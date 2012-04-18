@@ -1,0 +1,299 @@
+@CHARSET "UTF-8";
+
+* {padding:0; margin:0;}
+
+body {
+	margin:0 0 5px 0;
+	background:#fff;
+	color:#444;
+	font-size: 120%; /* Resets 1em to 10px */
+	font-family: Verdana, 'Lucida Grande', Tahoma, Arial, Sans-Serif;
+}
+
+#page {
+}
+
+a:hover, a:visited, a {
+    color: #77a240;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+.clickable {
+	cursor:pointer;
+}
+
+#loading {
+	width:100%;
+	text-align:center;
+	padding:5px;
+	background:	#9aca3c;
+	margin-top:20px;
+}
+
+.checkbox {
+	margin-right:10px;
+}
+
+li {
+	margin-left:15px;	
+}
+
+#header {
+  	padding:5px 5px;
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+#header-title {
+	float:left;	
+}
+
+#header-title h1 {
+	font-size:130%;
+	display:inline;
+	vertical-align:middle;
+	color: #77a240;
+}
+
+#header-logo {
+	float:left;
+}
+
+#header-right {
+	float:right;	
+	text-align:right;
+}
+
+#content {
+	font-size:110%;
+}
+
+#content h2 {
+	font-size:110%;
+	text-align: center;
+	padding:5px;
+}
+
+#menu {
+	width:100%;
+	text-align:center;
+	padding:5px;
+	background:	#9aca3c;
+}
+
+#menu a{
+	color: #444;	
+}
+
+.error {
+	color: red;
+}
+
+.formlabel, .formfield{
+	font-size:110%;
+	margin:auto;
+	width:80%;
+}
+
+.formfield input{
+	font-size:130%;
+	width:100%;
+}
+
+div.ctrl {
+	text-align: center;
+	margin:10px;
+}
+.button {
+	padding: 10px;
+	width: 98%;
+	font-size:110%;
+}
+
+.navbutton {
+	padding: 10px;
+	width: 100%;
+	font-size:110%;
+}
+
+.quizlist {
+	padding: 5px;
+}
+.quizlist:hover {
+	background: yellow;
+}
+.quiztitle {
+	color:#77a240;
+}
+
+.quizdesc {
+	font-style:italic;
+	font-size:80%;
+}
+
+#quizheader {
+	background: #9aca3c;
+	padding: 5px;
+	font-weight: bold;
+	text-align: center;
+}
+
+#question {
+	font-weight: bold;
+	padding: 10px;
+}
+
+#response{
+	padding: 10px 0;
+}
+.response {
+	padding: 5px 10px;
+}
+.mcresponse {
+	padding: 5px 10px;
+}
+.mcresponse:hover {
+	background: yellow;
+}
+
+.od {
+	padding: 5px 10px;
+}
+.mss {
+	float:left;
+	width: 15px;
+}
+.mst {
+	margin-left:20px;
+}
+.od:hover {
+	background: yellow;
+}
+
+div.quiznavprev {
+	float:left;
+	width:50%;
+}
+
+div.quiznavnext {
+	float:right;
+	width:50%;
+	text-align:right;
+}
+
+
+#quizresults {
+	font-size: 300%;
+	text-align: center;
+	margin: 20px;
+	font-weight:bold;
+}
+
+.resultopt {
+	margin: 10px;
+	color:#77a240;
+}
+
+
+#footer {
+	text-align:center;
+	margin-top:10px;
+	font-size:80%;
+}
+
+.matchingstate {
+	width: auto;
+	text-align:left;
+	float:left;
+}
+
+.matchingopt {
+	float:right;
+	font-size:120%;
+}
+
+.responsefield {
+	font-size:130%;
+	width:98%;
+}
+
+.selected{
+	font-weight:bold;
+}
+
+label.error{
+	color:red;
+	font-size:60%;
+}
+
+#searchresults, #suggestresults, #localq, #results {
+	width:80%;
+	margin:10px auto;
+}
+
+.centre {
+	text-align: center;
+}
+
+.th {
+	font-weight: bold;
+	text-align: center;
+}
+
+#rank {
+	text-align: center;
+}
+
+.result {
+	padding: 5px;
+}
+.rest {
+	float:left;
+	width:50%;
+	color:#77a240;
+}
+
+.resd {
+	float:left;
+	width:20%;
+	text-align: center;
+	font-size:80%;
+}
+
+.ress {
+	float:left;
+	width:20%;
+	text-align: center;
+}
+
+.resr {
+	float:left;
+	width:10%;
+	text-align: center;
+}
+
+.result:hover{
+	background: yellow;
+}
+
+.thrt {
+	float:left;
+	width:50%;
+	text-align: left;
+}
+
+.thrd {
+	float:left;
+	width:20%;
+}
+
+.thrs {
+	float:left;
+	width:20%;
+}
+
+.thrr {
+	float:left;
+	width:10%;
+}
