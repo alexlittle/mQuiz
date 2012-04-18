@@ -66,7 +66,7 @@ if ($submit != ""){
 		$json = json_encode($API->getQuizObject($q->ref));
 		$API->setProp('quiz', $quizid, 'json', $json);
 		
-		printf("<div class='info'>%s<p>Why not <a href='%s'>try your quiz</a> out now?</p></div>", getstring("quiz.new.saved"),$CONFIG->homeAddress."m/#".$q->ref);
+		printf("<div class='info'>%s<p>Why not <a href='%s'>try your quiz</a> out now?</p></div>", getstring("quiz.new.saved"),$CONFIG->homeAddress."m/?preview=true#".$q->ref);
 		if(!empty($IMPORT_INFO)){
 			echo "<div class='info'>Some of your questions were not imported:<ul>";
 			foreach ($IMPORT_INFO as $info){
