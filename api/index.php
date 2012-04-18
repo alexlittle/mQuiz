@@ -50,7 +50,7 @@ if($method == 'register'){
 			$login = userLogin($username,$password);
 			$response->login = $login;
 			$response->hash = md5($password);
-			$response->name = $USER->firstname + " "+ $USER->lastname;
+			$response->name = $firstname." ".$lastname;
 		}
 	}
 }
@@ -61,7 +61,7 @@ if($method == 'login'){
 	if($login){
 		$response->login = $login;
 		$response->hash = md5($password);
-		$response->name = $USER->firstname ." " .$USER->lastname;
+		$response->name = $USER->firstname." " .$USER->lastname;
 	} else {
 		$response->error = "Login failed";
 	}
