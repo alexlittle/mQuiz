@@ -227,8 +227,13 @@ label.error{
 	font-size:60%;
 }
 
-#searchresults, #suggestresults, #localq, #results {
+#searchresults, #suggestresults, #localq {
 	width:80%;
+	margin:10px auto;
+}
+
+#results {
+	width:100%;
 	margin:10px auto;
 }
 
@@ -254,22 +259,16 @@ label.error{
 	color:#77a240;
 }
 
-.resd {
-	float:left;
-	width:20%;
-	text-align: center;
-	font-size:80%;
-}
 
 .ress {
 	float:left;
-	width:20%;
+	width:30%;
 	text-align: center;
 }
 
 .resr {
 	float:left;
-	width:10%;
+	width:20%;
 	text-align: center;
 }
 
@@ -283,17 +282,12 @@ label.error{
 	text-align: left;
 }
 
-.thrd {
-	float:left;
-	width:20%;
-}
-
 .thrs {
 	float:left;
-	width:20%;
+	width:30%;
 }
 
 .thrr {
 	float:left;
-	width:10%;
+	width:20%;
 }

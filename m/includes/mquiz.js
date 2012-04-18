@@ -159,6 +159,9 @@ function showLocalQuizzes(){
 	for (var q in qs){
 		addQuizListItem(qs[q],'#localq');
 	}
+	if(!qs || qs.length == 0){
+		$(localQuizzes).append("<br/>No quizzes stored locally.");
+	}
 }
 
 function showResults(){
@@ -168,10 +171,9 @@ function showResults(){
 	var results = $('<div>').attr({'id':'results'}); 
 	$('#content').append(results);
 	var qs = store.get('results');
-	if(qs.length>0){
+	if(qs && qs.length>0){
 		var result = $('<div>').attr({'class':'th'});
 		result.append($('<div>').attr({'class':'thrt'}).text("Quiz"));
-		result.append($('<div>').attr({'class':'thrd'}).text("Date"));
 		result.append($('<div>').attr({'class':'thrs'}).text("Score"));
 		result.append($('<div>').attr({'class':'thrr'}).text("Rank"));
 		result.append("<div style='clear:both'></div>");
@@ -181,9 +183,9 @@ function showResults(){
 	}
 	for (var q in qs){
 		var result = $('<div>').attr({'class':'result'});
-		result.append($('<div>').attr({'class':'rest clickable','onclick':'document.location="#'+qs[q].quizid +'"','title':'try this quiz again'}).text(qs[q].title));
 		var d = new Date(qs[q].quizdate);
-		result.append($('<div>').attr({'class':'resd'}).text(dateFormat(d,'HH:MM d-mmm-yy')));
+		var str = qs[q].title + "<br/><small>"+dateFormat(d,'HH:MM d-mmm-yy')+"</small>";
+		result.append($('<div>').attr({'class':'rest clickable','onclick':'document.location="#'+qs[q].quizid +'"','title':'try this quiz again'}).html(str));
 		result.append($('<div>').attr({'class':'ress'}).text((qs[q].userscore*100/qs[q].maxscore).toFixed(0)+"%"));
 		result.append($('<div>').attr({'class':'resr'}).text(qs[q].rank));
 		result.append("<div style='clear:both'></div>");
