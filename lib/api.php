@@ -723,9 +723,9 @@ class API {
 					AND quizdeleted = 0
 					UNION
 					SELECT q.quiztitleref as quizref, quiztitle, quizdescription as description, lastupdate FROM quiz q
-					INNER JOIN quizquestion qqq ON q.quizid = qqq.quizid
-					INNER JOIN question qq ON qqq.questionid - qq.questionid
-					WHERE qq.questiontext LIKE '%%%s%%'
+					INNER JOIN quizquestion qq ON q.quizid = qq.quizid
+					INNER JOIN question qu ON qq.questionid = qu.questionid
+					WHERE qu.questiontext LIKE '%%%s%%'
 					AND q.quizdraft = 0
 					AND q.quizdeleted = 0)
 					a LIMIT 0,5",$terms,$terms,$terms);
