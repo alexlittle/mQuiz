@@ -262,15 +262,19 @@ function showQuiz(ref){
 	var qhead = $('<div>').attr({'id':'quizheader'});
 	$('#content').append(qhead);
 	
+	var qs = $('<div>').attr({'id':'qs'});
+	$('#content').append(qs);
+	
 	var question = $('<div>').attr({'id':'question'});
-	$('#content').append(question);
+	$('#qs').append(question);
 	
 	var response = $('<div>').attr({'id':'response'});
-	$('#content').append(response);
+	$('#qs').append(response);
 	
 	var fb = $('<div>').attr({'id':'feedback'});
-	$('#content').append(fb);
+	$('#qs').append(fb);
 	fb.hide();
+	
 	var quiznav = $('<div>').attr({'id':'quiznav'});
 	var quiznavprev = $('<div>').attr({'class':'quiznavprev'}).append($('<input>').attr({'id':'quiznavprevbtn','type':'button','class':'button','value':'<< Prev'}));
 	quiznav.append(quiznavprev);

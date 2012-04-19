@@ -25,9 +25,9 @@ function Quiz(){
 			if(this.feedback != ""){
 				$('#question').hide();
 				$('#response').hide();
-				$('#feedback').show();
 				$('#feedback').empty();
 				$('#feedback').append("<h2>Feedback</h2><div id='fbtext'>"+this.feedback+"</div>");
+				$('#feedback').show('blind',{},500);
 				$('#quiznavnextbtn').unbind('click');
 				$('#quiznavnextbtn').bind('click',function(){
 					Q.currentQuestion++;
@@ -53,11 +53,12 @@ function Quiz(){
 		this.setHeader();
 		this.setNav();
 		this.feedback = "";
-		$('#question').show();
-		$('#response').show();
-		$('#feedback').hide();
+
 		$('#question').html(this.quiz.q[this.currentQuestion].text);
 		this.loadResponses(this.quiz.q[this.currentQuestion]);
+		$('#feedback').hide();
+		$('#question').show('blind',{},500);
+		$('#response').show('blind',{},500);
 	}
 	
 	this.loadResponses = function(q){
