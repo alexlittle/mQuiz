@@ -25,7 +25,7 @@ if ($submit != ""){
 	$noquest = 0;
 	for ($q=1;$q<$noquestions+1;$q++){
 		$ref = "q".($q);
-		$questiontitle = optional_param($ref,"",PARAM_TEXT);
+		$questiontitle = optional_param($ref,"",PARAM_HTML);
 		if($questiontitle != ""){
 			$noquest++;
 		}
@@ -36,11 +36,6 @@ if ($submit != ""){
 			if($responsetitle != ""){
 				$noresponses++;
 			}
-		}
-		 
-		if ($questiontitle != "" && $noresponses == 0){
-			array_push($MSG, "You must enter at least one response for Q".$q);
-			$savequiz = false;
 		}
 		if ($questiontitle == "" && $noresponses > 0){
 			array_push($MSG, "You must enter a question for Q".$q);
@@ -55,7 +50,7 @@ if ($submit != ""){
 				$score= optional_param($mref,0,PARAM_INT);
 				$tempscore += $score;
 			}
-			if($tempscore == 0){
+			if($tempscore == 0 && $noresponses>0){
 				array_push($MSG, "You need to allow a non-zero score for Q".$q);
 				$savequiz = false;
 			}
@@ -78,11 +73,12 @@ if ($submit != ""){
 		// create each question
 		for ($q=1;$q<$noquestions+1;$q++){
 			$ref = "q".($q);
-			$questiontitle = optional_param($ref,"",PARAM_TEXT);
+			$questiontitle = optional_param($ref,"",PARAM_HTML);
 			if($questiontitle != ""){
 				$questionid = $API->addQuestion($questiontitle);
 				$API->addQuestionToQuiz($quizid,$questionid,$q);
 				$questionmaxscore = 0;
+				$rcount = 0;
 				// create each response
 				for ($r=1;$r<5;$r++){
 					$rref = "q".($q)."r".($r);
@@ -93,8 +89,17 @@ if ($submit != ""){
 						$responseid = $API->addResponse($responsetitle,$score);
 						$API->addResponsetoQuestion($questionid,$responseid,$r);
 						$questionmaxscore += $score;
+						$rcount++;
 					}
 				}
+				
+				//set question type
+				if($rcount == 0){
+					$API->setProp('question', $questionid, 'type', 'info');
+				} else {
+					$API->setProp('question', $questionid, 'type', 'multichoice');
+				}
+				
 				
 				//set max score for question
 				$API->setProp('question', $questionid, 'maxscore', $questionmaxscore);
@@ -173,7 +178,7 @@ if(!empty($MSG)){
 				<div class="formblock">
 					<div class="formlabel"><?php echo getstring('quiz.new.question'); echo " "; echo $q; ?></div>
 					<div class="formfield">
-						<input type="text" name="q<?php echo $q; ?>" value="<?php echo $questiontitle; ?>" size="60"></input>
+						<textarea name="q<?php echo $q; ?>" cols="80" rows="3" maxlength="300"><?php echo $questiontitle; ?></textarea>
 						<div class="responses">
 							<div class="responsetext">Possible responses</div>
 							<div class="responsescore">Score</div>

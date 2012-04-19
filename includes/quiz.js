@@ -6,7 +6,7 @@ function addQuestion(){
 	var fl = $("<div class='formlabel'></div>").text("Question " +qno);
 	fb.append(fl);
 	var ff = $("<div class='formfield'></div>");
-	ff.append("<input type='text' name='q"+qno+"' value='' size='60'></input>");
+	ff.append("<textarea name='q"+qno+"' cols='80' rows='3' maxlength='300'></textarea>");
 	ff.append("<div class='responses'>");
 	ff.append("<div class='responsetext'>Possible responses</div><div class='responsescore'>Score</div>");
 	for(i=1; i<5 ; i++){

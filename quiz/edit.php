@@ -41,11 +41,12 @@ if ($submit != ""){
 		// create each question
 		for ($i=1;$i<$noquestions+1;$i++){
 			$qref = "q".($i);
-			$questiontitle = optional_param($qref,"",PARAM_TEXT);
+			$questiontitle = optional_param($qref,"",PARAM_HTML);
 			if($questiontitle != ""){
 				$questionid = $API->addQuestion($questiontitle);
 				$API->addQuestionToQuiz($quizid,$questionid,$i);
 				$questionmaxscore = 0;
+				$rcount = 0;
 				// create each response
 				for ($j=1;$j<5;$j++){
 					$rref = "q".($i)."r".($j);
@@ -56,9 +57,17 @@ if ($submit != ""){
 						$responseid = $API->addResponse($responsetitle,$score);
 						$API->addResponsetoQuestion($questionid,$responseid,$j);
 						$questionmaxscore += $score;
+						$rcount++;
 					}
 				}
 	
+				//set question type
+				if($rcount == 0){
+					$API->setProp('question', $questionid, 'type', 'info');
+				} else {
+					$API->setProp('question', $questionid, 'type', 'multichoice');
+				}
+				
 				//set max score for question
 				$API->setProp('question', $questionid, 'maxscore', $questionmaxscore);
 	
@@ -130,7 +139,7 @@ if ($API->quizHasAttempts($ref)){
 			<div class="formblock">
 				<div class="formlabel"><?php echo getstring('quiz.edit.question'); echo " "; echo $i; ?></div>
 				<div class="formfield">
-					<input type="text" name="q<?php echo $i; ?>" value="<?php echo $qq[$i-1]->text; ?>" size="60"></input>
+					<textarea name="q<?php echo $i; ?>" cols="80" rows="3" maxlength="300"><?php echo $qq[$i-1]->text; ?></textarea>
 					<div class="responses">
 					<div class="responsetext">Possible responses</div><div class="responsescore">Score</div>
 					<?php 

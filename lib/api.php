@@ -530,7 +530,7 @@ class API {
 		$questiontitleref = $this->createUUID("qqt");
 	
 		$str = "INSERT INTO question (questiontitleref,createdby,questiontext) VALUES ('%s',%d,'%s')";
-		$sql = sprintf($str,$questiontitleref,$USER->userid,$title);
+		$sql = sprintf($str,$questiontitleref,$USER->userid,addslashes($title));
 		mysql_query($sql,$this->DB);
 		$result = mysql_insert_id();
 		if (!$result){

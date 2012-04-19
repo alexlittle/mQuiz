@@ -55,6 +55,8 @@ function Quiz(){
 			this.loadEssay();
 		} else if (q.type == 'multiselect'){
 			this.loadMultiselect(q.r);
+		} else if (q.type == 'info'){
+			this.loadInfo();
 		} else {
 			$('#response').empty();
 		}
@@ -137,6 +139,10 @@ function Quiz(){
 				})(resp[i]);
 			}
 		});
+	}
+	
+	this.loadInfo = function(){
+		$('#response').empty();
 	}
 	
 	this.loadShortAnswer = function(){
@@ -224,6 +230,8 @@ function Quiz(){
 			return this.saveEssay(nav);
 		} else if(q.type == 'multiselect'){
 			return this.saveMultiselect(nav);
+		} else if(q.type == 'info'){
+			return this.saveInfo(nav);
 		} else {
 			
 		}
@@ -298,6 +306,10 @@ function Quiz(){
 				return true;
 			}	
 		}
+	}
+	
+	this.saveInfo = function(nav){
+		return true;
 	}
 	
 	this.saveMatching = function(nav){
