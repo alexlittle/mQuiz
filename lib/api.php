@@ -399,10 +399,10 @@ class API {
 	}
 	
 	function getRankingForAttempt($attemptid){
-		$sql = sprintf("SELECT aqa.id, aqa.score FROM quizattempt qa
-						INNER JOIN (SELECT id, score, quizref  FROM quizattempt) aqa ON aqa.quizref = qa.quizref
+		$sql = sprintf("SELECT aqa.id, aqa.qascore FROM quizattempt qa
+						INNER JOIN (SELECT id, qascore, quizref  FROM quizattempt) aqa ON aqa.quizref = qa.quizref
 						WHERE qa.id = %d
-						ORDER BY aqa.score DESC",$attemptid);
+						ORDER BY aqa.qascore DESC",$attemptid);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return;
@@ -413,9 +413,9 @@ class API {
 		$myrank = 0;
 		while($o = mysql_fetch_object($result)){
 			$count++;
-			if($o->score != $prevscore){
+			if($o->qascore != $prevscore){
 				$rank = $count;
-				$prevscore = $o->score;
+				$prevscore = $o->qascore;
 			}
 			if($o->id == $attemptid){
 				$myrank = $rank;
