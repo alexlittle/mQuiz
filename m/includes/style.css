@@ -291,3 +291,13 @@ label.error{
 	float:left;
 	width:20%;
 }
+
+#feedback {
+	text-align:center;
+	min-height:100px;
+}
+#fbtext {
+	text-align:center;
+	width:80%;
+	margin: 10px auto;
+}

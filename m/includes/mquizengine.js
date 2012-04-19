@@ -9,6 +9,7 @@ function Quiz(){
 	this.responses = [];
 	this.matchingstate = [];
 	this.matchingopt = [];
+	this.feedback = "";
 	
 	this.init = function(q){
 		this.quiz = q;
@@ -21,10 +22,24 @@ function Quiz(){
 	
 	this.loadNextQuestion = function(){
 		if(this.saveResponse('next')){
-			this.currentQuestion++;
-			this.loadQuestion();
+			if(this.feedback != ""){
+				$('#question').hide();
+				$('#response').hide();
+				$('#feedback').show();
+				$('#feedback').empty();
+				$('#feedback').append("<h2>Feedback</h2><div id='fbtext'>"+this.feedback+"</div>");
+				$('#quiznavnextbtn').unbind('click');
+				$('#quiznavnextbtn').bind('click',function(){
+					Q.currentQuestion++;
+					Q.loadQuestion();
+				});
+			} else {
+				this.currentQuestion++;
+				this.loadQuestion();
+			}
+
 		} else {
-			alert("You must answer this question before continuing.");
+			alert("Please answer this question before continuing.");
 		}
 	}
 	
@@ -32,12 +47,15 @@ function Quiz(){
 		this.saveResponse('prev')
 		this.currentQuestion--;
 		this.loadQuestion();
-
 	}
 	
 	this.loadQuestion = function(){
 		this.setHeader();
 		this.setNav();
+		this.feedback = "";
+		$('#question').show();
+		$('#response').show();
+		$('#feedback').hide();
 		$('#question').html(this.quiz.q[this.currentQuestion].text);
 		this.loadResponses(this.quiz.q[this.currentQuestion]);
 	}
@@ -245,24 +263,20 @@ function Quiz(){
 			o.qid = q.refid;
 			o.score = 0;
 			o.qrtext = "";
-			var feedback = null;
 			// mark question and get text
 			for(var r in q.r){
 				if(q.r[r].refid == opt){
 					o.score = q.r[r].score;
 					o.qrtext = q.r[r].text;
+					// set feedback (if any)
 					if (q.r[r].props.feedback && q.r[r].props.feedback != ''){
-						feedback = q.r[r].props.feedback;
+						this.feedback = q.r[r].props.feedback;
 					}
 				}
 			}
 			o.score = Math.min(o.score,parseInt(q.props.maxscore));
 			this.responses[this.currentQuestion] = o;
-			
-			// show feedback (if any)
-			if(feedback){
-				alert("Feedback: "+feedback);
-			}
+
 			return true;
 		} else {
 			if(nav == 'next'){
@@ -281,23 +295,19 @@ function Quiz(){
 			o.qid = q.refid;
 			o.score = 0;
 			o.qrtext = ans;
-			var feedback = null;
 			// mark question and get text
 			for(var r in q.r){
 				if(q.r[r].text == ans){
 					o.score = q.r[r].score;
+					// set feedback (if any)
 					if (q.r[r].props.feedback && q.r[r].props.feedback != ''){
-						feedback = q.r[r].props.feedback;
+						this.feedback = q.r[r].props.feedback;
 					}
 				}
 			}
 			o.score = Math.min(o.score,parseInt(q.props.maxscore));
 			this.responses[this.currentQuestion] = o;
-			
-			// show feedback (if any)
-			if(feedback){
-				alert("Feedback: "+feedback);
-			}
+
 			return true;
 		} else {
 			if(nav == 'next'){
@@ -329,7 +339,6 @@ function Quiz(){
 		o.qid = q.refid;
 		o.score = 0;
 		o.qrtext = '';
-		var feedback = null;
 		for(var s in this.matchingstate){
 			var resp = this.matchingstate[s] + " -&gt; " +  $('#matchingopt'+s+' :selected').text();
 			for(var r in q.r){
@@ -354,7 +363,6 @@ function Quiz(){
 			o.qid = q.refid;
 			o.score = 0;
 			o.qrtext = ans;
-			var feedback = null;
 			var bestans = -1;
 			// mark question and get text
 			for(var r in q.r){
@@ -367,18 +375,15 @@ function Quiz(){
 			}
 			if(bestans != -1){
 				o.score = q.r[bestans].score;
+				// set feedback (if any)
 				if (q.r[bestans].props.feedback && q.r[bestans].props.feedback != ''){
-					feedback = q.r[bestans].props.feedback;
+					this.feedback = q.r[bestans].props.feedback;
 				}
 			}
 			
 			o.score = Math.min(o.score,parseInt(q.props.maxscore));
 			this.responses[this.currentQuestion] = o;
 			
-			// show feedback (if any)
-			if(feedback){
-				alert("Feedback: "+feedback);
-			}
 			return true;
 		} else {
 			if(nav == 'next'){
@@ -397,23 +402,19 @@ function Quiz(){
 			o.qid = q.refid;
 			o.score = 0;
 			o.qrtext = ans;
-			var feedback = null;
 			// mark question and get text
 			for(var r in q.r){
 				if(q.r[r].text == ans){
 					o.score = q.r[r].score;
+					// set feedback (if any)
 					if (q.r[r].props.feedback && q.r[r].props.feedback != ''){
-						feedback = q.r[r].props.feedback;
+						this.feedback = q.r[r].props.feedback;
 					}
 				}
 			}
 			o.score = Math.min(o.score,parseInt(q.props.maxscore));
 			this.responses[this.currentQuestion] = o;
-			
-			// show feedback (if any)
-			if(feedback){
-				alert("Feedback: "+feedback);
-			}
+
 			return true;
 		} else {
 			if(nav == 'next'){
@@ -443,7 +444,6 @@ function Quiz(){
 		o.qid = q.refid;
 		o.score = 0;
 		o.qrtext = "";
-		var feedback = null;
 		var countsel = 0;
 		// mark question and get text
 		for(var r in q.r){
@@ -452,7 +452,6 @@ function Quiz(){
 				o.qrtext += q.r[r].text + "|";
 				countsel++;
 			}
-			// TODO add feedback
 		}
 		//set score back to 0 if any incorrect options selected
 		for(var r in q.r){
@@ -466,9 +465,13 @@ function Quiz(){
 		return true;
 	}
 	
+	this.showFeedback = function(feedback){
+		return true;
+	}
+	
 	this.showResults = function(){
 		if(!this.saveResponse('next')){
-			alert("You must answer this question before getting your results.");
+			alert("Please answer this question before getting your results.");
 			return;
 		} 
 		inQuiz = false;
@@ -544,15 +547,27 @@ function Quiz(){
 	}
 	
 	this.setNav = function(){
+		$('#quiznavprevbtn').unbind('click');
+		$('#quiznavprevbtn').bind('click',function(event){
+			Q.loadPrevQuestion();
+		});
 		if(this.currentQuestion == 0){
 			$('#quiznavprevbtn').attr('disabled', 'disabled');
 		} else {
 			$('#quiznavprevbtn').removeAttr('disabled');
 		}
+		
+		$('#quiznavnextbtn').unbind('click');
 		if(this.currentQuestion+1 == this.quiz.q.length){
-			$('#quiznavnextbtn').attr({'onclick':'Q.showResults()','value':'Get results'});
+			$('#quiznavnextbtn').attr({'value':'Get results'});
+			$('#quiznavnextbtn').bind('click',function(){
+				Q.showResults();
+			});
 		} else {
-			$('#quiznavnextbtn').attr({'onclick':'Q.loadNextQuestion()','value':'Next >>'});
+			$('#quiznavnextbtn').attr({'value':'Next >>'});
+			$('#quiznavnextbtn').bind('click',function(){
+				Q.loadNextQuestion();
+			});
 		}
 	}
 	

@@ -268,11 +268,16 @@ function showQuiz(ref){
 	var response = $('<div>').attr({'id':'response'});
 	$('#content').append(response);
 	
+	var fb = $('<div>').attr({'id':'feedback'});
+	$('#content').append(fb);
+	fb.hide();
 	var quiznav = $('<div>').attr({'id':'quiznav'});
-	var quiznavprev = $('<div>').attr({'class':'quiznavprev'}).append($('<input>').attr({'id':'quiznavprevbtn','type':'button','class':'button','value':'<< Prev','onclick':'Q.loadPrevQuestion()'}));
+	var quiznavprev = $('<div>').attr({'class':'quiznavprev'}).append($('<input>').attr({'id':'quiznavprevbtn','type':'button','class':'button','value':'<< Prev'}));
 	quiznav.append(quiznavprev);
-	var quiznavnext = $('<div>').attr({'class':'quiznavnext'}).append($('<input>').attr({'id':'quiznavnextbtn','type':'button','class':'button','value':'Next >>','onclick':'Q.loadNextQuestion()'}));
+	
+	var quiznavnext = $('<div>').attr({'class':'quiznavnext'}).append($('<input>').attr({'id':'quiznavnextbtn','type':'button','class':'button','value':'Next >>'}));
 	quiznav.append(quiznavnext);
+	
 	var clear = $('<div>').attr({'style':'clear:both'});
 	$('#content').append(quiznav);
 	Q.loadQuestion();

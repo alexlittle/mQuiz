@@ -1,16 +1,16 @@
 CACHE MANIFEST
-# v4
+# v5
 
 CACHE:
 index.html
 includes/style.css
 includes/mquiz.js
-includes/i8n.js
-includes/lang/en.js
 includes/mquizengine.js
 includes/dateformat.js
 
 includes/lib/flotr2.min.js
 includes/lib/jquery-1.7.1.min.js
 includes/lib/jquery.validate.min.js
+includes/lib/jquery-ui-1.8.19.custom.min.js
+
 images/dclogo.png
