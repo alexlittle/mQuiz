@@ -130,9 +130,10 @@ if ($method != "search" && $method != "register" && $method != "login"){
 				$json = json_decode(stripslashes($content));
 				// only save results if not owner
 				if(!$API->isOwner($json->quizid)){
-					saveResult($json,$username);
-					$ranking = $API->getRanking($json->quizid, $USER->userid);
-					$response->rank = $ranking['myrank'];
+					$attemptid = saveResult($json,$username);
+					$best = $API->getBestRankForQuiz($json->quizid, $USER->userid);
+					$response->rank = $API->getRankingForAttempt($attemptid);
+					$response->bestrank = $best;
 				}
 				$response->result = true;
 			}
@@ -171,6 +172,7 @@ function endsWith($haystack, $needle){
 
 function saveResult($json,$username){
 	global $API;
+	$newId = 0;
 	try{
 		if (isset($json->quizid)){
 			$quiz = $API->getQuiz($json->quizid);
@@ -198,9 +200,9 @@ function saveResult($json,$username){
 			$qar->text = $r->qrtext;
 			$API->insertQuizAttemptResponse($qar);
 		}
-		return true;
+		return $newId;
 	} catch (Exception $e){
-		return false;
+		return $newId;
 	}
 }
 ?>

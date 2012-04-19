@@ -22,7 +22,7 @@ if(count($results) == 0){
 	echo "<div class='quizcell'>Highest Score</div>";
 	echo "<div class='quizcell'>Lowest score</div>";
 	echo "<div class='quizcell'>Average Score</div>";
-	echo "<div class='quizcell'>Ranking</div>";
+	echo "<div class='quizcell'>Best Ranking</div>";
 	echo "<div style='clear:both'></div>";
 	echo "</div>";
 	
@@ -33,7 +33,7 @@ if(count($results) == 0){
 		echo "<div class='quizcell'>".sprintf('%3d',$r->maxscore)."%</div>";
 		echo "<div class='quizcell'>".sprintf('%3d',$r->minscore)."%</div>";
 		echo "<div class='quizcell'>".sprintf('%3d',$r->avgscore)."%</div>";
-		$rank = $API->getRanking($r->ref, $USER->userid);
+		$rank = $API->getBestRankForQuiz($r->ref, $USER->userid);
 		echo "<div class='quizcell'>".$rank['myrank']."</div>";
 		echo "<div style='clear:both'></div>";
 		echo "</div>";

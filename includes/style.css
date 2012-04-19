@@ -100,6 +100,7 @@ a:hover {
 /* Content */
 #content {
 	margin-top:20px;
+	width:850px;
 }
 
 /* Forms */
@@ -174,6 +175,7 @@ div.homewidget {
 	-moz-border-radius: 1em 1em;
   	border-radius: 1em 1em;
   	min-height:400px;
+  	width:250px;
 }
 
 div.homewidget h3{
@@ -194,6 +196,7 @@ div.homestart {
 	-moz-border-radius: 1em 1em;
   	border-radius: 1em 1em;
   	min-height:230px;
+  	width:250px;
   	text-align:center;
 }
 

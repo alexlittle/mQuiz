@@ -370,15 +370,39 @@ class API {
 		return $results;
 	}
 	
-	function getRanking($ref,$userid){
-		$sql = sprintf("SELECT * FROM
-						(SELECT MAX((qascore*100)/ maxscore) as score,  u.userid, quiztitleref FROM quizattempt qa
+	function getBestRankForQuiz($ref,$userid){
+		$sql = sprintf("SELECT qascore, u.userid, quizref FROM quizattempt qa
 						INNER JOIN user u ON qa.submituser = u.username
-						INNER JOIN quiz q ON q.quiztitleref = qa.quizref
 						WHERE qa.quizref = '%s'
-						AND q.quizdeleted = 0
-						GROUP BY u.userid, quiztitleref) a
-						ORDER BY score DESC",$ref);
+						ORDER BY qascore DESC",$ref);
+		$result = _mysql_query($sql,$this->DB);
+		if (!$result){
+			return;
+		}
+		$rank = 0;
+		$count = 0;
+		$prevscore = -1;
+		$myrank = 0;
+		while($o = mysql_fetch_object($result)){
+			$count++;
+			if($o->qascore != $prevscore){
+				$rank = $count;
+				$prevscore = $o->qascore;
+			}
+			if($o->userid == $userid){
+				$myrank = $rank;
+				break;
+			}
+		}
+		$r = array("myrank"=>$myrank,"total"=>$count);
+		return $r;
+	}
+	
+	function getRankingForAttempt($attemptid){
+		$sql = sprintf("SELECT aqa.id, aqa.score FROM quizattempt qa
+						INNER JOIN (SELECT id, score, quizref  FROM quizattempt) aqa ON aqa.quizref = qa.quizref
+						WHERE qa.id = %d
+						ORDER BY aqa.score DESC",$attemptid);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return;
@@ -393,12 +417,11 @@ class API {
 				$rank = $count;
 				$prevscore = $o->score;
 			}
-			if($o->userid == $userid){
+			if($o->id == $attemptid){
 				$myrank = $rank;
 			}
 		}
-		$r = array("myrank"=>$myrank,"total"=>$count);
-		return $r;
+		return $myrank;
 	}
 	
 	function getQuiz($ref){
