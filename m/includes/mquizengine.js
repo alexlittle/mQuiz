@@ -468,7 +468,11 @@ function Quiz(){
 			total += this.responses[r].score;
 		}
 		total = Math.min(total,this.quiz.maxscore);
-		var percent = total*100/this.quiz.maxscore;
+		if(this.quiz.maxscore > 0){
+			var percent = total*100/this.quiz.maxscore;
+		} else {
+			var percent = 0;
+		}
 		$('#content').append("<div id='quizresults'>"+ percent.toFixed(0) +"%</div>");
 		
 		var rank = $('<div>').attr({'id':'rank','class': 'rank'});
