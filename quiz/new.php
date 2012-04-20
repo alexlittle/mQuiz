@@ -127,7 +127,7 @@ if ($submit != ""){
 }
 
 ?>
-<h1><?php echo getstring("quiz.new.title"); ?></h1>
+<h1><?php echo getstring("quiz.new.title"); ?> or <a href="import/index.php">enter in GIFT format</a></h1>
 <?php 
 if(!empty($MSG)){
 	echo "<div class='warning'><ul>";
@@ -216,7 +216,6 @@ if(!empty($MSG)){
 </form>
 </div>
 <?php 
-	include_once('optionmenu.php');
 
 	include_once("../includes/footer.php");
 ?>

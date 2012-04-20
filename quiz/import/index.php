@@ -116,7 +116,7 @@ if(!empty($MSG)){
 	</div>
 	<div class="formblock">
 		<div class="formlabel">Quiz Questions<br/><small>(enter in <a target='_blank' href='http://microformats.org/wiki/gift'>GIFT format</a>)</small></div>
-		<div class="formfield"><textarea name="content" cols="100" rows="20"><?php echo stripslashes($content); ?></textarea></div>
+		<div class="formfield"><textarea name="content" cols="80" rows="20"><?php echo stripslashes($content); ?></textarea></div>
 	</div>
 	<div class="formblock">
 		<div class="formlabel">&nbsp;</div>
