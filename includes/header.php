@@ -31,6 +31,7 @@ if ($lang != ""){
 	<title><?php echo getstring("app.title");?></title>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>includes/jquery-1.7.min.js"></script>
+	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>includes/jquery-ui-1.8.19.custom.min.js"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>includes/quiz.js"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>/m/includes/mquiz.js"></script>
 	<link rel="StyleSheet" href="<?php echo $CONFIG->homeAddress; ?>includes/style.css" type="text/css" media="screen">

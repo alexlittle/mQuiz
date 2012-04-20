@@ -246,7 +246,7 @@ class API {
 	}
 	
 	function getQuizAttempts($ref, $opts = array()){
-		$sql = sprintf("SELECT ((qascore*100)/ maxscore) as score, firstname, lastname, submitdate FROM quizattempt qa
+		$sql = sprintf("SELECT qa.id, ((qascore*100)/ maxscore) as score, firstname, lastname, submitdate FROM quizattempt qa
 						INNER JOIN user u ON qa.submituser = u.username
 						INNER JOIN quiz q ON q.quiztitleref = qa.quizref
 						WHERE quizref = '%s'
@@ -259,6 +259,22 @@ class API {
 			array_push($summary,$o);
 		}
 		return $summary;
+	}
+	
+	function getQuizAttemptDetail($id){
+		$sql = sprintf("SELECT questiontext,qarscore,responsetext,questionpropvalue as maxscore FROM quizattemptresponse qar
+						INNER JOIN question q on qar.questionrefid = q.questiontitleref
+						INNER JOIN quizquestion qq on q.questionid = qq.questionid
+						INNER JOIN questionprop qp ON q.questionid = qp.questionid
+						WHERE qaid = %d
+						AND qp.questionpropname='maxscore'
+						ORDER BY qq.orderno ASC",$id);
+		$d = array();
+		$result = _mysql_query($sql,$this->DB);
+		while($o = mysql_fetch_object($result)){
+			array_push($d,$o);
+		}
+		return $d;
 	}
 	
 	function quizHasAttempts($ref){

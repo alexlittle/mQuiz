@@ -143,6 +143,11 @@ div.quizlist, div.attemptlist {
 	border-bottom: 1px solid #999;
 }
 
+div.attemptlist:hover{
+	background:yellow;
+	cursor:pointer;
+}
+
 div.quiztitle, div.attemptdate {
 	float:left;
 	width:250px;
@@ -234,5 +239,25 @@ div.options{
 }
 #quizmenu h3{
 	text-align: center;
+}
+
+div.attemptdetail{
+	margin:20px;
+}
+div.adq {
+	float:left;
+	width:50%;
+}
+
+div.adscore {
+	float:left;
+	width:10%;
+	text-align:center;
+}
+
+div.adrtext {
+	float:left;
+	width:30%;
+	padding-left:20px;
 }
 
