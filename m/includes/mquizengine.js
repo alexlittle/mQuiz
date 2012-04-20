@@ -275,7 +275,7 @@ function Quiz(){
 					}
 				}
 			}
-			o.score = Math.min(o.score,parseInt(q.props.maxscore));
+			o.score = Math.min(o.score,parseFloat(q.props.maxscore));
 			this.responses[this.currentQuestion] = o;
 
 			return true;
@@ -306,7 +306,7 @@ function Quiz(){
 					}
 				}
 			}
-			o.score = Math.min(o.score,parseInt(q.props.maxscore));
+			o.score = Math.min(o.score,parseFloat(q.props.maxscore));
 			this.responses[this.currentQuestion] = o;
 
 			return true;
@@ -344,13 +344,13 @@ function Quiz(){
 			var resp = this.matchingstate[s] + " -&gt; " +  $('#matchingopt'+s+' :selected').text();
 			for(var r in q.r){
 				if(q.r[r].text == resp){
-					o.score += parseInt(q.r[r].score);
+					o.score += parseFloat(q.r[r].score);
 				}
 			}
 			o.qrtext += resp + "|";
 			
 		}
-		o.score = Math.min(o.score,parseInt(q.props.maxscore));
+		o.score = Math.min(o.score,parseFloat(q.props.maxscore));
 		this.responses[this.currentQuestion] = o;
 		return true;
 	}
@@ -368,7 +368,7 @@ function Quiz(){
 			// mark question and get text
 			for(var r in q.r){
 				if(parseFloat(q.r[r].text) - parseFloat(q.r[r].props.tolerance) <= ans && ans <= parseFloat(q.r[r].text) + parseFloat(q.r[r].props.tolerance) ){
-					if(parseInt(q.r[r].score) > parseInt(o.score)){
+					if(parseFloat(q.r[r].score) > parseFloat(o.score)){
 						o.score = q.r[r].score;
 						bestans = r;
 					}
@@ -382,7 +382,7 @@ function Quiz(){
 				}
 			}
 			
-			o.score = Math.min(o.score,parseInt(q.props.maxscore));
+			o.score = Math.min(o.score,parseFloat(q.props.maxscore));
 			this.responses[this.currentQuestion] = o;
 			
 			return true;
@@ -413,7 +413,7 @@ function Quiz(){
 					}
 				}
 			}
-			o.score = Math.min(o.score,parseInt(q.props.maxscore));
+			o.score = Math.min(o.score,parseFloat(q.props.maxscore));
 			this.responses[this.currentQuestion] = o;
 
 			return true;
@@ -449,24 +449,21 @@ function Quiz(){
 		// mark question and get text
 		for(var r in q.r){
 			if($('#'+q.r[r].refid).attr('checked')){
-				o.score += parseInt(q.r[r].score);
+				o.score += parseFloat(q.r[r].score);
 				o.qrtext += q.r[r].text + "|";
 				countsel++;
+				this.feedback += q.r[r].text+": "+ q.r[r].props.feedback + "<br/>";
 			}
 		}
 		//set score back to 0 if any incorrect options selected
 		for(var r in q.r){
-			if($('#'+q.r[r].refid).attr('checked') && parseInt(q.r[r].score) == 0){
+			if($('#'+q.r[r].refid).attr('checked') && parseFloat(q.r[r].score) == 0){
 				o.score = 0;
 			}
 		}
-		o.score = Math.min(o.score,parseInt(q.props.maxscore));
+		o.score = Math.min(o.score,parseFloat(q.props.maxscore));
 		this.responses[this.currentQuestion] = o;
 		
-		return true;
-	}
-	
-	this.showFeedback = function(feedback){
 		return true;
 	}
 	
@@ -475,6 +472,21 @@ function Quiz(){
 			alert("Please answer this question before getting your results.");
 			return;
 		} 
+		
+		/*if(this.feedback != ""){
+			$('#question').hide();
+			$('#response').hide();
+			$('#feedback').empty();
+			$('#feedback').append("<h2>Feedback</h2><div id='fbtext'>"+this.feedback+"</div>");
+			$('#feedback').show('blind',{},500);
+			this.feedback = "";
+			$('#quiznavnextbtn').unbind('click');
+			$('#quiznavnextbtn').bind('click',function(){
+				Q.showResults();
+			});
+			return;
+		} */
+		
 		inQuiz = false;
 		$('#content').empty();
 		$('#content').append("<h2 name='lang' id='page_title_results'>Your results for:<br/> '"+ this.quiz.title +"':</h2>");

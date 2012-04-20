@@ -598,7 +598,6 @@ class API {
 	}
 	
 	function setProp($obj,$id,$name,$value){
-		$value = addslashes($value);
 		// first check to see if it exists already
 		$sql = sprintf("SELECT * FROM %sprop WHERE %sid= %d AND %spropname='%s'",$obj,$obj,$id,$obj,$name);
 		$result = _mysql_query($sql,$this->DB);
