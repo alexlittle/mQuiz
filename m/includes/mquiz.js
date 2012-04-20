@@ -438,7 +438,6 @@ function register(){
 				   store.set('lastlogin',Date());
 				   showUsername();
 				   var hash = $(location).attr('hash');
-				   console.log(hash);
 				   showPage(hash);
 			   } else if(data.error) {
 				   $('#loading').hide();
