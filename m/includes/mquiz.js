@@ -290,7 +290,7 @@ function showQuiz(ref){
 
 function showLogin(hash){
 	$('#content').empty();
-	$('#content').append("<h2>Login (or <a href='#register'>Register</a>)</h2>");
+	$('#content').append("<h2>Login (or <a onclick='showRegister()'>Register</a>)</h2>");
 	var form =  $('<div>');
 	form.append("<div class='formblock'>" +
 		"<div class='formlabel' name='lang' id='login_username'>Email:</div>" +
@@ -307,7 +307,6 @@ function showLogin(hash){
 }
 
 function showRegister(){
-	document.location = '#register';
 	$('#content').empty();
 	$('#content').append("<h2>Register</h2>");
 	var l = $('<div>').attr({'id':'loading'}).html("Registering...");
@@ -438,7 +437,9 @@ function register(){
 				   store.set('password',data.hash);
 				   store.set('lastlogin',Date());
 				   showUsername();
-				   showPage('#home');
+				   var hash = $(location).attr('hash');
+				   console.log(hash);
+				   showPage(hash);
 			   } else if(data.error) {
 				   $('#loading').hide();
 				   $('#register').show();
