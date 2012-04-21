@@ -96,6 +96,11 @@ a:hover {
 #userlogin {
 	float: right;
 }
+
+#viewby {
+	margin-bottom:10px;
+	
+}
 /* Footer */
 #footer {
 	text-align:center;

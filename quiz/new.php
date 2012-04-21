@@ -68,7 +68,8 @@ if ($submit != ""){
 		$quizid = $API->addQuiz($title,$quizdraft,$description);
 		
 		$API->setProp('quiz',$quizid,'generatedby','mquiz');
-
+		$API->updateQuizTags($quizid, $tags);
+		
 		$quizmaxscore = 0;
 		// create each question
 		for ($q=1;$q<$noquestions+1;$q++){
@@ -164,6 +165,13 @@ if(!empty($MSG)){
 			<div class='formfield'>
 				<textarea name="description" cols="80" rows="3" maxlength="300"><?php echo $description; ?></textarea><br/>
 				<small>Max 300 characters, no HTML</small>
+			</div>
+		</div>
+		<div class="formblock">
+			<div class="formlabel">Tags</div>
+			<div class="formfield">
+				<input type="text" name="tags" value="<?php echo $tags; ?>" size="60"/><br/>
+				<small>comma separated</small>
 			</div>
 		</div>
 		<div class="formblock">

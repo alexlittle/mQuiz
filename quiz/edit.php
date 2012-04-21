@@ -24,12 +24,14 @@ if ($submit != ""){
 	$title = optional_param("title","",PARAM_TEXT);
 	$description = optional_param("description","",PARAM_TEXT);
 	$quizdraft = optional_param("quizdraft",0,PARAM_INT);
+	$tags = optional_param("tags","",PARAM_TEXT);
 	
 	if ($title != ""){
 		
 		//update quiz title	
 		$API->updateQuiz($ref,$title,$quizdraft,$description);
-				
+		$API->updateQuizTags($q->quizid, $tags);
+		
 		// remove quiz questions and responses
 		$API->removeQuiz($q->quizid);
 		
@@ -123,12 +125,19 @@ if ($API->quizHasAttempts($ref)){
 		</div>
 	</div>
 	<div class="formblock">
-			<div class='formlabel'>Description<br/><small>(optional)</small></div>
-			<div class='formfield'>
-				<textarea name="description" cols="80" rows="3" maxlength="300"><?php echo $q->description; ?></textarea><br/>
-				<small>Max 300 characters, no HTML</small>
-			</div>
+		<div class='formlabel'>Description<br/><small>(optional)</small></div>
+		<div class='formfield'>
+			<textarea name="description" cols="80" rows="3" maxlength="300"><?php echo $q->description; ?></textarea><br/>
+			<small>Max 300 characters, no HTML</small>
 		</div>
+	</div>
+	<div class="formblock">
+		<div class="formlabel">Tags</div>
+		<div class="formfield">
+			<input type="text" name="tags" value="<?php echo $q->tags; ?>" size="60"/><br/>
+			<small>comma separated</small>
+		</div>
+	</div>
 	<div class="formblock">
 		<h2><?php echo getstring("quiz.edit.questions"); ?></h2>
 	</div>

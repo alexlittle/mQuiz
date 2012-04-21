@@ -481,6 +481,7 @@ class API {
 		}
 		while($q = mysql_fetch_object($result)){
 			$q->props = $this->getQuizProps($q->quizid);
+			$q->tags = implode(", ",$this->getQuizTags($q->quizid));
 			return $q;
 		}
 	}
@@ -493,6 +494,19 @@ class API {
 			$p[$prop->quizpropname] = $prop->quizpropvalue;
 		}
 		return $p;
+	}
+	
+	function getQuizTags($quizid){
+		$tsql = sprintf("SELECT tagtext FROM tag t
+						INNER JOIN quiztag qt ON qt.tagid = t.tagid
+						WHERE qt.quizid = %d
+						ORDER BY tagtext ASC",$quizid);
+		$tags = _mysql_query($tsql,$this->DB);
+		$t = array();
+		while($tag = mysql_fetch_object($tags)){
+			array_push($t,$tag->tagtext);
+		}
+		return $t;
 	}
 	
 	function getQuizQuestions($quizid){
@@ -685,6 +699,35 @@ class API {
 		}
 	}
 	
+	function updateQuizTags($quizid,$tags){
+		// remove all tags for this quiz
+		$sql = sprintf("DELETE FROM quiztag WHERE quizid = %d",$quizid);
+		_mysql_query($sql,$this->DB);
+		
+		$tags = explode(",",$tags);
+		foreach($tags as $k=>$t){
+			if(trim($t)!= ""){
+				$tagid = $this->getTagID($t);
+				$sql = sprintf("INSERT INTO quiztag (tagid,quizid) VALUES(%d,%d)",$tagid,$quizid);
+				_mysql_query($sql,$this->DB);
+			}
+		}
+	}
+	
+	function getTagID($tag){
+		$sql = sprintf("SELECT tagid FROM tag WHERE tagtext ='%s'",trim($tag));
+		$result = _mysql_query($sql,$this->DB);
+		if(mysql_num_rows($result) > 0){
+			while($o = mysql_fetch_object($result)){
+				return $o->tagid;
+			}
+		} else {
+			$sql = sprintf("INSERT INTO tag (tagtext) VALUES('%s')",trim($tag));
+			mysql_query($sql,$this->DB);
+			return mysql_insert_id();
+		}
+	}
+	
 	function get10PopularQuizzes(){
 		$sql = "SELECT Count(qa.id) as noattempts, qa.quizref as ref, quiztitle as title FROM quizattempt qa
 					INNER JOIN quiz q ON q.quiztitleref = qa.quizref
@@ -840,6 +883,47 @@ class API {
 			array_push($results,$o);
 		}
 		return $results;
+	}
+	
+	function tagCloud($tag = ""){
+		if($tag == ""){
+			$sql = "SELECT tagtext, COUNT(*) as weight FROM tag t
+					INNER JOIN quiztag qt ON qt.tagid = t.tagid
+					INNER JOIN quiz q ON qt.quizid = q.quizid
+					WHERE quizdeleted = 0
+					AND quizdraft = 0
+					GROUP BY tagtext
+					ORDER BY tagtext ASC";
+			$result = _mysql_query($sql,$this->DB);
+			$cloud = new stdClass;
+			$cloud->tags = Array();
+			while($o = mysql_fetch_object($result)){
+				array_push($cloud->tags,$o);
+			}
+			
+			$msql = sprintf("SELECT MAX(weight) as tagmax, MIN(weight) as tagmin FROM (%s) b",$sql);
+			$result = _mysql_query($msql,$this->DB);
+			while($o = mysql_fetch_object($result)){
+				$cloud->max = $o->tagmax;
+				$cloud->min = $o->tagmin;
+			}
+			return $cloud;
+		} else {
+			$tagid = $this->getTagID($tag);
+			$sql = sprintf("SELECT quiztitleref as ref, quiztitle as title, quizdescription as description
+							FROM quiz q
+							INNER JOIN quiztag qt ON qt.quizid = q.quizid
+							WHERE quizdeleted = 0
+							AND quizdraft = 0
+							AND qt.tagid = %d
+							ORDER BY quiztitle ASC",$tagid);
+			$result = _mysql_query($sql,$this->DB);
+			$results = array();
+			while($o = mysql_fetch_object($result)){
+				array_push($results,$o);
+			}
+			return $results;
+		}
 	}
 	
 	function browseAlpha($init = ""){

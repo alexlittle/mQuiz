@@ -23,7 +23,7 @@ if ($lang != ""){
 
 ?>
 <!DOCTYPE html>
-<html manifest="m/mquiz.appcache">
+<html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<META name="description" content="mQuiz: mobile quiz application"/> 
