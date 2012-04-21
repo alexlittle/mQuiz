@@ -10,7 +10,7 @@ if($uagent_obj->DetectIphone() || $uagent_obj->DetectAndroidPhone()){
 
 global $PAGE,$CONFIG,$MSG,$API,$HEADER;
 
-$nologinpages = array ("login","index","register","faqs","terms","about","phoneapps","reset");
+$nologinpages = array ("login","index","register","faqs","terms","about","phoneapps","reset","search");
 
 if (!in_array($PAGE,$nologinpages)){
 	checkLogin();
@@ -32,7 +32,7 @@ if ($lang != ""){
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>includes/jquery-1.7.min.js"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>includes/jquery-ui-1.8.19.custom.min.js"></script>
-	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>includes/quiz.js"></script>
+	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>includes/script.js"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>/m/includes/mquiz.js"></script>
 	<link rel="StyleSheet" href="<?php echo $CONFIG->homeAddress; ?>includes/style.css" type="text/css" media="screen">
 	<link rel="shortcut icon" href="<?php echo $CONFIG->homeAddress; ?>images/favicon.ico" />
@@ -61,9 +61,16 @@ if ($lang != ""){
 
 <div id="page">
 	<div id="header">
-		<div id="logo">
-			<a href="<?php echo $CONFIG->homeAddress; ?>index.php" class="logo">mQuiz</a>
-		</div>
+		<form action="<?php echo $CONFIG->homeAddress; ?>search.php" method="get">
+			<div id="logo">
+				<a href="<?php echo $CONFIG->homeAddress; ?>index.php" class="logo">mQuiz</a>
+			</div>
+			<div id="search">
+				Search:
+					<input type="text" name="s" value=""/> 	
+			</div>
+		</form>
+		<div style="clear:both"></div>
 		<div id="menu">
 			<ul>
 				<li><a href="<?php echo $CONFIG->homeAddress; ?>my/results.php">My Results</a></li>

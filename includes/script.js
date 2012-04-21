@@ -1,3 +1,6 @@
+
+
+
 function addQuestion(){
 	
 	var qno = $('#questions > div').size()+1;

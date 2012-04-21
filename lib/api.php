@@ -754,19 +754,35 @@ class API {
 		return $leaders;
 	}
 	
-	function searchQuizzes($terms){
-		$sql = sprintf("SELECT * FROM (SELECT quiztitleref as ref, quiztitle as title, quizdescription as description, lastupdate FROM quiz 
-					WHERE (quiztitle LIKE '%%%s%%' OR quizdescription LIKE '%%%s%%')
-					AND quizdraft = 0
-					AND quizdeleted = 0
-					UNION
-					SELECT q.quiztitleref as quizref, quiztitle, quizdescription as description, lastupdate FROM quiz q
-					INNER JOIN quizquestion qq ON q.quizid = qq.quizid
-					INNER JOIN question qu ON qq.questionid = qu.questionid
-					WHERE qu.questiontext LIKE '%%%s%%'
-					AND q.quizdraft = 0
-					AND q.quizdeleted = 0)
-					a LIMIT 0,5",$terms,$terms,$terms);
+	function searchQuizzes($terms, $opts = Array()){
+		if(isset($opts['count'])){
+			$count = $opts['count'];
+		} else {
+			$count = 5;
+		}
+	
+		if(isset($opts['start'])){
+			$start = $opts['start'];
+		} else {
+			$start = 0;
+		}
+		
+		$sql = sprintf("SELECT MAX(weight), ref, title, description FROM (
+						SELECT quiztitleref as ref, quiztitle as title, quizdescription as description, lastupdate, 10 as weight FROM quiz 
+						WHERE (quiztitle LIKE '%%%s%%' OR quizdescription LIKE '%%%s%%')
+						AND quizdraft = 0
+						AND quizdeleted = 0
+						UNION
+						SELECT q.quiztitleref as quizref, quiztitle, quizdescription as description, lastupdate, 2 AS weight FROM quiz q
+						INNER JOIN quizquestion qq ON q.quizid = qq.quizid
+						INNER JOIN question qu ON qq.questionid = qu.questionid
+						WHERE qu.questiontext LIKE '%%%s%%'
+						AND q.quizdraft = 0
+						AND q.quizdeleted = 0)
+					a ",$terms,$terms,$terms);
+		$sql .= " GROUP BY ref,title,description";
+		$sql .= " ORDER BY weight DESC, title ASC";
+		$sql .= sprintf(" LIMIT %d,%d",$start,$count);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return false;

@@ -10,10 +10,12 @@ function Quiz(){
 	this.matchingstate = [];
 	this.matchingopt = [];
 	this.feedback = "";
+	this.opts = {};
 	
-	this.init = function(q){
+	this.init = function(q,opts){
 		this.quiz = q;
 		inQuiz = true;
+		this.opts = opts;
 	}
 	
 	this.setHeader = function(){

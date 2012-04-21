@@ -41,6 +41,7 @@ a:visited, a {
 }
 a:hover {
 	text-decoration:underline;
+	cursor:pointer;
 }
 
 .link {
@@ -87,6 +88,10 @@ a:hover {
 	font-size:130%;
 	font-weight:bold;
 	margin-bottom:5px;
+	float:left;
+}
+#search {
+	float:right;
 }
 #userlogin {
 	float: right;

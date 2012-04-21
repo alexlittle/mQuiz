@@ -42,7 +42,6 @@ $('div[name=al]').each(function(i){
 }
 );
 
-
 </script>
 
 
