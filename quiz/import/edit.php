@@ -24,6 +24,7 @@ $submit = optional_param("submit","",PARAM_TEXT);
 $title = optional_param("title",$q->title,PARAM_TEXT);
 $description = optional_param("description",$q->description,PARAM_TEXT);
 $content = optional_param("content",$q->props['content'],PARAM_TEXT);
+$tags = optional_param("tags",$q->tags,PARAM_TEXT);
 $format = optional_param("format","gift",PARAM_TEXT);
 
 $supported_qtypes = array('truefalse','multichoice','essay','shortanswer','numerical');
@@ -66,6 +67,8 @@ if ($submit != ""){
 			// update title and content
 			$API->updateQuiz($ref,$title,$quizdraft,$description);
 			$API->setProp('quiz',$q->quizid,'content',$content);
+			$API->updateQuizTags($q->quizid, $tags);
+			
 			// remove current questions/responses (will add them again below)
 			$API->removeQuiz($q->quizid);
 			
@@ -78,9 +81,12 @@ if ($submit != ""){
 
 		$q = $API->getQuizById($q->quizid);
 		
+		
 		// store JSON object for quiz (for caching)
 		$json = json_encode($API->getQuizObject($q->ref));
 		$API->setProp('quiz', $q->quizid, 'json', $json);
+		
+		
 		
 		printf("<div class='info'>%s<p>Why not <a href='%s'>try your quiz</a> out now?</p></div>", getstring("quiz.edit.saved"),$CONFIG->homeAddress."m/?preview=true#".$ref);
 		
@@ -130,6 +136,13 @@ if(!empty($MSG)){
 		<div class='formlabel'>Description<br/><small>(optional, max 300 characters, no HTML)</small></div>
 		<div class='formfield'>
 			<textarea name="description" cols="80" rows="3" maxlength="300"><?php echo $description; ?></textarea>
+		</div>
+	</div>
+	<div class="formblock">
+		<div class="formlabel">Tags</div>
+		<div class="formfield">
+			<input type="text" name="tags" value="<?php echo $tags; ?>" size="60"/><br/>
+			<small>comma separated</small>
 		</div>
 	</div>
 	<div class="formblock">

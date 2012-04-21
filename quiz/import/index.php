@@ -54,6 +54,7 @@ if ($submit != ""){
 			$quizid = $API->addQuiz($title,$quizdraft,$description);
 			$API->setProp('quiz',$quizid,'generatedby','import');
 			$API->setProp('quiz',$quizid,'content',$content);
+			$API->updateQuizTags($quizid, $tags);
 			$importer = new GIFTImporter();
 			$importer->quizid = $quizid;
 			$importer->import($questions_to_import);
@@ -112,6 +113,13 @@ if(!empty($MSG)){
 		<div class='formlabel'>Description<br/><small>(optional, max 300 characters, no HTML)</small></div>
 		<div class='formfield'>
 			<textarea name="description" cols="80" rows="3" maxlength="300"><?php echo $description; ?></textarea>
+		</div>
+	</div>
+	<div class="formblock">
+		<div class="formlabel">Tags</div>
+		<div class="formfield">
+			<input type="text" name="tags" value="<?php echo $tags; ?>" size="60"/><br/>
+			<small>comma separated</small>
 		</div>
 	</div>
 	<div class="formblock">
