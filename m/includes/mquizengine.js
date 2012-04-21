@@ -29,13 +29,23 @@ function Quiz(){
 				$('#feedback').append("<h2>Feedback</h2><div id='fbtext'>"+this.feedback+"</div>");
 				$('#feedback').show('blind',{},500);
 				$('#quiznavnextbtn').unbind('click');
-				$('#quiznavnextbtn').bind('click',function(){
-					Q.currentQuestion++;
-					Q.loadQuestion();
-				});
+				if(this.currentQuestion+1 == this.quiz.q.length){
+					$('#quiznavnextbtn').bind('click',function(){
+						Q.showResults();
+					});
+				} else {
+					$('#quiznavnextbtn').bind('click',function(){
+						Q.currentQuestion++;
+						Q.loadQuestion();
+					});
+				}
 			} else {
-				this.currentQuestion++;
-				this.loadQuestion();
+				if(this.currentQuestion+1 == this.quiz.q.length){
+					Q.showResults();
+				} else {
+					this.currentQuestion++;
+					this.loadQuestion();
+				}
 			}
 
 		} else {
@@ -573,15 +583,13 @@ function Quiz(){
 		$('#quiznavnextbtn').unbind('click');
 		if(this.currentQuestion+1 == this.quiz.q.length){
 			$('#quiznavnextbtn').attr({'value':'Get results'});
-			$('#quiznavnextbtn').bind('click',function(){
-				Q.showResults();
-			});
 		} else {
 			$('#quiznavnextbtn').attr({'value':'Next >>'});
-			$('#quiznavnextbtn').bind('click',function(){
-				Q.loadNextQuestion();
-			});
+			
 		}
+		$('#quiznavnextbtn').bind('click',function(){
+			Q.loadNextQuestion();
+		});
 	}
 	
 }
