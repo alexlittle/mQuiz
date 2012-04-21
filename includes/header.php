@@ -10,7 +10,7 @@ if($uagent_obj->DetectIphone() || $uagent_obj->DetectAndroidPhone()){
 
 global $PAGE,$CONFIG,$MSG,$API,$HEADER;
 
-$nologinpages = array ("login","index","register","faqs","terms","about","phoneapps","reset","search");
+$nologinpages = array ("login","index","register","faqs","terms","about","phoneapps","reset","search","browse");
 
 if (!in_array($PAGE,$nologinpages)){
 	checkLogin();
@@ -75,6 +75,7 @@ if ($lang != ""){
 			<ul>
 				<li><a href="<?php echo $CONFIG->homeAddress; ?>my/results.php">My Results</a></li>
 				<li><a href="<?php echo $CONFIG->homeAddress; ?>my/quizzes.php">My Quizzes</a></li>
+				<li><a href="<?php echo $CONFIG->homeAddress; ?>browse.php">Browse Quizzes</a></li>
 				<li><a href="<?php echo $CONFIG->homeAddress; ?>quiz/new.php">Create New Quiz</a></li>
 				<li><a href="<?php echo $CONFIG->homeAddress; ?>m/">Mobile</a></li>
 			</ul>

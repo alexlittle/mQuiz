@@ -842,6 +842,36 @@ class API {
 		return $results;
 	}
 	
+	function browseAlpha($init = ""){
+		if($init == ""){
+			$sql = "SELECT COUNT(*) as icount, initial FROM ( 
+						SELECT upper(substring(quiztitle,1,1)) as initial 
+						FROM quiz
+						WHERE quizdeleted = 0
+						AND quizdraft = 0) i
+					GROUP BY initial ASC";
+			$result = _mysql_query($sql,$this->DB);
+			$results = array();
+			while($o = mysql_fetch_object($result)){
+				$results[$o->initial] = $o->icount;
+			}
+			return $results;
+		} else {
+			$sql = sprintf("SELECT quiztitleref as ref, quiztitle as title, quizdescription as description
+							FROM quiz
+							WHERE quizdeleted = 0
+							AND quizdraft = 0
+							AND upper(substring(quiztitle,1,1)) = '%s'
+							ORDER BY quiztitle ASC",$init);
+			$result = _mysql_query($sql,$this->DB);
+			$results = array();
+			while($o = mysql_fetch_object($result)){
+				array_push($results,$o);
+			}
+			return $results;
+		}
+	}
+	
 	function isOwner($ref){
 		global $USER;
 		$sql = sprintf("SELECT * FROM quiz WHERE quiztitleref='%s' AND createdby = %d",$ref,$USER->userid);
