@@ -37,9 +37,7 @@ if ($submit != ""){
 	}
 	
 	// check username doesn't already exist
-	$u = new User($email);
-	$user = $API->getUser($u);
-	if(isset($user->userid) && $user->userid != ""){
+	if($API->checkUserExists($email)){
 		array_push($MSG,"Email already in use, please select another");
 	}
 	
