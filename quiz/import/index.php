@@ -1,11 +1,11 @@
 <?php 
 include_once("../../config.php");
 $PAGE = "import";
-include_once("../../includes/header.php");
+
 global $IMPORT_INFO;
 $IMPORT_INFO = array();
 
-echo "<h1>Create quiz in GIFT format</h1>";
+
 
 $submit = optional_param("submit","",PARAM_TEXT);
 $title = optional_param("title","",PARAM_TEXT);
@@ -67,21 +67,17 @@ if ($submit != ""){
 		$json = json_encode($API->getQuizObject($q->ref));
 		$API->setProp('quiz', $quizid, 'json', $json);
 		
-		printf("<div class='info'>%s<p>Why not <a href='%s'>try your quiz</a> out now?</p></div>", getstring("quiz.new.saved"),$CONFIG->homeAddress."m/?preview=true#".$q->ref);
-		if(!empty($IMPORT_INFO)){
-			echo "<div class='info'>Some of your questions were not imported:<ul>";
-			foreach ($IMPORT_INFO as $info){
-				echo "<li>".$info."</li>";
-			}
-			echo "</ul></div>";
-		}
 		// send mail to owner
 		$m = new Mailer();
 		$m->sendQuizCreated($USER->email,$USER->firstname, $title, $q->ref);
-		include_once("../../includes/footer.php");
+		
+		header(sprintf("Location:  %squiz/invite.php?qref=%s&new=1",$CONFIG->homeAddress, $q->ref));
 		die;
 	}
 }
+
+include_once("../../includes/header.php");
+echo "<h1>Create quiz in GIFT format</h1>";
 
 if(!empty($MSG)){
 	echo "<div class='warning'><ul>";

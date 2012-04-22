@@ -85,9 +85,10 @@ if ($submit != ""){
 		$json = json_encode($API->getQuizObject($ref));
 		$API->setProp('quiz', $quizid, 'json', $json);
 		
-		printf("<div class='info'>%s<p>Why not <a href='%s'>try your quiz</a> out now?</p></div>", getstring("quiz.edit.saved"),$CONFIG->homeAddress."m/?preview=true#".$ref);
-		include_once("../includes/footer.php");
+		
+		header(sprintf("Location:  %squiz/invite.php?qref=%s&new=0",$CONFIG->homeAddress, $q->ref));
 		die;
+
 	}
 	//reload quiz (to get updated title)
 	$q = $API->getQuizForUser($ref,$USER->userid);

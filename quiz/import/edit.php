@@ -1,21 +1,22 @@
 <?php 
 include_once("../../config.php");
 $PAGE = "import";
-include_once("../../includes/header.php");
+
 global $IMPORT_INFO;
 $IMPORT_INFO = array();
 $ref = optional_param('ref',"",PARAM_TEXT);
 $q = $API->getQuizForUser($ref,$USER->userid);
 
 if($q == null){
+	include_once("../../includes/header.php");
 	echo "Quiz not found";
 	include_once("../includes/footer.php");
 	die;
 }
 
 if ($API->quizHasAttempts($ref)){
+	include_once("../../includes/header.php");
 	printf("<div class='info'>Sorry, you cannot edit this quiz as attempts have already been made on it.</div>");
-
 	include_once("../../includes/footer.php");
 	die;
 }
@@ -87,21 +88,14 @@ if ($submit != ""){
 		$API->setProp('quiz', $q->quizid, 'json', $json);
 		
 		
-		
-		printf("<div class='info'>%s<p>Why not <a href='%s'>try your quiz</a> out now?</p></div>", getstring("quiz.edit.saved"),$CONFIG->homeAddress."m/?preview=true#".$ref);
-		
-		if(!empty($IMPORT_INFO)){
-			echo "<div class='info'>Some of your questions were not imported:<ul>";
-			foreach ($IMPORT_INFO as $info){
-				echo "<li>".$info."</li>";
-			}
-			echo "</ul></div>";
-		}
-		include_once("../../includes/footer.php");
+		header(sprintf("Location:  %squiz/invite.php?qref=%s&new=0",$CONFIG->homeAddress, $q->ref));
 		die;
 	}
 }
+
+include_once("../../includes/header.php");
 ?>
+
 
 <h1><?php echo getstring("quiz.edit.title"); ?></h1>
 

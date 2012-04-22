@@ -512,14 +512,14 @@ function Quiz(){
 		$('#content').append(next);
 		next.hide();
 		
-		var retake = $('<div>').attr({'class': 'resultopt clickable centre'}).append('Take this quiz again');
+		var retake = $('<div>').attr({'class': 'resultopt clickable centre'}).append("Retake '"+ this.quiz.title +"'");
 		$('#content').append(retake);
 		var refid = this.quiz.refid;
 		retake.click(function(){
 			loadQuiz(refid,false);
 		});
 		
-		var takeAnother = $('<div>').attr({'class': 'resultopt clickable centre'}).append('Take another quiz');
+		var takeAnother = $('<div>').attr({'class': 'resultopt clickable centre'}).append('Try another quiz');
 		$('#content').append(takeAnother);
 		takeAnother.click(function(){
 			document.location = "#home";
@@ -560,9 +560,7 @@ function Quiz(){
 				   if($('#next') && data.next){
 					   if(data.next.length > 0){
 						   $('#next').empty();
-						   for(var n in data.next){
-							   $('#next').append("We suggest you take '<a href='#"+ data.next[n].quizref+"'>"+ data.next[n].title+"</a>' next");
-						   }
+						   $('#next').append("We suggest you take '<a href='#"+ data.next[0].quizref+"'>"+ data.next[0].title+"</a>' next");
 						   $('#next').show('blind');
 					   }
 				   }

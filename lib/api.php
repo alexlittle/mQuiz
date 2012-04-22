@@ -261,6 +261,18 @@ class API {
 		return $summary;
 	}
 	
+	function getQuizAttempt($id){
+		$sql = sprintf("SELECT qa.id, ((qascore*100)/ maxscore) as score, submitdate FROM quizattempt qa
+							INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+							WHERE qa.id = %d
+							AND q.quizdeleted = 0",$id);
+		$result = _mysql_query($sql,$this->DB);
+		while($o = mysql_fetch_object($result)){
+			return $o;
+		}
+		return false;
+	}
+	
 	function getQuizAttemptDetail($id){
 		$sql = sprintf("SELECT questiontext,qarscore,responsetext,questionpropvalue as maxscore FROM quizattemptresponse qar
 						INNER JOIN question q on qar.questionrefid = q.questiontitleref
@@ -468,12 +480,12 @@ class API {
 		}
 	}
 	
-	function getQuizForUser($ref,$userid){
+	function getQuizForUser($qref,$userid){
 		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.quiztitleref as ref, q.quizdraft as draft, q.quizdescription as description FROM quiz q
 						WHERE q.quiztitleref = '%s' 
 						AND createdby=%d
 						AND q.quizdeleted = 0
-						ORDER BY q.quiztitle ASC",$ref,$userid);
+						ORDER BY q.quiztitle ASC",$qref,$userid);
 
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
@@ -885,11 +897,12 @@ class API {
 		return $results;
 	}
 	
-	function suggestNext($quizref){
+	function suggestNext($quizref,$score){
 		$sql = sprintf("SELECT qp.quiztitleref as quizref, qp.quiztitle as title FROM quiz qp
 				INNER JOIN quizrelation qr ON qp.quizid = qr.parentquizid
 				INNER JOIN quiz qc ON qc.quizid = qr.childquizid
-				WHERE qc.quiztitleref = '%s'",$quizref);
+				WHERE qc.quiztitleref = '%s'
+				AND qr.threshold < %d",$quizref,$score);
 		$result = _mysql_query($sql,$this->DB);
 		$results = array();
 		while($o = mysql_fetch_object($result)){

@@ -1,7 +1,6 @@
 <?php
 include_once("../config.php");
 $PAGE = "newquiz";
-include_once("../includes/header.php");
 
 $submit = optional_param("submit","",PARAM_TEXT);
 
@@ -118,14 +117,14 @@ if ($submit != ""){
 		$json = json_encode($API->getQuizObject($q->ref));
 		$API->setProp('quiz', $quizid, 'json', $json);
 		
-		printf("<div class='info'>%s<p>Why not <a href='%s'>try your quiz</a> out now?</p></div>", getstring("quiz.new.saved"),$CONFIG->homeAddress."m/?preview=true#".$q->ref);
 		// send mail to owner
 		$m = new Mailer();
 		$m->sendQuizCreated($USER->email,$USER->firstname, $title, $q->ref);
-		include_once("../includes/footer.php");
+		header(sprintf("Location:  %squiz/invite.php?qref=%s&new=1",$CONFIG->homeAddress, $q->ref));
 		die;
 	} 
 }
+include_once("../includes/header.php");
 
 ?>
 <h1><?php echo getstring("quiz.new.title"); ?> or <a href="import/index.php">enter in GIFT format</a></h1>
