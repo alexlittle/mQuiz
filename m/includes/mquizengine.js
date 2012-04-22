@@ -464,7 +464,9 @@ function Quiz(){
 				o.score += parseFloat(q.r[r].score);
 				o.qrtext += q.r[r].text + "|";
 				countsel++;
-				this.feedback += q.r[r].text+": "+ q.r[r].props.feedback + "<br/>";
+				if(q.r[r].props.feedback != ""){
+					this.feedback += q.r[r].text+": "+ q.r[r].props.feedback + "<br/>";
+				}
 			}
 		}
 		//set score back to 0 if any incorrect options selected
@@ -485,22 +487,9 @@ function Quiz(){
 			return;
 		} 
 		
-		/*if(this.feedback != ""){
-			$('#question').hide();
-			$('#response').hide();
-			$('#feedback').empty();
-			$('#feedback').append("<h2>Feedback</h2><div id='fbtext'>"+this.feedback+"</div>");
-			$('#feedback').show('blind',{},500);
-			this.feedback = "";
-			$('#quiznavnextbtn').unbind('click');
-			$('#quiznavnextbtn').bind('click',function(){
-				Q.showResults();
-			});
-			return;
-		} */
-		
 		inQuiz = false;
 		$('#content').empty();
+		
 		$('#content').append("<h2 name='lang' id='page_title_results'>Your results for:<br/> '"+ this.quiz.title +"':</h2>");
 		// calculate score
 		var total = 0;
@@ -518,6 +507,10 @@ function Quiz(){
 		var rank = $('<div>').attr({'id':'rank','class': 'rank'});
 		$('#content').append(rank);
 		rank.hide();
+		
+		var next = $('<div>').attr({'id':'next','class': 'next centre'});
+		$('#content').append(next);
+		next.hide();
 		
 		var retake = $('<div>').attr({'class': 'resultopt clickable centre'}).append('Take this quiz again');
 		$('#content').append(retake);
@@ -537,6 +530,7 @@ function Quiz(){
 		viewResults.click(function(){
 			document.location = "#results";
 		});
+		
 		
 		//save for submission to server
 		var content = Object();
@@ -562,6 +556,15 @@ function Quiz(){
 					   $('#rank').empty();
 					   $('#rank').append("Your ranking: " + data.rank);
 					   $('#rank').show();
+				   }
+				   if($('#next') && data.next){
+					   if(data.next.length > 0){
+						   $('#next').empty();
+						   for(var n in data.next){
+							   $('#next').append("We suggest you take '<a href='#"+ data.next[n].quizref+"'>"+ data.next[n].title+"</a>' next");
+						   }
+						   $('#next').show('blind');
+					   }
 				   }
 			   }
 		   }, 

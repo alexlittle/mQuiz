@@ -135,6 +135,7 @@ if ($method != "search" && $method != "register" && $method != "login"){
 					$response->rank = $API->getRankingForAttempt($attemptid);
 					$response->bestrank = $best;
 				}
+				$response->next = $API->suggestNext($json->quizid);
 				$response->result = true;
 			}
 		}

@@ -14,7 +14,6 @@ class QuizAttemptResponse {
 	public $qaid;
 	public $userScore;
 	public $questionRef;
-	public $questionResponseRef;
 	public $text;
 }
 

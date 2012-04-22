@@ -885,6 +885,19 @@ class API {
 		return $results;
 	}
 	
+	function suggestNext($quizref){
+		$sql = sprintf("SELECT qp.quiztitleref as quizref, qp.quiztitle as title FROM quiz qp
+				INNER JOIN quizrelation qr ON qp.quizid = qr.parentquizid
+				INNER JOIN quiz qc ON qc.quizid = qr.childquizid
+				WHERE qc.quiztitleref = '%s'",$quizref);
+		$result = _mysql_query($sql,$this->DB);
+		$results = array();
+		while($o = mysql_fetch_object($result)){
+			array_push($results,$o);
+		}
+		return $results;
+	}
+	
 	function tagCloud($tag = ""){
 		if($tag == ""){
 			$sql = "SELECT tagtext, COUNT(*) as weight FROM tag t
