@@ -271,3 +271,8 @@ div.adrtext {
 	padding-left:20px;
 }
 
+#share {
+	border: 1px solid #CCCCCC;
+    margin: 10px;
+    padding: 10px;
+}

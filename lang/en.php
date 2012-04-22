@@ -44,7 +44,7 @@ $LANG['quiz.edit.quiztitle'] = 'Title';
 $LANG['quiz.edit.questions'] = 'Questions';
 $LANG['quiz.edit.question'] = 'Question';
 $LANG['quiz.edit.responses'] = 'Response options';
-$LANG['quiz.edit.saved'] = 'Changes saved';
+$LANG['quiz.edit.saved'] = 'Changes saved, <a href="%s">try your quiz</a> now';
 
 $LANG['quiz.new.add'] = 'Add another question';
 $LANG['quiz.new.error.notitle'] = 'You must give your quiz a title';
@@ -53,7 +53,7 @@ $LANG['quiz.new.quiztitle'] = 'Title';
 $LANG['quiz.new.questions'] = 'Questions';
 $LANG['quiz.new.question'] = 'Question';
 $LANG['quiz.new.responses'] = 'Response options';
-$LANG['quiz.new.saved'] = 'Your quiz has been created!';
+$LANG['quiz.new.saved'] = 'Your quiz has been created, <a href="%s">try your quiz</a> now';
 $LANG['quiz.new.submit.button'] = "Create quiz";
 $LANG['quiz.new.title'] = 'Create a new quiz';
 

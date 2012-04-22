@@ -83,13 +83,42 @@ class API {
 	function addUser($username,$password,$firstname,$surname,$email){
 		$username = strtolower($username);
 		$email = strtolower($email);
-		$str = "INSERT INTO user (username,password,firstname,lastname,email) VALUES ('%s',md5('%s'),'%s','%s','%s')";
-		$sql = sprintf($str,$username,$password,$firstname,$surname,$email);
+		
+		// find if pending user
+		$sql = sprintf("SELECT * FROM user where username='%s' and pending = 1",$username);
+		$result = _mysql_query($sql,$this->DB);
+		
+		if(mysql_num_rows($result) == 0){
+			$str = "INSERT INTO user (username,password,firstname,lastname,email,pending) VALUES ('%s',md5('%s'),'%s','%s','%s',0)";
+			$sql = sprintf($str,$username,$password,$firstname,$surname,$email);
+		} else {
+			$str = "UPDATE user SET
+						password = md5('%s'),
+						firstname = '%s',
+						lastname = '%s',
+						email = '%s',
+						pending = 0
+					WHERE username = '%s'";
+			$sql = sprintf($str,$password,$firstname,$surname,$email,$username);
+		}
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return false;
 		}
 		return true;
+		
+	}
+	
+	function addPendingUser($email){
+		$email = strtolower($email);
+		$sql = sprintf("SELECT * FROM user WHERE email='%s'",$email);
+		$result = _mysql_query($sql,$this->DB);
+		
+		if(mysql_num_rows($result) != 0){
+			$str = "INSERT INTO user (username,email,pending) VALUES ('%s','%s',1)";
+			$sql = sprintf($str,$email,$email);
+			_mysql_query($sql,$this->DB);
+		}
 	}
 	
 	function getUserProperties(&$user){
@@ -146,7 +175,7 @@ class API {
 	}
 	
 	function checkUserExists($username){
-		$sql = sprintf("SELECT * FROM user WHERE username='%s'",$username);
+		$sql = sprintf("SELECT * FROM user WHERE username='%s' and pending=0",$username);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return false;
