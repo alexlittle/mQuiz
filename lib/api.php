@@ -244,7 +244,7 @@ class API {
 	}
 	
 	function getQuizzes(){
-		$sql = "SELECT q.quizid, q.quiztitle as title, q.quiztitleref as ref, q.quizdraft FROM quiz q 
+		$sql = "SELECT q.quizid, q.quiztitle as title, q.qref as ref, q.quizdraft FROM quiz q 
 				WHERE quizdraft = 0
 				AND quizdeleted = 0";
 		$result = _mysql_query($sql,$this->DB);
@@ -259,7 +259,7 @@ class API {
 	}
 	
 	function getQuizzesForUser($userid){
-		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.quiztitleref as ref, q.quizdraft FROM quiz q
+		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.qref as ref, q.quizdraft FROM quiz q
 						WHERE q.createdby = %d
 						AND quizdeleted = 0
 						ORDER BY q.quiztitle ASC",$userid);
@@ -281,7 +281,7 @@ class API {
 	function getQuizAttempts($ref, $opts = array()){
 		$sql = sprintf("SELECT qa.id, ((qascore*100)/ maxscore) as score, firstname, lastname, submitdate FROM quizattempt qa
 						INNER JOIN user u ON qa.submituser = u.username
-						INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+						INNER JOIN quiz q ON q.qref = qa.quizref
 						WHERE quizref = '%s'
 						AND q.quizdeleted = 0
 						AND u.userid != q.createdby
@@ -296,7 +296,7 @@ class API {
 	
 	function getQuizAttempt($id){
 		$sql = sprintf("SELECT qa.id, ((qascore*100)/ maxscore) as score, submitdate FROM quizattempt qa
-							INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+							INNER JOIN quiz q ON q.qref = qa.quizref
 							WHERE qa.id = %d
 							AND q.quizdeleted = 0",$id);
 		$result = _mysql_query($sql,$this->DB);
@@ -345,7 +345,7 @@ class API {
 								YEAR(submitdate) as year,
 								DATE_FORMAT(submitdate,'%%e-%%b-%%Y') AS displaydate
 						FROM quizattempt qa
-						INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+						INNER JOIN quiz q ON q.qref = qa.quizref
 						WHERE quizref='%s' 
 						AND submitdate > DATE_ADD(NOW(), INTERVAL -%d DAY) 
 						AND q.quizdeleted = 0
@@ -356,7 +356,7 @@ class API {
 	
 	function getQuizNoAttempts($quizref){
 		$sql = sprintf("SELECT Count(*) as noattempts, AVG(qascore*100/maxscore) as avgscore FROM quizattempt qa
-						INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+						INNER JOIN quiz q ON q.qref = qa.quizref
 						WHERE quizref = '%s'
 						AND q.quizdeleted = 0",$quizref);
 		$result = _mysql_query($sql,$this->DB);
@@ -381,7 +381,7 @@ class API {
 	
 	function getQuizScores($quizref){
 		$sql = sprintf("SELECT Count(*) as NoScores, qascore*100/maxscore as scorepercent FROM quizattempt qa
-						INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+						INNER JOIN quiz q ON q.qref = qa.quizref
 						WHERE quizref = '%s'
 						AND q.quizdeleted = 0
 						GROUP BY qascore",$quizref);
@@ -399,7 +399,7 @@ class API {
 	function getQuizAvgResponseScores($quizref){
 		$sql = sprintf("SELECT AVG(qarscore) as avgscore, qq.questiontext FROM quizattemptresponse qar
 						INNER JOIN quizattempt qa ON qa.id = qar.qaid
-						INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+						INNER JOIN quiz q ON q.qref = qa.quizref
 						INNER JOIN question qq ON qq.questiontitleref = qar.questionrefid
 						INNER JOIN quizquestion qqu ON qqu.questionid = qq.questionid
 						WHERE quizref = '%s'
@@ -412,14 +412,14 @@ class API {
 	
 	function getMyQuizScores(){
 		global $USER;
-		$sql = sprintf("SELECT AVG(score) as avgscore, count(*) as noattempts, max(score) as maxscore, min(score) as minscore, quiztitle as title, quiztitleref as ref  FROM 
-						(SELECT ((qascore*100)/ maxscore) as score,  firstname, lastname, submitdate, quiztitle, quiztitleref FROM quizattempt qa
+		$sql = sprintf("SELECT AVG(score) as avgscore, count(*) as noattempts, max(score) as maxscore, min(score) as minscore, quiztitle as title, qref as ref  FROM 
+						(SELECT ((qascore*100)/ maxscore) as score,  firstname, lastname, submitdate, quiztitle, q.qref FROM quizattempt qa
 						INNER JOIN user u ON qa.submituser = u.username
-						INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+						INNER JOIN quiz q ON q.qref = qa.quizref
 						WHERE u.userid = %d
 						AND q.quizdeleted = 0
 						ORDER BY submitdate DESC) a
-						GROUP BY quiztitle, quiztitleref", $USER->userid);
+						GROUP BY quiztitle, qref", $USER->userid);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return;
@@ -486,8 +486,8 @@ class API {
 	}
 	
 	function getQuiz($ref){
-		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.quiztitleref as ref, q.quizdraft, q.quizdescription as description, lastupdate FROM quiz q
-						WHERE q.quiztitleref = '%s'
+		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.qref as ref, q.quizdraft, q.quizdescription as description, lastupdate FROM quiz q
+						WHERE q.qref = '%s'
 						AND q.quizdeleted = 0",$ref);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
@@ -500,7 +500,7 @@ class API {
 	}
 	
 	function getQuizById($quizid){
-		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.quiztitleref as ref, q.quizdraft FROM quiz q
+		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.qref as ref, q.quizdraft FROM quiz q
 							WHERE q.quizid = %d
 							AND q.quizdeleted = 0",$quizid);
 		$result = _mysql_query($sql,$this->DB);
@@ -514,8 +514,8 @@ class API {
 	}
 	
 	function getQuizForUser($qref,$userid){
-		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.quiztitleref as ref, q.quizdraft as draft, q.quizdescription as description FROM quiz q
-						WHERE q.quiztitleref = '%s' 
+		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.qref as ref, q.quizdraft as draft, q.quizdescription as description FROM quiz q
+						WHERE q.qref = '%s' 
 						AND createdby=%d
 						AND q.quizdeleted = 0
 						ORDER BY q.quiztitle ASC",$qref,$userid);
@@ -610,11 +610,11 @@ class API {
 	
 	function addQuiz($title, $draft=0,$description=""){
 		global $USER, $CONFIG;
-		$quiztitleref = $this->createUUID("qt");
+		$qref = $this->createUUID("qt");
 		$description = substr($description,0,300);
 		$date = new DateTime();
-		$str = "INSERT INTO quiz (quiztitleref,createdby,quizdraft, quiztitle,quizdescription, lastupdate) VALUES ('%s',%d,%d,'%s','%s','%s')";
-		$sql = sprintf($str,$quiztitleref,$USER->userid,$draft,$title,$description,$date->format('Y-m-d H:i:s'));
+		$str = "INSERT INTO quiz (qref,createdby,quizdraft, quiztitle,quizdescription, lastupdate) VALUES ('%s',%d,%d,'%s','%s','%s')";
+		$sql = sprintf($str,$qref,$USER->userid,$draft,$title,$description,$date->format('Y-m-d H:i:s'));
 		mysql_query($sql,$this->DB);
 		$result = mysql_insert_id();
 		if (!$result){
@@ -695,7 +695,7 @@ class API {
 	function deleteQuiz($ref){
 		//remove questions/responses first
 		$q = $this->getQuiz($ref);
-		$sql = sprintf("UPDATE quiz SET quizdeleted = 1 WHERE quiztitleref='%s'",$ref);
+		$sql = sprintf("UPDATE quiz SET quizdeleted = 1 WHERE qref='%s'",$ref);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return ;
@@ -737,7 +737,7 @@ class API {
 							quiztitle = '%s',
 							quizdescription = '%s',
 							lastupdate = '%s'
-						WHERE quiztitleref='%s'",$quizdraft,$title,$description, $date->format('Y-m-d H:i:s'),$ref);
+						WHERE qref='%s'",$quizdraft,$title,$description, $date->format('Y-m-d H:i:s'),$ref);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return ;
@@ -775,7 +775,7 @@ class API {
 	
 	function get10PopularQuizzes(){
 		$sql = "SELECT Count(qa.id) as noattempts, qa.quizref as ref, quiztitle as title FROM quizattempt qa
-					INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+					INNER JOIN quiz q ON q.qref = qa.quizref
 					INNER JOIN user u ON u.username = qa.submituser
 					WHERE u.userid != q.createdby
 					AND q.quizdraft = 0
@@ -792,7 +792,7 @@ class API {
 	}
 	
 	function get10MostRecentQuizzes(){
-		$sql = "SELECT q.quiztitleref as ref ,createdon, quiztitle as title FROM quiz q
+		$sql = "SELECT q.qref as ref ,createdon, quiztitle as title FROM quiz q
 					WHERE quizdraft = 0
 					AND quizdeleted = 0
 					ORDER BY createdon DESC
@@ -813,7 +813,7 @@ class API {
 		/*$sql = "SELECT AVG(qa.maxscore) as avgscore, u.firstname, u.lastname FROM 
 				(SELECT MAX(qascore*100/maxscore) as maxscore, submituser, quizref  FROM quizattempt
 				GROUP BY submituser, quizref) qa
-				INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+				INNER JOIN quiz q ON q.qref = qa.quizref
 				INNER JOIN user u ON u.username = qa.submituser
 				WHERE q.quizdraft = 0
 				AND q.quizdeleted = 0
@@ -822,7 +822,7 @@ class API {
 				ORDER BY AVG(qa.maxscore) DESC
 				LIMIT 0,10";*/
 		$sql = "SELECT AVG(qascore*100/maxscore) as avgscore, u.firstname, u.lastname FROM quizattempt qa
-					INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+					INNER JOIN quiz q ON q.qref = qa.quizref
 					INNER JOIN user u ON u.username = qa.submituser
 					WHERE u.userid != q.createdby
 					AND q.quizdraft = 0
@@ -856,12 +856,12 @@ class API {
 		}
 		
 		$sql = sprintf("SELECT MAX(weight), ref, title, description FROM (
-						SELECT quiztitleref as ref, quiztitle as title, quizdescription as description, lastupdate, 10 as weight FROM quiz 
+						SELECT qref as ref, quiztitle as title, quizdescription as description, lastupdate, 10 as weight FROM quiz 
 						WHERE (quiztitle LIKE '%%%s%%' OR quizdescription LIKE '%%%s%%')
 						AND quizdraft = 0
 						AND quizdeleted = 0
 						UNION
-						SELECT q.quiztitleref as quizref, quiztitle, quizdescription as description, lastupdate, 2 AS weight FROM quiz q
+						SELECT q.qref as quizref, quiztitle, quizdescription as description, lastupdate, 2 AS weight FROM quiz q
 						INNER JOIN quizquestion qq ON q.quizid = qq.quizid
 						INNER JOIN question qu ON qq.questionid = qu.questionid
 						WHERE qu.questiontext LIKE '%%%s%%'
@@ -886,7 +886,7 @@ class API {
 		global $USER;
 		$sql = "SELECT DISTINCT quizref as ref, quiztitle as title, quizdescription as description, lastupdate FROM (";
 		// get featured
-		$sql .= "SELECT * FROM (SELECT q.quizid, q.quiztitleref as quizref, q.quiztitle, 10 AS weight,q.quizdescription, lastupdate FROM quiz q
+		$sql .= "SELECT * FROM (SELECT q.quizid, q.qref as quizref, q.quiztitle, 10 AS weight,q.quizdescription, lastupdate FROM quiz q
 							INNER JOIN quizprop qp ON q.quizid = qp.quizid
 							WHERE qp.quizpropname = 'featured'
 							AND qp.quizpropvalue = 'true'
@@ -897,7 +897,7 @@ class API {
 		
 		// get most recent 5
 		$sql .= " UNION
-					SELECT * FROM (SELECT q.quizid, q.quiztitleref as quizref, q.quiztitle,5 AS weight,q.quizdescription, lastupdate FROM quiz q
+					SELECT * FROM (SELECT q.quizid, q.qref as quizref, q.quiztitle,5 AS weight,q.quizdescription, lastupdate FROM quiz q
 							WHERE q.quizdraft = 0
 							AND q.quizdeleted = 0
 							ORDER BY createdon DESC) b";
@@ -906,7 +906,7 @@ class API {
 		$sql .= " UNION 
 					SELECT * FROM 
 					(SELECT q.quizid, qa.quizref, q.quiztitle, 4 AS weight,q.quizdescription, lastupdate FROM quizattempt qa
-					INNER JOIN quiz q ON q.quiztitleref = qa.quizref
+					INNER JOIN quiz q ON q.qref = qa.quizref
 					INNER JOIN user u ON u.username = qa.submituser
 					WHERE u.userid != q.createdby
 					AND q.quizdraft = 0
@@ -916,7 +916,7 @@ class API {
 		
 		$sql .= sprintf(") a
 					WHERE a.quizref NOT IN (SELECT quizref FROM quizattempt WHERE qauser ='%s')
-					AND a.quizref NOT IN (SELECT quiztitleref FROM quiz WHERE createdby =%d)
+					AND a.quizref NOT IN (SELECT qref FROM quiz WHERE createdby =%d)
 					ORDER BY weight DESC
 					LIMIT 0,10",$USER->username,$USER->userid);
 		$result = _mysql_query($sql,$this->DB);
@@ -931,11 +931,12 @@ class API {
 	}
 	
 	function suggestNext($quizref,$score){
-		$sql = sprintf("SELECT qp.quiztitleref as quizref, qp.quiztitle as title FROM quiz qp
+		$sql = sprintf("SELECT qp.qref as quizref, qp.quiztitle as title FROM quiz qp
 				INNER JOIN quizrelation qr ON qp.quizid = qr.parentquizid
 				INNER JOIN quiz qc ON qc.quizid = qr.childquizid
-				WHERE qc.quiztitleref = '%s'
-				AND qr.threshold < %d",$quizref,$score);
+				WHERE qc.qref = '%s'
+				AND qr.threshold <= %d
+				ORDER BY qr.threshold DESC",$quizref,$score);
 		$result = _mysql_query($sql,$this->DB);
 		$results = array();
 		while($o = mysql_fetch_object($result)){
@@ -969,7 +970,7 @@ class API {
 			return $cloud;
 		} else {
 			$tagid = $this->getTagID($tag);
-			$sql = sprintf("SELECT quiztitleref as ref, quiztitle as title, quizdescription as description
+			$sql = sprintf("SELECT qref as ref, quiztitle as title, quizdescription as description
 							FROM quiz q
 							INNER JOIN quiztag qt ON qt.quizid = q.quizid
 							WHERE quizdeleted = 0
@@ -1000,7 +1001,7 @@ class API {
 			}
 			return $results;
 		} else {
-			$sql = sprintf("SELECT quiztitleref as ref, quiztitle as title, quizdescription as description
+			$sql = sprintf("SELECT qref as ref, quiztitle as title, quizdescription as description
 							FROM quiz
 							WHERE quizdeleted = 0
 							AND quizdraft = 0
@@ -1017,7 +1018,7 @@ class API {
 	
 	function isOwner($qref){
 		global $USER;
-		$sql = sprintf("SELECT * FROM quiz WHERE quiztitleref='%s' AND createdby = %d",$qref,$USER->userid);
+		$sql = sprintf("SELECT * FROM quiz WHERE qref='%s' AND createdby = %d",$qref,$USER->userid);
 		$result = _mysql_query($sql,$this->DB);
 		while($o = mysql_fetch_object($result)){
 			return true;
@@ -1071,6 +1072,17 @@ class API {
 		$str = "INSERT INTO usergroupquiz (userid,groupid,quizid) VALUES (%d,%d,%d)";
 		$sql = sprintf($str,$userid,$groupid,$quizid);
 		_mysql_query($sql,$this->DB);
+	}
+	
+	function getUserGroups(){
+		global $USER;
+		$sql = sprintf("SELECT g.groupid, g.groupname FROM `group` g 
+						WHERE g.ownerid = %d
+						UNION
+						SELECT g.groupid, g.groupname FROM `group` g 
+						INNER JOIN usergroupquiz ugq ON g.groupid = ugq.groupid
+						WHERE ugq.userid = %d");
+		$results = _mysql_query($sql,$this->DB);
 	}
 	
 	function getQuizObject($ref){
@@ -1132,7 +1144,6 @@ class API {
 						'maxscore'=>$maxscore,
 						'lastupdate'=>$quiz->lastupdate,
 						'q'=>$questions);
-		
 		return $q;	
 	}
 	

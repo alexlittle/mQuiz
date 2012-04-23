@@ -120,7 +120,7 @@ if ($submit != ""){
 		// send mail to owner
 		$m = new Mailer();
 		$m->sendQuizCreated($USER->email,$USER->firstname, $title, $q->ref);
-		header(sprintf("Location:  %squiz/invite.php?qref=%s&new=true",$CONFIG->homeAddress, $q->ref));
+		header(sprintf("Location:  %squiz/options.php?qref=%s&new=true",$CONFIG->homeAddress, $q->ref));
 		die;
 	} 
 }

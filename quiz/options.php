@@ -5,6 +5,8 @@ include_once("../includes/header.php");
 
 $qref = required_param("qref",PARAM_TEXT);
 $new = optional_param("new","",PARAM_TEXT);
+$view = optional_param("view","invite",PARAM_TEXT);
+
 $q = $API->getQuizForUser($qref, $USER->userid);
 
 if(!$q){

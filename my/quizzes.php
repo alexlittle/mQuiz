@@ -27,7 +27,7 @@ foreach ($quizzes as $q){
 		echo "<a href='".$CONFIG->homeAddress."quiz/edit.php?ref=".$q->ref."'>[Edit] </a>";
 	}
 	echo "<a href='".$CONFIG->homeAddress."quiz/delete.php?ref=".$q->ref."'>[Delete]</a>";
-	echo "<a href='".$CONFIG->homeAddress."quiz/invite.php?qref=".$q->ref."'> [Share]</a>";
+	echo "<a href='".$CONFIG->homeAddress."quiz/options.php?qref=".$q->ref."'> [Share]</a>";
 	echo "</small></div>";
 	echo "<div style='clear:both'></div>";
 	echo "</div>";
