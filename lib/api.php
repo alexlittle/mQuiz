@@ -1036,10 +1036,13 @@ class API {
 		$mail = new Mailer();
 		//split up the email addresses
 		$emailArray = preg_split( "( |,)", $emails );
+		$groupname = "Invited by email - ".$q->title." - ".date('d-M-Y');
+		$groupid = $this->addGroup($groupname);
 		foreach($emailArray as $email){
 			if(trim($email) != ""){
 				if(validEmailAddress($email)){
 					$userid =$this->addPendingUser($email);
+					$this->addUserGroupQuiz($userid,$groupid,$q->quizid);
 					$mail->invite($email, $USER->firstname, $q->title, $q->ref);
 				}
 			}
@@ -1047,6 +1050,28 @@ class API {
 		return true;	
 	}
 	
+	function addGroup($name){
+		global $USER;
+		//find if groups already exists for this user
+		$sql = sprintf("SELECT groupid FROM `group` WHERE groupname ='%s' and ownerid=%d",$name,$USER->userid);
+		$result = _mysql_query($sql,$this->DB);
+		if(mysql_num_rows($result) == 0){
+			$str = "INSERT INTO `group` (groupname,ownerid) VALUES ('%s',%d)";
+			$sql = sprintf($str,$name,$USER->userid);
+			_mysql_query($sql,$this->DB);
+			return mysql_insert_id();
+		} else {
+			while($o = mysql_fetch_object($result)){
+				return $o->groupid;
+			}
+		}
+	}
+	
+	function addUserGroupQuiz($userid,$groupid,$quizid){
+		$str = "INSERT INTO usergroupquiz (userid,groupid,quizid) VALUES (%d,%d,%d)";
+		$sql = sprintf($str,$userid,$groupid,$quizid);
+		_mysql_query($sql,$this->DB);
+	}
 	
 	function getQuizObject($ref){
 		$quiz = $this->getQuiz($ref);
