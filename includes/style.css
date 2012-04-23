@@ -158,19 +158,25 @@ div.attemptlist:hover{
 	cursor:pointer;
 }
 
-div.quiztitle, div.attemptdate {
+div.attemptdate {
 	float:left;
 	width:250px;
 }
 
-div.quizattempts, div.quizopts, div.attemptname, div.attemptscore, div.quizopts {
+div.quiztitle {
 	float:left;
-	width:150px;
+	width:40%;
 }
 
-div.quizavg {
+div.quizattempts, div.quizavg, div.quizopts{
 	float:left;
-	width:200px;
+	width: 20%;
+	text-align:center;
+}
+
+div.attemptname, div.attemptscore {
+	float:left;
+	width:150px;
 }
 
 div.quizcell{

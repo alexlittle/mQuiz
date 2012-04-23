@@ -7,6 +7,7 @@ include_once("../includes/header.php");
 $ref = optional_param("ref","",PARAM_TEXT);
 $days = optional_param("days",14,PARAM_INT);
 $view = optional_param("view","bydate",PARAM_TEXT);
+$group = optional_param("group",0,PARAM_INT);
 
 $views = array ('bydate'=>'Attempts by date', 'scoredist'=>'Score distribution', 'question'=>'Average score by question');
 if($API->isOwner($ref)){
@@ -32,7 +33,11 @@ if(!$API->quizHasAttempts($ref)){
 	die;
 }
 
-echo "<p>View: ";
+// get user groups
+$groups = $API->getUserGroupQuiz($quiz->quizid);
+//print_r($groups);
+
+echo "<p>";
 $i = 0;
 foreach($views as $k=>$v){
 	if ($k == $view){

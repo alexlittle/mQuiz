@@ -11,7 +11,16 @@ if (count($quizzes) == 0){
 	echo "<div class='info'>";
 	echo getstring("myquizzes.none",array($CONFIG->homeAddress."quiz/new.php"));
 	echo "</div>";
+} else {
+	echo "<div id='th' class='quizlist'>";
+	echo "<div class='quiztitle'>Quiz</div>";
+	echo "<div class='quizattempts'>Attempts</div>";
+	echo "<div class='quizavg'>Average Score</div>";
+	echo "<div class='quizopts'></div>";
+	echo "<div style='clear:both'></div>";
+	echo "</div>";
 }
+
 
 foreach ($quizzes as $q){
 	echo "<div id='".$q->ref."' class='quizlist'>";
@@ -20,8 +29,8 @@ foreach ($quizzes as $q){
 		echo " (draft)";
 	}
 	echo "</div>";
-	echo "<div class='quizattempts'>Attempts: ".$q->noattempts."</div>";
-	echo "<div class='quizavg'>Average Score: ".sprintf('%3d',$q->avgscore)."%</div>";
+	echo "<div class='quizattempts'>".$q->noattempts."</div>";
+	echo "<div class='quizavg'>".sprintf('%3d',$q->avgscore)."%</div>";
 	echo "<div class='quizopts'><small>";
 	if($q->noattempts == 0){
 		echo "<a href='".$CONFIG->homeAddress."quiz/edit.php?ref=".$q->ref."'>[Edit] </a>";

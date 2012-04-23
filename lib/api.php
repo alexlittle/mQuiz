@@ -1076,13 +1076,32 @@ class API {
 	
 	function getUserGroups(){
 		global $USER;
-		$sql = sprintf("SELECT g.groupid, g.groupname FROM `group` g 
+		$sql = sprintf("SELECT g.groupid, g.groupname, true as owner FROM `group` g 
 						WHERE g.ownerid = %d
 						UNION
-						SELECT g.groupid, g.groupname FROM `group` g 
+						SELECT g.groupid, g.groupname, false as owner FROM `group` g 
 						INNER JOIN usergroupquiz ugq ON g.groupid = ugq.groupid
-						WHERE ugq.userid = %d");
+						WHERE ugq.userid = %d",$USER->userid,$USER->userid);
 		$results = _mysql_query($sql,$this->DB);
+		$groups = Array();
+		while($o = mysql_fetch_object($result)){
+			array_push($groups,$o);
+		}
+		return $groups;
+	}
+	
+	function getUserGroupQuiz($quizid){
+		global $USER;
+		$sql = sprintf("SELECT DISTINCT g.groupid, g.groupname FROM `group` g 
+						INNER JOIN usergroupquiz ugq ON g.groupid = ugq.groupid
+						WHERE (g.ownerid = %d OR ugq.userid = %d) AND ugq.quizid = %d",$USER->userid,$USER->userid,$quizid);
+		
+		$result = _mysql_query($sql,$this->DB);
+		$groups = Array();
+		while($o = mysql_fetch_object($result)){
+			array_push($groups,$o);
+		}
+		return $groups;
 	}
 	
 	function getQuizObject($ref){
