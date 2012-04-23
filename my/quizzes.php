@@ -24,9 +24,10 @@ foreach ($quizzes as $q){
 	echo "<div class='quizavg'>Average Score: ".sprintf('%3d',$q->avgscore)."%</div>";
 	echo "<div class='quizopts'><small>";
 	if($q->noattempts == 0){
-		echo "<a href='".$CONFIG->homeAddress."quiz/edit.php?ref=".$q->ref."'>[Edit]</a>";
+		echo "<a href='".$CONFIG->homeAddress."quiz/edit.php?ref=".$q->ref."'>[Edit] </a>";
 	}
 	echo "<a href='".$CONFIG->homeAddress."quiz/delete.php?ref=".$q->ref."'>[Delete]</a>";
+	echo "<a href='".$CONFIG->homeAddress."quiz/invite.php?qref=".$q->ref."'> [Share]</a>";
 	echo "</small></div>";
 	echo "<div style='clear:both'></div>";
 	echo "</div>";

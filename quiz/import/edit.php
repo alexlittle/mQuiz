@@ -88,7 +88,7 @@ if ($submit != ""){
 		$API->setProp('quiz', $q->quizid, 'json', $json);
 		
 		
-		header(sprintf("Location:  %squiz/invite.php?qref=%s&new=0",$CONFIG->homeAddress, $q->ref));
+		header(sprintf("Location:  %squiz/invite.php?qref=%s&new=false",$CONFIG->homeAddress, $q->ref));
 		die;
 	}
 }

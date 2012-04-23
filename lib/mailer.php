@@ -17,11 +17,11 @@ class Mailer{
 		$this->sendMail($CONFIG->emailfrom,$subject,$message);
 	}
 	
-	function sendQuizCreated($to,$name, $quiztitle, $quizrefid){
+	function sendQuizCreated($to,$name, $quiztitle, $qref){
 		global $CONFIG;
 		$subject = 'mQuiz: Quiz created' ;
-		$url_edit = $CONFIG->homeAddress."quiz/edit.php?ref=".$quizrefid;
-		$url_take = $CONFIG->homeAddress."m/#".$quizrefid;
+		$url_edit = $CONFIG->homeAddress."quiz/edit.php?ref=".$qref;
+		$url_take = $CONFIG->homeAddress."m/#".$qref;
 		$message = "
 			<p>Hi ".$name.",</p>
 			<p>Your new mQuiz '".$quiztitle."' has been created.</p>
@@ -40,6 +40,21 @@ class Mailer{
 		$subject = 'mQuiz: New Signup' ;
 		$message = $name. ' just signed up to mQuiz' ;
 		$this->sendMail($to,$subject,$message);
+	}
+	
+	function invite($to, $name, $quiztitle, $qref){
+		global $CONFIG;
+		$subject = 'mQuiz: '.$quiztitle ;
+		$url_take = $CONFIG->homeAddress."m/#".$qref;
+		$message = "
+			<p>Hi,</p>
+			<p>".$name." has invited you to try: '".$quiztitle."'</p>
+			<p>Take the quiz here: <a href='".$url_take."'>".$url_take."</a>.</p>
+			<p>We hope you enjoy using mQuiz!</p>
+			<p>Alex: alex@mquiz.org</p>
+		";
+		$this->sendMail($to,$subject,$message);
+		$this->sendMail($CONFIG->emailfrom,$subject,$message);
 	}
 	
 	private function sendMail($to,$subject,$message){

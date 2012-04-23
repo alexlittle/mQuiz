@@ -113,11 +113,15 @@ class API {
 		$email = strtolower($email);
 		$sql = sprintf("SELECT * FROM user WHERE email='%s'",$email);
 		$result = _mysql_query($sql,$this->DB);
-		
-		if(mysql_num_rows($result) != 0){
+		if(mysql_num_rows($result) == 0){
 			$str = "INSERT INTO user (username,email,pending) VALUES ('%s','%s',1)";
 			$sql = sprintf($str,$email,$email);
 			_mysql_query($sql,$this->DB);
+			return mysql_insert_id();
+		} else {
+			while($o = mysql_fetch_object($result)){
+				return $o->userid;
+			}
 		}
 	}
 	
@@ -1011,15 +1015,38 @@ class API {
 		}
 	}
 	
-	function isOwner($ref){
+	function isOwner($qref){
 		global $USER;
-		$sql = sprintf("SELECT * FROM quiz WHERE quiztitleref='%s' AND createdby = %d",$ref,$USER->userid);
+		$sql = sprintf("SELECT * FROM quiz WHERE quiztitleref='%s' AND createdby = %d",$qref,$USER->userid);
 		$result = _mysql_query($sql,$this->DB);
 		while($o = mysql_fetch_object($result)){
 			return true;
 		}
 		return false;
 	}
+	
+	function invite($qref, $emails,$message){
+		global $USER;
+		//check quiz owner
+		$q = $this->getQuizForUser($qref, $USER->userid);
+		if(!$q){
+			return false;
+		}
+		
+		$mail = new Mailer();
+		//split up the email addresses
+		$emailArray = preg_split( "( |,)", $emails );
+		foreach($emailArray as $email){
+			if(trim($email) != ""){
+				if(validEmailAddress($email)){
+					$userid =$this->addPendingUser($email);
+					$mail->invite($email, $USER->firstname, $q->title, $q->ref);
+				}
+			}
+		}
+		return true;	
+	}
+	
 	
 	function getQuizObject($ref){
 		$quiz = $this->getQuiz($ref);

@@ -142,6 +142,12 @@ if ($method != "search" && $method != "register" && $method != "login"){
 				$response->result = true;
 			}
 		}
+		if($method == 'invite'){
+			$qref = optional_param("qref","",PARAM_TEXT);
+			$emails = optional_param("emails","",PARAM_TEXT);
+			$message = optional_param("message","",PARAM_TEXT);
+			$response->result = $API->invite($qref,$emails,$message);
+		}
 	}
 }
 
