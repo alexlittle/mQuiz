@@ -9,7 +9,7 @@ $ref = optional_param("ref",$CONFIG->homeAddress."index.php",PARAM_TEXT);
 
 // check that user not already logged in
 if(isset($USER->username)){
-    header('Location: index.php');  
+    header(sprintf('Location: %sindex.php',$CONFIG->homeAddress));  
     return; 
 }
 
