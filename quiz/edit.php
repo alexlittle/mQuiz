@@ -45,7 +45,7 @@ if ($submit != ""){
 			$qref = "q".($i);
 			$questiontitle = optional_param($qref,"",PARAM_HTML);
 			if($questiontitle != ""){
-				$questionid = $API->addQuestion($questiontitle);
+				$questionid = $API->addQuestion(addslashes($questiontitle));
 				$API->addQuestionToQuiz($quizid,$questionid,$i);
 				$questionmaxscore = 0;
 				$rcount = 0;
