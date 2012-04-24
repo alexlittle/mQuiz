@@ -29,6 +29,7 @@ function mQuiz(){
 			timeout: 20000
 		});
 		this.showUsername();
+		this.dataUpdate();
 	}
 	
 	this.confirmExitQuiz = function(page){
@@ -403,14 +404,13 @@ function mQuiz(){
 
 	this.loggedIn = function(){
 		if(mQ.store.get('username') == null){
-			mQ.showLogin();
 			return false;
 		} 
 		return true;
 	};
 	
 	this.dataUpdate = function(){
-		if(!mQ.loggedIn()){
+		if(!mQ.loggedIn(false)){
 			return;
 		}
 		// check when last update made, return if too early
@@ -553,7 +553,7 @@ function mQuiz(){
 		var quiz = $('<span>').attr({'class':'quiztitle'});
 		quiz.append(q.quiztitle);
 		$(list).append(ql.append(quiz));
-		if(q.description != null && q.quizdescription != ""){
+		if(q.quizdescription != null && q.quizdescription != ""){
 			var desc = $("<span>").attr({'class':'quizdesc'});
 			desc.text(" - " + q.quizdescription);
 			ql.append(desc);
