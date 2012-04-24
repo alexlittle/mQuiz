@@ -10,22 +10,11 @@
     <script type="text/javascript" src="includes/mquiz.js"></script>
     <script type="text/javascript" src="includes/dateformat.js"></script>
     <script type="text/javascript" src="includes/mquizengine.js"></script>
-    
-    <script type="text/javascript">
-    	function init(){
-    		if($(location).attr('hash')){
-    			showPage($(location).attr('hash'));
-    		} else {
-    			showPage('#home');
-    		}
-    		showUsername();
-    	}
-    </script>
 </head>
 <body onload="init()" onhashchange="init()">
 <div id="page">
 	<div id="header">
-		<div id="header-title" onclick="confirmExitQuiz('#home')" class="clickable">
+		<div id="header-title" onclick="mQ.confirmExitQuiz('#home')" class="clickable">
 			<h1 id="mobile_app_title">mQuiz</h1>
 		</div>
 		<div id="header-right">
