@@ -98,9 +98,9 @@ if ($method != "search" && $method != "register" && $method != "login"){
 			$response = array();
 			foreach($quizzes as $q){
 				if(!$q->quizdraft){
-					$o = array(	'id'=>$q->ref,
-									'name'=>$q->title,
-									'url'=>$url_prefix."?format=json&method=getquiz&ref=".$q->ref);
+					$o = array(	'qref'=>$q->qref,
+									'quiztitle'=>$q->title,
+									'url'=>$url_prefix."?format=json&method=getquiz&qref=".$q->qref);
 					array_push($response,$o);
 				}
 			}
@@ -111,14 +111,14 @@ if ($method != "search" && $method != "register" && $method != "login"){
 		}
 		
 		if($method == 'getquiz'){
-			$ref = optional_param('ref','',PARAM_TEXT);
-			$quiz = $API->getQuiz($ref);
+			$qref = optional_param('qref','',PARAM_TEXT);
+			$quiz = $API->getQuiz($qref);
 			if($quiz == null){
 				$response->error = "Quiz not found";
-			} else if($quiz->quizdraft == 1 && !$API->isOwner($ref)){
+			} else if($quiz->quizdraft == 1 && !$API->isOwner($qref)){
 				$response->error = "Quiz not available for download";
 			} else {
-				$response = $API->getQuizObject($ref);
+				$response = $API->getQuizObject($qref);
 			}
 		}
 		
@@ -129,14 +129,14 @@ if ($method != "search" && $method != "register" && $method != "login"){
 			} else {
 				$json = json_decode(stripslashes($content));
 				// only save results if not owner
-				if(!$API->isOwner($json->quizid)){
+				if(!$API->isOwner($json->qref)){
 					$attemptid = saveResult($json,$username);
-					$best = $API->getBestRankForQuiz($json->quizid, $USER->userid);
+					$best = $API->getBestRankForQuiz($json->qref, $USER->userid);
 					$response->rank = $API->getRankingForAttempt($attemptid);
 					$response->bestrank = $best;
 					
 					$qa = $API->getQuizAttempt($attemptid);
-					$response->next = $API->suggestNext($json->quizid,$qa->score);
+					$response->next = $API->suggestNext($json->qref,$qa->score);
 				}
 				
 				$response->result = true;
@@ -184,14 +184,14 @@ function saveResult($json,$username){
 	global $API;
 	$newId = 0;
 	try{
-		if (isset($json->quizid)){
-			$quiz = $API->getQuiz($json->quizid);
+		if (isset($json->qref)){
+			$quiz = $API->getQuiz($json->qref);
 		} else {
 			return false;
 		}
 		
 		$qa = new QuizAttempt();
-		$qa->quizref = $json->quizid;
+		$qa->quizref = $json->qref;
 		$qa->username = $json->username;
 		$qa->maxscore = $json->maxscore;
 		$qa->userscore = $json->userscore;

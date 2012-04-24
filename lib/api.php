@@ -256,7 +256,7 @@ class API {
 	}
 	
 	function getQuizzes(){
-		$sql = "SELECT q.quizid, q.quiztitle as title, q.qref as ref, q.quizdraft FROM quiz q 
+		$sql = "SELECT q.quizid, q.quiztitle, q.qref, q.quizdraft FROM quiz q 
 				WHERE quizdraft = 0
 				AND quizdeleted = 0";
 		$result = _mysql_query($sql,$this->DB);
@@ -576,10 +576,10 @@ class API {
 		return $myrank;
 	}
 	
-	function getQuiz($ref){
-		$sql = sprintf("SELECT q.quizid, q.quiztitle as title, q.qref as ref, q.quizdraft, q.quizdescription as description, lastupdate FROM quiz q
+	function getQuiz($qref){
+		$sql = sprintf("SELECT q.quizid, q.quiztitle, q.qref, q.quizdraft, q.quizdescription, lastupdate FROM quiz q
 						WHERE q.qref = '%s'
-						AND q.quizdeleted = 0",$ref);
+						AND q.quizdeleted = 0",$qref);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return;
@@ -946,21 +946,28 @@ class API {
 			$start = 0;
 		}
 		
-		$sql = sprintf("SELECT MAX(weight), ref, title, description FROM (
-						SELECT qref as ref, quiztitle as title, quizdescription as description, lastupdate, 10 as weight FROM quiz 
+		$sql = sprintf("SELECT MAX(weight), qref, quiztitle, quizdescription FROM (
+						SELECT q.qref, quiztitle, quizdescription, lastupdate, 10 as weight FROM quiz q
 						WHERE (quiztitle LIKE '%%%s%%' OR quizdescription LIKE '%%%s%%')
 						AND quizdraft = 0
 						AND quizdeleted = 0
 						UNION
-						SELECT q.qref as quizref, quiztitle, quizdescription as description, lastupdate, 2 AS weight FROM quiz q
+						SELECT q.qref, quiztitle, quizdescription, lastupdate, 5 as weight FROM quiz q
+						INNER JOIN quiztag qt ON qt.quizid = q.quizid
+						INNER JOIN tag t ON qt.tagid = t.tagid
+						WHERE t.tagtext LIKE '%%%s%%'
+						AND q.quizdraft = 0
+						AND q.quizdeleted = 0
+						UNION
+						SELECT q.qref, quiztitle, quizdescription, lastupdate, 2 AS weight FROM quiz q
 						INNER JOIN quizquestion qq ON q.quizid = qq.quizid
 						INNER JOIN question qu ON qq.questionid = qu.questionid
 						WHERE qu.questiontext LIKE '%%%s%%'
 						AND q.quizdraft = 0
 						AND q.quizdeleted = 0)
-					a ",$terms,$terms,$terms);
-		$sql .= " GROUP BY ref,title,description";
-		$sql .= " ORDER BY weight DESC, title ASC";
+					a ",$terms,$terms,$terms,$terms);
+		$sql .= " GROUP BY qref,quiztitle,quizdescription";
+		$sql .= " ORDER BY weight DESC, quiztitle ASC";
 		$sql .= sprintf(" LIMIT %d,%d",$start,$count);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
@@ -975,9 +982,9 @@ class API {
 	
 	function suggestQuizzes(){
 		global $USER;
-		$sql = "SELECT DISTINCT quizref as ref, quiztitle as title, quizdescription as description, lastupdate FROM (";
+		$sql = "SELECT DISTINCT qref, quiztitle, quizdescription, lastupdate FROM (";
 		// get featured
-		$sql .= "SELECT * FROM (SELECT q.quizid, q.qref as quizref, q.quiztitle, 10 AS weight,q.quizdescription, lastupdate FROM quiz q
+		$sql .= "SELECT * FROM (SELECT q.quizid, q.qref, q.quiztitle, 10 AS weight,q.quizdescription, lastupdate FROM quiz q
 							INNER JOIN quizprop qp ON q.quizid = qp.quizid
 							WHERE qp.quizpropname = 'featured'
 							AND qp.quizpropvalue = 'true'
@@ -988,7 +995,7 @@ class API {
 		
 		// get most recent 5
 		$sql .= " UNION
-					SELECT * FROM (SELECT q.quizid, q.qref as quizref, q.quiztitle,5 AS weight,q.quizdescription, lastupdate FROM quiz q
+					SELECT * FROM (SELECT q.quizid, q.qref , q.quiztitle,5 AS weight,q.quizdescription, lastupdate FROM quiz q
 							WHERE q.quizdraft = 0
 							AND q.quizdeleted = 0
 							ORDER BY createdon DESC) b";
@@ -996,7 +1003,7 @@ class API {
 		// get top 5 popular which haven't been attempted by this user
 		$sql .= " UNION 
 					SELECT * FROM 
-					(SELECT q.quizid, q.qref as quizref, q.quiztitle, 4 AS weight,q.quizdescription, lastupdate FROM quizattempt qa
+					(SELECT q.quizid, q.qref, q.quiztitle, 4 AS weight,q.quizdescription, lastupdate FROM quizattempt qa
 					INNER JOIN quiz q ON q.quizid = qa.quizid
 					INNER JOIN user u ON u.userid = qa.userid
 					WHERE u.userid != q.createdby
@@ -1007,7 +1014,7 @@ class API {
 		
 		$sql .= sprintf(") a
 					WHERE a.quizid NOT IN (SELECT quizid FROM quizattempt WHERE userid =%d)
-					AND a.quizref NOT IN (SELECT qref FROM quiz WHERE createdby =%d)
+					AND a.quizid NOT IN (SELECT quizid FROM quiz WHERE createdby =%d)
 					ORDER BY weight DESC
 					LIMIT 0,10",$USER->userid,$USER->userid);
 		$result = _mysql_query($sql,$this->DB);
@@ -1195,8 +1202,8 @@ class API {
 		return $groups;
 	}
 	
-	function getQuizObject($ref){
-		$quiz = $this->getQuiz($ref);
+	function getQuizObject($qref){
+		$quiz = $this->getQuiz($qref);
 		
 		$questions = array();
 		
@@ -1247,10 +1254,9 @@ class API {
 			$maxscore = 0;
 		}
 		
-		$q = array (	'refid'=>$quiz->ref,
-						'ref'=>$quiz->ref,
-						'title'=>$quiz->title,
-						'description'=>$quiz->description,
+		$q = array (	'qref'=>$quiz->qref,
+						'quiztitle'=>$quiz->quiztitle,
+						'quizdescription'=>$quiz->quizdescription,
 						'maxscore'=>$maxscore,
 						'lastupdate'=>$quiz->lastupdate,
 						'q'=>$questions);

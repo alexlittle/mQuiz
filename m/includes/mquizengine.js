@@ -19,7 +19,7 @@ function Quiz(){
 	}
 	
 	this.setHeader = function(){
-		$('#quizheader').html(this.quiz.title + " Q" +(this.currentQuestion+1) + " of "+ this.quiz.q.length);
+		$('#quizheader').html(this.quiz.quiztitle + " Q" +(this.currentQuestion+1) + " of "+ this.quiz.q.length);
 	}
 	
 	this.loadNextQuestion = function(){
@@ -512,11 +512,11 @@ function Quiz(){
 		$('#content').append(next);
 		next.hide();
 		
-		var retake = $('<div>').attr({'class': 'resultopt clickable centre'}).append("Retake '"+ this.quiz.title +"'");
+		var retake = $('<div>').attr({'class': 'resultopt clickable centre'}).append("Retake '"+ this.quiz.quiztitle +"'");
 		$('#content').append(retake);
-		var refid = this.quiz.refid;
+		var qref = this.quiz.qref;
 		retake.click(function(){
-			loadQuiz(refid,false);
+			loadQuiz(qref,false);
 		});
 		
 		var takeAnother = $('<div>').attr({'class': 'resultopt clickable centre'}).append('Try another quiz');
@@ -534,13 +534,13 @@ function Quiz(){
 		
 		//save for submission to server
 		var content = Object();
-		content.quizid = this.quiz.refid;
+		content.qref = this.quiz.qref;
 		content.username = store.get('username');
 		content.maxscore = this.quiz.maxscore;
 		content.userscore = total;
 		content.quizdate = Date.now();
 		content.responses = this.responses;
-		content.title = this.quiz.title;
+		content.quiztitle = this.quiz.quiztitle;
 	
 		$.ajax({
 		   data:{'method':'submit','username':store.get('username'),'password':store.get('password'),'content':JSON.stringify(content)}, 

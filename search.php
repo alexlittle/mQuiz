@@ -19,9 +19,9 @@ if($s != ""){
 <?php 
 foreach($results as $r){
 	echo "<div class='quizlist'>";
-	printf("<a href='%sm/#%s'>%s</a>",$CONFIG->homeAddress,$r->ref,$r->title);
-	if($r->description != ""){
-		printf(" - <span>%s</span>",$r->description);
+	printf("<a href='%sm/#%s'>%s</a>",$CONFIG->homeAddress,$r->qref,$r->quiztitle);
+	if($r->quizdescription != ""){
+		printf(" - <span>%s</span>",$r->quizdescription);
 	}
 	echo "</div>";
 }
