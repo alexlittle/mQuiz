@@ -46,6 +46,18 @@ class API {
 		}
 	}
 	
+	function getUserFromUsername($username){
+		$sql = sprintf("SELECT * FROM user WHERE username ='%s' LIMIT 0,1",$username);
+		$result = _mysql_query($sql,$this->DB);
+		if (!$result){
+			return;
+		}
+		while($o = mysql_fetch_object($result)){
+			return $o;
+		}
+		return false;
+	}
+	
 	function checkUserNameNotInUse($username){
 		global $USER;
 		$sql = sprintf("SELECT * FROM user WHERE username='%s' AND userid != %d",$username,$USER->userid);
@@ -215,17 +227,19 @@ class API {
 	}
 	
 	function insertQuizAttempt($qa){
-		$qa->submituser = strtolower($qa->submituser);
-		$qa->user = strtolower($qa->submituser);
-		$sql = sprintf("INSERT INTO quizattempt (quizref,qadate,qascore,qauser,submituser, maxscore) 
-					VALUES ('%s',%d, %d, '%s', '%s',%d)",
+		$user = $this->getUserFromUsername($qa->username);
+		$quiz = $this->getQuiz($qa->quizref);
+		
+		$sql = sprintf("INSERT INTO quizattempt (quizref, qadate, qascore, submituser, maxscore, quizid, userid) 
+					VALUES ('%s', %d, %d, '%s', %d, %d, %d)",
 					$qa->quizref,
 					$qa->quizdate,
 					$qa->userscore,
 					$qa->username,
-					$qa->submituser,
-					$qa->maxscore);
-		mysql_query($sql,$this->DB);
+					$qa->maxscore,
+					$quiz->quizid,
+					$user->userid);
+		_mysql_query($sql,$this->DB);
 		$result = mysql_insert_id();
 		if (!$result){
 			return;
@@ -240,7 +254,7 @@ class API {
 					$qar->questionRef,
 					$qar->userScore,
 					$qar->text);
-		$result = mysql_query($sql,$this->DB);
+		$result = _mysql_query($sql,$this->DB);
 	}
 	
 	function getQuizzes(){
