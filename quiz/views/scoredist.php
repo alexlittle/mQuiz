@@ -1,5 +1,5 @@
 <?php 
-$scores = $API->getQuizScores($ref);
+$scores = $API->getQuizScores($ref,array('groupid'=>$groupid));
 ?>
 <script type="text/javascript">
 google.load("visualization", "1", {

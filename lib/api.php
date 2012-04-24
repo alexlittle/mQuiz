@@ -279,13 +279,30 @@ class API {
 	}
 	
 	function getQuizAttempts($ref, $opts = array()){
-		$sql = sprintf("SELECT qa.id, ((qascore*100)/ maxscore) as score, firstname, lastname, submitdate FROM quizattempt qa
-						INNER JOIN user u ON qa.submituser = u.username
-						INNER JOIN quiz q ON q.qref = qa.quizref
-						WHERE quizref = '%s'
-						AND q.quizdeleted = 0
-						AND u.userid != q.createdby
-						ORDER BY submitdate DESC",$ref);
+		if(array_key_exists('groupid',$opts)){
+			$groupid = $opts['groupid'];
+		} else {
+			$groupid = 0;
+		}
+		if($groupid == 0){
+			$sql = sprintf("SELECT qa.id, ((qascore*100)/ maxscore) as score, firstname, lastname, submitdate FROM quizattempt qa
+							INNER JOIN user u ON qa.submituser = u.username
+							INNER JOIN quiz q ON q.qref = qa.quizref
+							WHERE quizref = '%s'
+							AND q.quizdeleted = 0
+							AND u.userid != q.createdby
+							ORDER BY submitdate DESC",$ref);
+		} else {
+			$sql = sprintf("SELECT qa.id, ((qascore*100)/ maxscore) as score, firstname, lastname, submitdate FROM quizattempt qa
+							INNER JOIN user u ON qa.submituser = u.username
+							INNER JOIN quiz q ON q.qref = qa.quizref
+							INNER JOIN usergroupquiz ugq ON u.userid = ugq.userid
+							WHERE quizref = '%s'
+							AND q.quizdeleted = 0
+							AND u.userid != q.createdby
+							AND ugq.groupid = %d
+							ORDER BY submitdate DESC",$ref,$groupid);
+		}
 		$summary = array();
 		$result = _mysql_query($sql,$this->DB);
 		while($o = mysql_fetch_object($result)){
@@ -339,17 +356,40 @@ class API {
 		} else {
 			$days = DEFAULT_DAYS;
 		}
-		$sql = sprintf("SELECT COUNT(*) as no, 
-								DAY(submitdate) as day, 
-								MONTH(submitdate) as month, 
-								YEAR(submitdate) as year,
-								DATE_FORMAT(submitdate,'%%e-%%b-%%Y') AS displaydate
-						FROM quizattempt qa
-						INNER JOIN quiz q ON q.qref = qa.quizref
-						WHERE quizref='%s' 
-						AND submitdate > DATE_ADD(NOW(), INTERVAL -%d DAY) 
-						AND q.quizdeleted = 0
-						GROUP BY DAY(submitdate), MONTH(submitdate), YEAR(submitdate)",$ref,$days);
+		if(array_key_exists('groupid',$opts)){
+			$groupid = $opts['groupid'];
+		} else {
+			$groupid = 0;
+		}
+		if($groupid == 0){
+			$sql = sprintf("SELECT COUNT(*) as no, 
+									DAY(submitdate) as day, 
+									MONTH(submitdate) as month, 
+									YEAR(submitdate) as year,
+									DATE_FORMAT(submitdate,'%%e-%%b-%%Y') AS displaydate
+							FROM quizattempt qa
+							INNER JOIN quiz q ON q.qref = qa.quizref
+							WHERE quizref='%s' 
+							AND submitdate > DATE_ADD(NOW(), INTERVAL -%d DAY) 
+							AND q.quizdeleted = 0
+							GROUP BY DAY(submitdate), MONTH(submitdate), YEAR(submitdate)",$ref,$days);
+		} else {
+			$sql = sprintf("SELECT COUNT(*) as no,
+									DAY(submitdate) as day, 
+									MONTH(submitdate) as month, 
+									YEAR(submitdate) as year,
+									DATE_FORMAT(submitdate,'%%e-%%b-%%Y') AS displaydate
+							FROM quizattempt qa
+							INNER JOIN quiz q ON q.qref = qa.quizref
+							INNER JOIN user u ON u.username = qa.submituser
+							INNER JOIN usergroupquiz ugq ON u.userid = ugq.userid
+							WHERE quizref='%s' 
+							AND submitdate > DATE_ADD(NOW(), INTERVAL -%d DAY) 
+							AND q.quizdeleted = 0
+							AND ugq.groupid = %d
+							GROUP BY DAY(submitdate), MONTH(submitdate), YEAR(submitdate)",$ref,$days,$groupid);
+		}
+		
 		$result = _mysql_query($sql,$this->DB);
 		return $this->resultToArray($result);
 	}
@@ -379,12 +419,28 @@ class API {
 		return $a;
 	}
 	
-	function getQuizScores($quizref){
-		$sql = sprintf("SELECT Count(*) as NoScores, qascore*100/maxscore as scorepercent FROM quizattempt qa
-						INNER JOIN quiz q ON q.qref = qa.quizref
-						WHERE quizref = '%s'
-						AND q.quizdeleted = 0
-						GROUP BY qascore",$quizref);
+	function getQuizScores($quizref,$opts = Array()){
+		if(array_key_exists('groupid',$opts)){
+			$groupid = $opts['groupid'];
+		} else {
+			$groupid = 0;
+		}
+		if($groupid == 0){
+			$sql = sprintf("SELECT Count(*) as NoScores, qascore*100/maxscore as scorepercent FROM quizattempt qa
+							INNER JOIN quiz q ON q.qref = qa.quizref
+							WHERE quizref = '%s'
+							AND q.quizdeleted = 0
+							GROUP BY qascore",$quizref);
+		} else {
+			$sql = sprintf("SELECT Count(*) as NoScores, qascore*100/maxscore as scorepercent FROM quizattempt qa
+							INNER JOIN quiz q ON q.qref = qa.quizref
+							INNER JOIN user u ON u.username = qa.submituser
+							INNER JOIN usergroupquiz ugq ON ugq.userid = u.userid
+							WHERE quizref = '%s'
+							AND q.quizdeleted = 0
+							AND ugq.groupid = %d
+							GROUP BY qascore",$quizref,$groupid);
+		}
 		$result = _mysql_query($sql,$this->DB);
 		$resp = array();
 		if (!$result){
@@ -396,16 +452,36 @@ class API {
 		return $resp;
 	}
 	
-	function getQuizAvgResponseScores($quizref){
-		$sql = sprintf("SELECT AVG(qarscore) as avgscore, qq.questiontext FROM quizattemptresponse qar
-						INNER JOIN quizattempt qa ON qa.id = qar.qaid
-						INNER JOIN quiz q ON q.qref = qa.quizref
-						INNER JOIN question qq ON qq.questiontitleref = qar.questionrefid
-						INNER JOIN quizquestion qqu ON qqu.questionid = qq.questionid
-						WHERE quizref = '%s'
-						AND q.quizdeleted = 0
-						GROUP BY qq.questiontext
-						ORDER BY qqu.orderno ASC",$quizref);
+	function getQuizAvgResponseScores($quizref,$opts = Array()){
+		if(array_key_exists('groupid',$opts)){
+			$groupid = $opts['groupid'];
+		} else {
+			$groupid = 0;
+		}
+		if($groupid == 0){
+			$sql = sprintf("SELECT AVG(qarscore) as avgscore, qq.questiontext FROM quizattemptresponse qar
+							INNER JOIN quizattempt qa ON qa.id = qar.qaid
+							INNER JOIN quiz q ON q.qref = qa.quizref
+							INNER JOIN question qq ON qq.questiontitleref = qar.questionrefid
+							INNER JOIN quizquestion qqu ON qqu.questionid = qq.questionid
+							WHERE quizref = '%s'
+							AND q.quizdeleted = 0
+							GROUP BY qq.questiontext
+							ORDER BY qqu.orderno ASC",$quizref);
+		} else {
+			$sql = sprintf("SELECT AVG(qarscore) as avgscore, qq.questiontext FROM quizattemptresponse qar
+							INNER JOIN quizattempt qa ON qa.id = qar.qaid
+							INNER JOIN quiz q ON q.qref = qa.quizref
+							INNER JOIN question qq ON qq.questiontitleref = qar.questionrefid
+							INNER JOIN quizquestion qqu ON qqu.questionid = qq.questionid
+							INNER JOIN user u ON u.username = qa.submituser
+							INNER JOIN usergroupquiz ugq ON ugq.userid = u.userid
+							WHERE quizref = '%s'
+							AND q.quizdeleted = 0
+							AND ugq.groupid = %d
+							GROUP BY qq.questiontext
+							ORDER BY qqu.orderno ASC",$quizref,$groupid);
+		}
 		$result = _mysql_query($sql,$this->DB);
 		return $this->resultToArray($result);
 	}

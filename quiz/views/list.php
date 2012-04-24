@@ -2,7 +2,7 @@
 
 <?php
 
-$attempts = $API->getQuizAttempts($ref,array('days'=>$days));
+$attempts = $API->getQuizAttempts($ref,array('groupid'=>$groupid));
 
 foreach ($attempts as $a){
 	echo "<div id='".$a->id."' class='attemptlist' name='al' title='Click for full details'>";

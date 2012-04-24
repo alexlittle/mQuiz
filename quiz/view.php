@@ -7,7 +7,7 @@ include_once("../includes/header.php");
 $ref = optional_param("ref","",PARAM_TEXT);
 $days = optional_param("days",14,PARAM_INT);
 $view = optional_param("view","bydate",PARAM_TEXT);
-$group = optional_param("group",0,PARAM_INT);
+$groupid = optional_param("groupid",0,PARAM_INT);
 
 $views = array ('bydate'=>'Attempts by date', 'scoredist'=>'Score distribution', 'question'=>'Average score by question');
 if($API->isOwner($ref)){
@@ -35,7 +35,27 @@ if(!$API->quizHasAttempts($ref)){
 
 // get user groups
 $groups = $API->getUserGroupQuiz($quiz->quizid);
-//print_r($groups);
+if(count($groups)>0){
+	printf("<form method='get' action=''>");
+	printf("<input type='hidden' name='ref' value='%s'>",$ref);
+	printf("<input type='hidden' name='view' value='%s'>",$view);
+	echo "Select group: <select name='groupid'>";
+	if($groupid == 0){
+		echo "<option value='0' selected='selected'>All</option>";
+	} else {
+		echo "<option value='0'>All</option>";
+	}
+	foreach($groups as $group){
+		if($groupid == $group->groupid){
+			printf("<option value='%d' selected='selected'>%s</option>",$group->groupid,$group->groupname);
+		} else {
+			printf("<option value='%d'>%s</option>",$group->groupid,$group->groupname);
+		}
+	}
+	echo "</select>";
+	echo "<input type='submit' value='Go'/>";
+	echo "</form>";
+}
 
 echo "<p>";
 $i = 0;
@@ -43,7 +63,7 @@ foreach($views as $k=>$v){
 	if ($k == $view){
 		printf("<span class='selected'>%s</span>",$v);
 	} else {
-		printf("<a href='?ref=%s&days=%d&view=%s'>%s</a>",$ref,$days,$k,$v);
+		printf("<a href='?ref=%s&days=%d&view=%s&groupid=%d'>%s</a>",$ref,$days,$k,$groupid,$v);
 	}
 	if($i != count($views)-1){
 		printf(" | ");
@@ -70,4 +90,3 @@ switch ($view){
 }
 
 include_once("../includes/footer.php");
-?>

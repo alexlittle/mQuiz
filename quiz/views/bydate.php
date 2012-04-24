@@ -1,6 +1,6 @@
 <?php 
 
-$attempts = $API->getQuizAttemptsSummary($ref,array('days'=>$days));
+$attempts = $API->getQuizAttemptsSummary($ref,array('days'=>$days,'groupid'=>$groupid));
 $summary = array();
 $date = mktime(0,0,0,date('m'),date('d'),date('Y'));
 $date = $date - ($days*86400);
