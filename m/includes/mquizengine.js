@@ -8,7 +8,9 @@ function mQuiz(){
 	this.inQuiz = false;
 	this.opts = {};
 	this.onLogin = function(){};
-	this.onLogout = function(){};
+	this.onLogout = function(){
+		mQ.showPage("#login");
+	};
 	this.store = null;
 	
 	this.init = function(opts){
@@ -26,6 +28,7 @@ function mQuiz(){
 			dataType:'json',
 			timeout: 20000
 		});
+		this.showUsername();
 	}
 	
 	this.confirmExitQuiz = function(page){

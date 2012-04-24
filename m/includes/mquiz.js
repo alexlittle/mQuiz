@@ -9,14 +9,10 @@ function init(){
 			               {'title':'View all recent results','link':'#results'}]
 			};
 	mQ.init(opts);
-	mQ.onLogout = function(){
-		mQ.showPage("#login");
-	};
 	
 	if($(location).attr('hash')){
 		mQ.showPage($(location).attr('hash'));
 	} else {
 		mQ.showPage('#home');
 	}
-	mQ.showUsername();
 }
