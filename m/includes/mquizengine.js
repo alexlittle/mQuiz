@@ -490,7 +490,7 @@ function Quiz(){
 		inQuiz = false;
 		$('#content').empty();
 		
-		$('#content').append("<h2 name='lang' id='page_title_results'>Your results for:<br/> '"+ this.quiz.title +"':</h2>");
+		$('#content').append("<h2 name='lang' id='page_title_results'>Your results for:<br/> '"+ this.quiz.quiztitle +"':</h2>");
 		// calculate score
 		var total = 0;
 		for(var r in this.responses){
