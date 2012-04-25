@@ -15,10 +15,16 @@ if(!$q){
 
 printf("<h1>%s</h1>",$q->title);
 if($new == "true"){
-	printf("<div class='info'>%s</div>", getstring("quiz.new.saved",$CONFIG->homeAddress."m/?preview=true#".$q->ref));
+	printf("<div class='info'>%s</div>", getstring("quiz.new.saved",Array($CONFIG->homeAddress."m/?preview=true#".$q->ref,$CONFIG->homeAddress."quiz/edit.php?ref=".$q->ref)));
 } else if($new == "false"){
-	printf("<div class='info'>%s</div>", getstring("quiz.edit.saved",$CONFIG->homeAddress."m/?preview=true#".$q->ref));
+	printf("<div class='info'>%s</div>", getstring("quiz.edit.saved",Array($CONFIG->homeAddress."m/?preview=true#".$q->ref,$CONFIG->homeAddress."quiz/edit.php?ref=".$q->ref)));
 }
+
+if($q->draft){
+	printf("<div class='info'>%s</div>", getstring('quiz.draft'));
+} else {
+	
+
 ?>
 <div id="share">
 	<h2>Share:</h2>
@@ -86,4 +92,5 @@ if($new == "true"){
 	}
 </script>
 <?php
+}
 include_once("../includes/footer.php");

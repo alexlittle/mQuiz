@@ -37,6 +37,8 @@ $LANG['quiz.delete.button'] = "Yes, please delete";
 $LANG['quiz.delete.cancel.button'] = "No, I've change my mind!";
 $LANG['quiz.delete.title'] = "Delete Quiz";
 
+$LANG['quiz.draft'] = "Your quiz is currently a draft. Options to share your quiz are only available once your quiz is published.";
+
 $LANG['quiz.edit.title'] = "Edit Quiz";
 $LANG['quiz.edit.submit.button'] = "Save changes";
 $LANG['quiz.edit.add'] = 'Add another question';
@@ -44,7 +46,7 @@ $LANG['quiz.edit.quiztitle'] = 'Title';
 $LANG['quiz.edit.questions'] = 'Questions';
 $LANG['quiz.edit.question'] = 'Question';
 $LANG['quiz.edit.responses'] = 'Response options';
-$LANG['quiz.edit.saved'] = 'Changes saved, <a href="%s">try your quiz</a> now';
+$LANG['quiz.edit.saved'] = 'Changes saved, <a href="%s">try your quiz</a> now or go back to <a href="%s">edit your quiz</a>.';
 
 $LANG['quiz.new.add'] = 'Add another question';
 $LANG['quiz.new.error.notitle'] = 'You must give your quiz a title';
@@ -53,7 +55,7 @@ $LANG['quiz.new.quiztitle'] = 'Title';
 $LANG['quiz.new.questions'] = 'Questions';
 $LANG['quiz.new.question'] = 'Question';
 $LANG['quiz.new.responses'] = 'Response options';
-$LANG['quiz.new.saved'] = 'Your quiz has been created, <a href="%s">try your quiz</a> now';
+$LANG['quiz.new.saved'] = 'Your quiz has been created, <a href="%s">try your quiz</a> now or go back to <a href="%s">edit your quiz</a>.';
 $LANG['quiz.new.submit.button'] = "Create quiz";
 $LANG['quiz.new.title'] = 'Create a new quiz';
 

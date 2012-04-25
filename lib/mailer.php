@@ -11,7 +11,6 @@ class Mailer{
 				<p>Your new mQuiz password is: ".$password."</p>
 				<p>You can change your password to something more memorable on <a href='".$url_reset."'>your profile page</a>.</p>
 				<p>We hope you enjoy using mQuiz!</p>
-				<p>Alex: alex@mquiz.org</p>
 			";
 		$this->sendMail($user->email,$subject,$message);
 		$this->sendMail($CONFIG->emailfrom,$subject,$message);
@@ -21,14 +20,17 @@ class Mailer{
 		global $CONFIG;
 		$subject = 'mQuiz: Quiz created' ;
 		$url_edit = $CONFIG->homeAddress."quiz/edit.php?ref=".$qref;
-		$url_take = $CONFIG->homeAddress."m/#".$qref;
+		$url_share = $CONFIG->homeAddress."m/#".$qref;
+		$url_preview = $CONFIG->homeAddress."m/?preview=true#".$qref;
+		$url_track = $CONFIG->homeAddress."quiz/view.php?ref=".$qref;
 		$message = "
 			<p>Hi ".$name.",</p>
 			<p>Your new mQuiz '".$quiztitle."' has been created.</p>
-			<p>Share your quiz with this link: <a href='".$url_take."'>".$url_take."</a>, you can also try it out yourself with this link.</p>
-			<p>To edit your quiz visit: <a href='".$url_edit."'>".$url_edit."</a>.</p>
-			<p>We hope you enjoy using mQuiz!</p>
-			<p>Alex: alex@mquiz.org</p>
+			<p><b>Preview</b> your quiz: <a href='".$url_preview."'>".$url_preview."</a></p>
+			<p><b>Edit</b> your quiz: <a href='".$url_edit."'>".$url_edit."</a>.</p>
+			<p><b>Share</b> your quiz: <a href='".$url_share."'>".$url_share."</a></p>
+			<p><b>Track</b> responses to your quiz: <a href='".$url_track."'>".$url_track."</a></p>
+			<p>We hope you enjoy using mQuiz! We really appreciate your feedback, please let us know how it works for you.</p>
 		";
 		$this->sendMail($to,$subject,$message);
 		$this->sendMail($CONFIG->emailfrom,$subject,$message);
@@ -51,7 +53,6 @@ class Mailer{
 			<p>".$name." has invited you to try: '".$quiztitle."'</p>
 			<p>Take the quiz here: <a href='".$url_take."'>".$url_take."</a>.</p>
 			<p>We hope you enjoy using mQuiz!</p>
-			<p>Alex: alex@mquiz.org</p>
 		";
 		$this->sendMail($to,$subject,$message);
 		$this->sendMail($CONFIG->emailfrom,$subject,$message);
@@ -60,8 +61,9 @@ class Mailer{
 	private function sendMail($to,$subject,$message){
 		global $CONFIG;
 		$headers = "MIME-Version: 1.0" . "\r\n";
-		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+		$headers .= "Content-type: text/html; charset=UTF-8" . "\r\n";
 		$headers .= "From: ".$CONFIG->emailfrom . "\r\n";
+		$message .= "<p>Alex: alex@mquiz.org</p>";
 		mail($to, $subject, $message, $headers );
 	}
 }
