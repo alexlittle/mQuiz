@@ -15,7 +15,7 @@ include_once("../includes/header.php");
 
 <p>You can view summary information about who has responded, average scores and more.</p>
 
-<p>mQuiz is still under development, we expect new features to be added rapidly, so you may find little bugs, if so, <a href="mailto:alex@alexlittle.net">please let us know</a> :-)</p>
+<p>mQuiz is still under development, we expect new features to be added rapidly, so you may find little bugs, if so, <a href="mailto:alex@mquiz.org">please let us know</a> :-)</p>
 
 <?php 
 include_once("../includes/footer.php");

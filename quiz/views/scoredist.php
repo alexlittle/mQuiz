@@ -29,4 +29,4 @@ google.load("visualization", "1", {
 				});
 		}
 		</script>
-		<div id="chart_div<?php echo $quiz->ref; ?>"><?php echo getstring('warning.graph.unavailable');?></div>
+		<div id="chart_div<?php echo $ref; ?>"><?php echo getstring('warning.graph.unavailable');?></div>

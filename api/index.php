@@ -78,9 +78,51 @@ if($method == 'search'){
 }
 
 /*
+ * Methods which allow logged in or anon users
+ */
+if($method == 'getquiz' || $method == 'submit'){
+	if (!userLogin($username,$password,false)){
+		$USER = new User($CONFIG->anonuser);
+		$USER->setUsername($CONFIG->anonuser);
+	}
+	if($method == 'getquiz'){
+		$qref = optional_param('qref','',PARAM_TEXT);
+		$quiz = $API->getQuiz($qref);
+		if($quiz == null){
+			$response->error = "Quiz not found";
+		} else if($quiz->quizdraft == 1 && !$API->isOwner($qref)){
+			$response->error = "Quiz not available for download";
+		} else {
+			$response = $API->getQuizObject($qref);
+		}
+	}
+	
+	if($method == 'submit'){
+		$content = optional_param("content","",PARAM_TEXT);
+		if($content == ""){
+			$response->error = "no content";
+		} else {
+			$json = json_decode(stripslashes($content));
+			// only save results if not owner
+			if(!$API->isOwner($json->qref)){
+				$attemptid = saveResult($json,$username);
+				$best = $API->getBestRankForQuiz($json->qref, $USER->userid);
+				$response->rank = $API->getRankingForAttempt($attemptid);
+				$response->bestrank = $best;
+					
+				$qa = $API->getQuizAttempt($attemptid);
+				$response->next = $API->suggestNext($json->qref,$qa->score);
+			}
+	
+			$response->result = true;
+		}
+	}
+}	
+
+/*
 * Methods with login required
 */
-if ($method != "search" && $method != "register" && $method != "login"){
+if ($method == "list" || $method == "suggest" || $method == "invite"){
 	if (!userLogin($username,$password,false)){
 		$response->login = false;
 	} else {
@@ -110,38 +152,6 @@ if ($method != "search" && $method != "register" && $method != "login"){
 			$response = $API->suggestQuizzes();
 		}
 		
-		if($method == 'getquiz'){
-			$qref = optional_param('qref','',PARAM_TEXT);
-			$quiz = $API->getQuiz($qref);
-			if($quiz == null){
-				$response->error = "Quiz not found";
-			} else if($quiz->quizdraft == 1 && !$API->isOwner($qref)){
-				$response->error = "Quiz not available for download";
-			} else {
-				$response = $API->getQuizObject($qref);
-			}
-		}
-		
-		if($method == 'submit'){
-			$content = optional_param("content","",PARAM_TEXT);
-			if($content == ""){
-				$response->error = "no content";
-			} else {
-				$json = json_decode(stripslashes($content));
-				// only save results if not owner
-				if(!$API->isOwner($json->qref)){
-					$attemptid = saveResult($json,$username);
-					$best = $API->getBestRankForQuiz($json->qref, $USER->userid);
-					$response->rank = $API->getRankingForAttempt($attemptid);
-					$response->bestrank = $best;
-					
-					$qa = $API->getQuizAttempt($attemptid);
-					$response->next = $API->suggestNext($json->qref,$qa->score);
-				}
-				
-				$response->result = true;
-			}
-		}
 		if($method == 'invite'){
 			$qref = optional_param("qref","",PARAM_TEXT);
 			$emails = optional_param("emails","",PARAM_TEXT);

@@ -22,4 +22,6 @@ $CONFIG->dbpass = "XXXXXX";
 $CONFIG->googleanalytics = "";
 $CONFIG->emailfrom = "xxxxxxxx@xxxxxxxxx.com";
 
+$CONFIG->anonuser = "anon";
+
 include_once("setup.php");

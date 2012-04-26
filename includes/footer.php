@@ -3,7 +3,8 @@
 </div> <!-- page -->
 <div id="footer"> 
 <a href="<?php echo $CONFIG->homeAddress; ?>info/about.php">About</a> | 
-<a href="<?php echo $CONFIG->homeAddress; ?>info/terms.php">Terms/License</a><br/>
+<a href="<?php echo $CONFIG->homeAddress; ?>info/terms.php">Terms/License</a> | 
+<a href="<?php echo $CONFIG->homeAddress; ?>info/contact.php">Contact/Feedback</a><br/>
 <a href="http://alexlittle.net">Alex Little</a> &copy; <?php echo date('Y');?><br/>
  
 </div>

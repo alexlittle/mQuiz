@@ -17,7 +17,13 @@ function mQuiz(){
 		this.opts = opts;
 		this.store = new Store();
 		this.store.init();
-		
+		if(mQ.store.get('username') == 'anon'){
+			this.logout(true);
+		}
+		if(this.opts.allowanon){
+			mQ.store.set('username','anon');
+			mQ.store.set('password','anon');
+		}
 		if(!this.opts.url){
 			this.opts.url = "../api/?format=json";
 		}
@@ -403,7 +409,7 @@ function mQuiz(){
 	};
 
 	this.loggedIn = function(){
-		if(mQ.store.get('username') == null){
+		if(mQ.store.get('username') == null && mQ.store.get('username') != 'anon'){
 			return false;
 		} 
 		return true;
@@ -1183,7 +1189,7 @@ function Quiz(){
 		   error:function(data){
 			   mQ.store.addArrayItem('unsentresults',content);
 		   }
-		});		
+		});	
 	}
 	
 	this.setNav = function(){

@@ -4,6 +4,7 @@ function init(){
 			        {'title':'Quizzes','link':'#quizzes'},
 			        {'title':'Results','link':'#results'}],
 			'allowregister': true,
+			'allowanon': true,
 			'url':'../api/?format=json'
 			};
 	mQ.init(opts);
