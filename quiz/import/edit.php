@@ -82,11 +82,9 @@ if ($submit != ""){
 
 		$q = $API->getQuizById($q->quizid);
 		
-		
 		// store JSON object for quiz (for caching)
 		$json = json_encode($API->getQuizObject($q->ref));
 		$API->setProp('quiz', $q->quizid, 'json', $json);
-		
 		
 		header(sprintf("Location:  %squiz/options.php?qref=%s&new=false",$CONFIG->homeAddress, $q->ref));
 		die;

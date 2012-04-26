@@ -21,10 +21,10 @@ if($quiz == null){
 	die;
 }
 
-printf("<h1>%s</h1>",$quiz->title);
+printf("<h1>%s</h1>",$quiz->quiztitle);
 
-if($quiz->description != ""){
-	printf("<p class='desc'>%s</p>",$quiz->description);
+if($quiz->quizdescription != ""){
+	printf("<p class='desc'>%s</p>",$quiz->quizdescription);
 }
 
 if(!$API->quizHasAttempts($ref)){

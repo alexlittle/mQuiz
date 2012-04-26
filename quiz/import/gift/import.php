@@ -100,7 +100,7 @@ class GIFTImporter {
 		$API->addQuestionToQuiz($this->quizid,$questionid,$qcount);
 		$API->setProp('question', $questionid, 'maxscore', MAXSCORE);
 		$API->setProp('question', $questionid, 'type', 'essay');
-		return 0;
+		return MAXSCORE;
 	}
 	
 	private function importShortAnswer($q,$qcount){

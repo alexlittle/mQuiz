@@ -290,30 +290,35 @@ class API {
 		return $quizzes;
 	}
 	
-	function getQuizAttempts($ref, $opts = array()){
+	function getQuizAttempts($qref, $opts = array()){
 		if(array_key_exists('groupid',$opts)){
 			$groupid = $opts['groupid'];
 		} else {
 			$groupid = 0;
 		}
+		$q = $this->getQuiz($qref);
+		if(!$q){
+			return;
+		}
+		
 		if($groupid == 0){
 			$sql = sprintf("SELECT qa.id, ((qascore*100)/ maxscore) as score, firstname, lastname, submitdate FROM quizattempt qa
 							INNER JOIN user u ON qa.userid = u.userid
 							INNER JOIN quiz q ON q.quizid = qa.quizid
-							WHERE quizref = '%s'
+							WHERE qa.quizid = %d
 							AND q.quizdeleted = 0
 							AND u.userid != q.createdby
-							ORDER BY submitdate DESC",$ref);
+							ORDER BY submitdate DESC",$q->quizid);
 		} else {
 			$sql = sprintf("SELECT qa.id, ((qascore*100)/ maxscore) as score, firstname, lastname, submitdate FROM quizattempt qa
 							INNER JOIN user u ON qa.userid = u.userid
 							INNER JOIN quiz q ON q.quizid = qa.quizid
 							INNER JOIN usergroupquiz ugq ON u.userid = ugq.userid
-							WHERE quizref = '%s'
+							WHERE qa.quizid = %d
 							AND q.quizdeleted = 0
 							AND u.userid != q.createdby
 							AND ugq.groupid = %d
-							ORDER BY submitdate DESC",$ref,$groupid);
+							ORDER BY submitdate DESC",$q->quizid,$groupid);
 		}
 		$summary = array();
 		$result = _mysql_query($sql,$this->DB);
