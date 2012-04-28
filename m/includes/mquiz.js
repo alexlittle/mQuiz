@@ -9,7 +9,9 @@ function init(){
 			               {'title':'View all recent results','link':'#results'}]
 			};
 	mQ.init(opts);
-	
+	mQ.onLogin = function(){
+		mQ.dataUpdate();
+	}
 	if($(location).attr('hash')){
 		mQ.showPage($(location).attr('hash'));
 	} else {

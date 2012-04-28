@@ -23,33 +23,47 @@ if($new == "true"){
 if($q->draft){
 	printf("<div class='info'>%s</div>", getstring('quiz.draft'));
 } else {
-	
 
-?>
+
+	?>
 <div id="share">
 	<h2>Share:</h2>
 	<div id="tweet">
-		<?php 
-		printf('<a href="https://twitter.com/share" class="twitter-share-button"
+
+
+	<?php
+	printf('<a href="https://twitter.com/share" class="twitter-share-button"
 			data-url="%sm/#%s" data-text="Try my new quiz \'%s\'" 
 			data-size="large" data-count="none"
 			data-hashtags="mquiz">Tweet</a>',$CONFIG->homeAddress,$q->ref,$q->title);
-		?>
+	?>
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	</div>
+	
+	<h2>Embed:</h2>
+	Copy and paste the following code to put this quiz on your website:
+	<div id="embedcode">
+	&lt;iframe src='<?php echo $CONFIG->homeAddress."embed/#".$q->ref;?>' width='350' height='400' style='border:1px solid black'&gt;&lt;/iframe&gt;
 	</div>
 	<div id="invite">
 		<h2>Invite by email:</h2>
 		<div class="formblock">
 			<div class="formlabel">Email addresses:</div>
-			<div class="formfield"><textarea rows="5" cols="80" name="emails" id="emails"></textarea></div>
+			<div class="formfield">
+				<textarea rows="5" cols="80" name="emails" id="emails"></textarea>
+			</div>
 		</div>
 		<div class="formblock">
 			<div class="formlabel">&nbsp;</div>
-			<div class="formfield"><input type="button" value="Send" onclick="invite();" id="sendBtn"/></div>
+			<div class="formfield">
+				<input type="button" value="Send" onclick="invite();" id="sendBtn" />
+			</div>
 		</div>
 		<div class="formblock">
 			<div class="formlabel">&nbsp;</div>
-			<div class="formfield"><div id="sending"></div></div>
+			<div class="formfield">
+				<div id="sending"></div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -91,6 +105,7 @@ if($q->draft){
 
 	}
 </script>
+
 <?php
 }
 include_once("../includes/footer.php");

@@ -17,12 +17,12 @@ function mQuiz(){
 		this.opts = opts;
 		this.store = new Store();
 		this.store.init();
-		if(mQ.store.get('username') == 'anon'){
+		if(this.store.get('username') == 'anon'){
 			this.logout(true);
 		}
-		if(this.opts.allowanon){
-			mQ.store.set('username','anon');
-			mQ.store.set('password','anon');
+		if(this.opts.allowanon && !this.store.get('username')){
+			this.store.set('username','anon');
+			this.store.set('password','anon');
 		}
 		if(!this.opts.url){
 			this.opts.url = "../api/?format=json";
@@ -326,7 +326,6 @@ function mQuiz(){
 			this.showLogin(hash);
 			return;
 		} 
-		mQ.dataUpdate();
 		$('#content').empty();
 		if (hash == '#register'){
 			mQ.showRegister();
@@ -421,6 +420,7 @@ function mQuiz(){
 		}
 		// check when last update made, return if too early
 		var now = new Date();
+		console.log("updating");
 		var lastupdate = new Date(mQ.store.get('lastupdate'));
 		if(lastupdate > now.addMins(-DATA_CACHE_EXPIRY)){
 			return;
@@ -534,10 +534,8 @@ function mQuiz(){
 		$('#logininfo').empty();
 		if(mQ.store.get('displayname') != null){
 			$('#logininfo').text(mQ.store.get('displayname') + " ");
-		} 
-		if(mQ.store.get('username') != null){
 			$('#logininfo').append("<a onclick='mQ.logout()' name='lang' id='logout'>Logout</a>");
-		}
+		} 
 	};
 	
 	this.cacheQuiz = function(qref){
@@ -594,7 +592,11 @@ function Store(){
 	
 	this.get = function(key){
 		var value = localStorage.getItem(key);
-	    return value && JSON.parse(value);
+		try{
+			return value && JSON.parse(value);
+		} catch(err){
+			return null;
+		}
 	}
 	
 	this.set = function(key,value){
@@ -1167,10 +1169,10 @@ function Quiz(){
 		   success:function(data){
 			   //check for any error messages
 			   if(!data || data.error){
-				   mQ.store.addArrayItem('unsentresults',content);
+				   mQ.store.addArrayItem('unsentresults',JSON.stringify(content));
 			   } else {
 				   content.rank = data.rank;
-				   mQ.store.addArrayItem('results', content);
+				   mQ.store.addArrayItem('results', JSON.stringify(content));
 				   // show ranking 
 				   if($('#rank') && data.rank){
 					   $('#rank').empty();
@@ -1187,7 +1189,7 @@ function Quiz(){
 			   }
 		   }, 
 		   error:function(data){
-			   mQ.store.addArrayItem('unsentresults',content);
+			   mQ.store.addArrayItem('unsentresults',JSON.stringify(content));
 		   }
 		});	
 	}
