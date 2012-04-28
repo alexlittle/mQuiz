@@ -13,10 +13,14 @@ function mQuiz(){
 	};
 	this.store = null;
 	
-	this.init = function(opts){
-		this.opts = opts;
+	this.initStore = function(){
 		this.store = new Store();
 		this.store.init();
+	}
+	
+	this.init = function(opts){
+		this.opts = opts;
+		this.initStore();
 		if(this.store.get('username') == 'anon'){
 			this.logout(true);
 		}
@@ -420,7 +424,6 @@ function mQuiz(){
 		}
 		// check when last update made, return if too early
 		var now = new Date();
-		console.log("updating");
 		var lastupdate = new Date(mQ.store.get('lastupdate'));
 		if(lastupdate > now.addMins(-DATA_CACHE_EXPIRY)){
 			return;

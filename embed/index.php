@@ -17,7 +17,7 @@
 <div id="page">
 	<div id="content"></div>
 	<div id="footer">
-		<a onclick="parent.location='http://mquiz.org'">Visit mQuiz</a>
+		<a onclick="parent.location='http://mquiz.org'">mQuiz</a>
 	</div>
 </div>
 </body>

@@ -4,19 +4,7 @@
 ?>
 
 function initPage(){
-	var opts = {
-			'menu':[{'title':'Search','link':'#select'},
-			        {'title':'Quizzes','link':'#quizzes'},
-			        {'title':'Results','link':'#results'}],
-			'allowregister': true,
-			'finallinks': [{'title':'Try another quiz','link':'#select'},
-			               {'title':'View all recent results','link':'#results'}],
-			'url':'<?php echo $CONFIG->homeAddress; ?>/api/?format=json'
-			};
-	mQ.init(opts);
-	mQ.onLogout = function(){
-		document.location = '<?php echo $CONFIG->homeAddress; ?>';
-	};
+	mQ.initStore();
 	<?php 
     	if(isLoggedIn()){
     		printf("mQ.store.set('username','%s');",$USER->username);
