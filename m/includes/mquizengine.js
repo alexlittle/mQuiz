@@ -208,10 +208,13 @@ function mQuiz(){
 		$('#content').empty();
 		var str = "<h2>Login";
 		if(this.opts.allowregister){
-			str += "(or <a onclick='mQ.showRegister()'>Register</a>)";
+			str += " (or <a href='#register'>Register</a>)";
 		}
 		str += "</h2>";
 		$('#content').append(str);
+		var msg = $('<div>').attr({'id':'msg'});
+		$('#content').append(msg);
+		msg.hide();
 		var form =  $('<div>');
 		form.append("<div class='formblock'>" +
 			"<div class='formlabel' name='lang' id='login_username'>Email:</div>" +
@@ -223,7 +226,7 @@ function mQuiz(){
 			"<div class='formfield'><input type='password' name='password' id='password'></input></div>" +
 			"</div>");
 		
-		form.append("<div class='ctrl'><input type='button' name='submit' value='Login' onclick='mQ.login(\""+hash+"\")' class='button'></input></div>");
+		form.append("<div class='ctrl'><input type='button' name='submit' value='Login' onclick='mQ.login(\""+hash+"\")' class='button' id='loginbtn'></input></div>");
 		$('#content').append(form);
 	};
 	
@@ -278,13 +281,18 @@ function mQuiz(){
 	};
 	
 	this.login = function(hash){
+		$('#msg').empty();
+		$('#msg').show();
 		var username = $('#username').val();
 		var password = $('#password').val();
 		if(username == '' || password == ''){
-			alert("Please enter your username and password");
+			$('#msg').append("<span class='warn'>Please enter your username and password</span>");
 			return false;
 		}
-		
+		$('#msg').append("Logging in...");
+		$('#username').attr('disabled','disabled');
+		$('#password').attr('disabled','disabled');
+		$('#loginbtn').attr('disabled','disabled');
 		$.ajax({
 			   data:{'method':'login','username':username,'password':password}, 
 			   success:function(data){
@@ -299,11 +307,19 @@ function mQuiz(){
 					   mQ.showPage(hash);
 					   mQ.onLogin();
 				   } else {
-					   alert('Login failed');
+					   $('#username').removeAttr('disabled');
+					   $('#password').removeAttr('disabled');
+					   $('#loginbtn').removeAttr('disabled');
+					   $('#msg').empty();
+					   $('#msg').append("<span class='warn'>Login failed</span>");
 				   }
 			   }, 
 			   error:function(data){
-				   alert("No connection available. You need to be online to log in.");
+				   $('#username').removeAttr('disabled');
+				   $('#password').removeAttr('disabled');
+				   $('#loginbtn').removeAttr('disabled');
+				   $('#msg').empty();
+				   $('#msg').append("<span class='warn'>No connection available. You need to be online to log in.</span>");
 			   }
 			});
 		return false;

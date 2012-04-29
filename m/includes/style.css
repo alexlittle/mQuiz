@@ -318,3 +318,13 @@ label.error{
 	width:15%;
 	font-size:130%;
 }
+
+#msg {
+	width:80%;
+	margin:0 auto;
+	text-align:center;
+	font-size:80%;
+}
+.warn {
+	color: red;
+}
