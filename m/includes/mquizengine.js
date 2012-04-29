@@ -152,11 +152,16 @@ function mQuiz(){
 		
 		mQ.showMenu();
 		
-		var searchform = $('<div>').attr({'id':'search','class':'formblock'});
-		searchform.append($('<div>').attr({'id':'searchtitle','class':'formlabel'}).text("Search quizzes:"));
-		var ff = $('<div>').attr({'class':'formfield'});
+		var searchform = $('<div>').attr({'id':'searchform'});
+		searchform.append($('<div>').attr({'id':'searchtitle'}).text("Search quizzes:"));
+		var ff = $('<div>').attr({'class':'search'});
 		var sterms = $('<input>').attr({'id':'searchterms'});
+		var sbtn = $('<input>').attr({'type':'button','id':'searchbtn','value':'Go'});
+		sbtn.click(function(){
+				mQ.doSearch();
+			});
 		ff.append(sterms);
+		ff.append(sbtn);
 		searchform.append(ff);
 		$('#content').append(searchform);
 		
@@ -371,7 +376,7 @@ function mQuiz(){
 		for (var q in qs){
 			var result = $('<div>').attr({'class':'result'});
 			var d = new Date(qs[q].quizdate);
-			var str = qs[q].quiztitle + "<br/><small>"+dateFormat(d,'HH:MM d-mmm-yy')+"</small>";
+			var str = qs[q].quiztitle + "<br/><small>"+ dateFormat(d,'HH:MM d-mmm-yy')+"</small>";
 			result.append($('<div>').attr({'class':'rest clickable','onclick':'document.location="#'+qs[q].qref +'"','title':'try this quiz again'}).html(str));
 			result.append($('<div>').attr({'class':'ress'}).text((qs[q].userscore*100/qs[q].maxscore).toFixed(0)+"%"));
 			result.append($('<div>').attr({'class':'resr'}).text(qs[q].rank));
@@ -1171,10 +1176,10 @@ function Quiz(){
 		   success:function(data){
 			   //check for any error messages
 			   if(!data || data.error){
-				   mQ.store.addArrayItem('unsentresults',JSON.stringify(content));
+				   mQ.store.addArrayItem('unsentresults',content);
 			   } else {
 				   content.rank = data.rank;
-				   mQ.store.addArrayItem('results', JSON.stringify(content));
+				   mQ.store.addArrayItem('results', content);
 				   // show ranking 
 				   if($('#rank') && data.rank){
 					   $('#rank').empty();
@@ -1191,7 +1196,7 @@ function Quiz(){
 			   }
 		   }, 
 		   error:function(data){
-			   mQ.store.addArrayItem('unsentresults',JSON.stringify(content));
+			   mQ.store.addArrayItem('unsentresults',content);
 		   }
 		});	
 	}
