@@ -2,7 +2,6 @@
 function init(){
 	var opts = {
 			'menu':[{'title':'Search','link':'#select'},
-			        {'title':'Quizzes','link':'#quizzes'},
 			        {'title':'Results','link':'#results'}],
 			'allowregister': true,
 			'finallinks': [{'title':'Try another quiz','link':'#select'},

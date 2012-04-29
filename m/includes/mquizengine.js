@@ -587,7 +587,6 @@ function Store(){
 		if (!localStorage) {
 			localStorage.setItem('username', null);
 			localStorage.setItem('password', null);
-			localStorage.setItem('lang', 'EN');
 			localStorage.setItem('quizzes', null);
 			localStorage.setItem('results', null);
 		}
@@ -1139,7 +1138,7 @@ function Quiz(){
 		next.hide();
 		
 		var d = $('<div>').attr({'class': 'resultopt clickable centre'});
-		var l = $('<a>').text("Retake '"+ this.quiz.quiztitle +"'");
+		var l = $('<a>').text("Retry '"+ this.quiz.quiztitle +"'");
 		d.append(l);
 		var qref = this.quiz.qref;
 		l.click(function(){

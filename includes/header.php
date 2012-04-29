@@ -39,33 +39,6 @@ if ($lang != ""){
 	<?php 
     	echo $HEADER;
     ?>
-    
-    <script type="text/javascript">
-	    
-    	function initPage(){
-    		var opts = {
-    				'menu':[{'title':'Search','link':'#select'},
-    				        {'title':'Quizzes','link':'#quizzes'},
-    				        {'title':'Results','link':'#results'}],
-    				'allowregister': true,
-    				'finallinks': [{'title':'Try another quiz','link':'#select'},
-    				               {'title':'View all recent results','link':'#results'}],
-    				'url':'<?php echo $CONFIG->homeAddress; ?>/api/?format=json'
-    				};
-    		mQ.init(opts);
-    		<?php 
-    	    	if(isLoggedIn()){
-    	    		printf("mQ.store.set('username','%s');",$USER->username);
-    	    		printf("mQ.store.set('displayname','%s');",$USER->firstname." ".$USER->lastname);
-    	    		printf("mQ.store.set('password','%s');",$USER->password);
-    	    		
-    	    	} 
-    	    	if(!$uagent_obj->DetectIphone() && !$uagent_obj->DetectAndroidPhone()){
-    	    		printf("mQ.store.set('source','%s');",$CONFIG->homeAddress);
-    	    	}
-    	    ?>
-    	}
-    </script>
 </head>
 
 <body onload="initPage()">
