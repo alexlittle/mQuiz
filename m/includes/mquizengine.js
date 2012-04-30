@@ -193,14 +193,16 @@ function mQuiz(){
 		$('#content').empty();
 		mQ.showMenu();
 		var localQuizzes = $('<div>').attr({'id':'localq'}); 
-		localQuizzes.append("Quizzes stored locally:");
+		if(this.opts.lang){
+			localQuizzes.append(this.opts.lang.en.localquiz.title);
+		}
 		$('#content').append(localQuizzes);
 		var qs = mQ.store.get('quizzes');
 		for (var q in qs){
 			mQ.addQuizListItem(qs[q],'#localq');
 		}
 		if(!qs || qs.length == 0){
-			$(localQuizzes).append("<br/>No quizzes stored locally.");
+			$(localQuizzes).append("<br/>No quizzes");
 		}
 	};
 	
