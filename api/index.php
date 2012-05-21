@@ -168,7 +168,7 @@ if ($method == "list" || $method == "suggest" || $method == "invite"){
 echo json_encode($response);
 
 writeToLog("info","pagehit",$_SERVER["REQUEST_URI"]." method: ".$method);
-
+$API->cleanUpDB();
 
 function curPageURL() {
 	$pageURL = 'http';

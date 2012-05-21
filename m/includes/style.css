@@ -93,7 +93,7 @@ li {
 .formlabel, .formfield{
 	font-size:110%;
 	margin:auto;
-	width:80%;
+	width:90%;
 }
 
 .formfield input{
@@ -228,7 +228,7 @@ label.error{
 }
 
 #searchresults, #suggestresults, #localq {
-	width:80%;
+	width:90%;
 	margin:10px auto;
 }
 
@@ -298,7 +298,7 @@ label.error{
 }
 #fbtext {
 	text-align:center;
-	width:80%;
+	width:90%;
 	margin: 10px auto;
 }
 
@@ -307,20 +307,20 @@ label.error{
 }
 #searchform {
 	font-size:110%;
-	width:80%;
+	width:90%;
 	margin:5px auto;
 }
 #searchterms {
-	width:80%;
+	width:200px;
 	font-size:130%;
 }
 #searchbtn {
-	width:15%;
+	width:60px;
 	font-size:130%;
 }
 
 #msg {
-	width:80%;
+	width:90%;
 	margin:0 auto;
 	text-align:center;
 	font-size:80%;
