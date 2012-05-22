@@ -1,9 +1,10 @@
 CACHE MANIFEST
-# v10
+# v11
 
 CACHE:
 index.html
-includes/style.css
+includes/mquiz-core.css
+includes/mquiz-local.css
 includes/mquiz.js
 includes/mquizengine.js
 includes/dateformat.js

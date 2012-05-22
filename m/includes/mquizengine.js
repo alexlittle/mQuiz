@@ -60,7 +60,7 @@ function mQuiz(){
 	
 	this.loadQuiz = function(qref,force){
 		document.location = "#"+qref;
-		$('#content').empty();
+		$('#mq').empty();
 		mQ.showLoading('quiz');
 		// find if this quiz is already in the cache
 		var quiz = mQ.quizInCache(qref);
@@ -93,10 +93,10 @@ function mQuiz(){
 	};
 	
 	this.showRegister = function(){
-		$('#content').empty();
-		$('#content').append("<h2>Register</h2>");
+		$('#mq').empty();
+		$('#mq').append("<h2>Register</h2>");
 		var l = $('<div>').attr({'id':'loading'}).html("Registering...");
-		$('#content').append(l);
+		$('#mq').append(l);
 		l.hide();
 		var form =  $('<form>').attr({'id':'register'});
 		form.append("<div class='formblock'>" +
@@ -120,7 +120,7 @@ function mQuiz(){
 				"<div class='formfield'><input type='text' name='surname' id='surname'></input></div>" +
 				"</div>");
 		form.append("<div class='ctrl'><input type='button' name='submit' value='Register' onclick='register()' class='button'></input></div>");
-		$('#content').append(form);
+		$('#mq').append(form);
 		//data validation
 		$('#register').validate({
 			rules: {
@@ -148,7 +148,7 @@ function mQuiz(){
 	};
 	
 	this.showHome = function(){
-		$('#content').empty();
+		$('#mq').empty();
 		
 		mQ.showMenu();
 		
@@ -163,16 +163,16 @@ function mQuiz(){
 		ff.append(sterms);
 		ff.append(sbtn);
 		searchform.append(ff);
-		$('#content').append(searchform);
+		$('#mq').append(searchform);
 		
 		var searchresults = $('<div>').attr({'id':'searchresults','class':'formblock'}); 
-		$('#content').append(searchresults);
+		$('#mq').append(searchresults);
 		
 		var suggest = $('<div>').attr({'id':'suggest','class':'formblock'});
 		suggest.append($('<div>').attr({'id':'suggesttitle','class':'formlabel'}).text("or try one of these:"));
-		$('#content').append(suggest);
+		$('#mq').append(suggest);
 		var suggestresults = $('<div>').attr({'id':'suggestresults','class':'formblock'}); 
-		$('#content').append(suggestresults);
+		$('#mq').append(suggestresults);
 		if(mQ.store.get('suggest')){
 			var data = mQ.store.get('suggest');
 			for(var q in data){		   
@@ -190,13 +190,13 @@ function mQuiz(){
 	};
 
 	this.showLocalQuizzes = function(){
-		$('#content').empty();
+		$('#mq').empty();
 		mQ.showMenu();
 		var localQuizzes = $('<div>').attr({'id':'localq'}); 
 		if(this.opts.lang){
 			localQuizzes.append(this.opts.lang.en.localquiz.title);
 		}
-		$('#content').append(localQuizzes);
+		$('#mq').append(localQuizzes);
 		var qs = mQ.store.get('quizzes');
 		for (var q in qs){
 			mQ.addQuizListItem(qs[q],'#localq');
@@ -207,15 +207,15 @@ function mQuiz(){
 	};
 	
 	this.showLogin = function(hash){
-		$('#content').empty();
+		$('#mq').empty();
 		var str = "<h2>Login";
 		if(this.opts.allowregister){
 			str += " (or <a href='#register'>Register</a>)";
 		}
 		str += "</h2>";
-		$('#content').append(str);
+		$('#mq').append(str);
 		var msg = $('<div>').attr({'id':'msg'});
-		$('#content').append(msg);
+		$('#mq').append(msg);
 		msg.hide();
 		var form =  $('<div>');
 		form.append("<div class='formblock'>" +
@@ -229,7 +229,7 @@ function mQuiz(){
 			"</div>");
 		
 		form.append("<div class='ctrl'><input type='button' name='submit' value='Login' onclick='mQ.login(\""+hash+"\")' class='button' id='loginbtn'></input></div>");
-		$('#content').append(form);
+		$('#mq').append(form);
 	};
 	
 	this.showMenu = function(){
@@ -237,7 +237,7 @@ function mQuiz(){
 			var menu = $('#menu');
 			if(menu.length == 0){
 				menu = $('<div>').attr({'id':'menu'});
-				$('#content').append(menu);
+				$('#mq').append(menu);
 			}
 			menu.empty();
 			for(var i=0;i < this.opts.menu.length;i++){
@@ -250,15 +250,15 @@ function mQuiz(){
 	};
 	
 	this.showQuiz = function(qref){
-		$('#content').empty();
+		$('#mq').empty();
 		Q = new Quiz();
 		Q.init(mQ.quizInCache(qref));
 		
 		var qhead = $('<div>').attr({'id':'quizheader'});
-		$('#content').append(qhead);
+		$('#mq').append(qhead);
 		
 		var qs = $('<div>').attr({'id':'qs'});
-		$('#content').append(qs);
+		$('#mq').append(qs);
 		
 		var question = $('<div>').attr({'id':'question'});
 		$('#qs').append(question);
@@ -278,7 +278,7 @@ function mQuiz(){
 		quiznav.append(quiznavnext);
 		
 		var clear = $('<div>').attr({'style':'clear:both'});
-		$('#content').append(quiznav);
+		$('#mq').append(quiznav);
 		Q.loadQuestion();
 	};
 	
@@ -353,7 +353,7 @@ function mQuiz(){
 			this.showLogin(hash);
 			return;
 		} 
-		$('#content').empty();
+		$('#mq').empty();
 		if (hash == '#register'){
 			mQ.showRegister();
 		} else if (hash == '#login' && !mQ.loggedIn()){
@@ -375,11 +375,11 @@ function mQuiz(){
 	};
 	
 	this.showResults = function(){
-		$('#content').empty();
+		$('#mq').empty();
 		
 		mQ.showMenu();
 		var results = $('<div>').attr({'id':'results'}); 
-		$('#content').append(results);
+		$('#mq').append(results);
 		var qs = mQ.store.get('results');
 		if(qs && qs.length>0){
 			var result = $('<div>').attr({'class':'th'});
@@ -431,7 +431,7 @@ function mQuiz(){
 	
 	this.showLoading = function(msg){
 		var l = $('<div>').attr({'id':'loading'}).html("Loading "+msg+"...");
-		$('#content').append(l);
+		$('#mq').append(l);
 	};
 
 	this.loggedIn = function(){
@@ -1136,9 +1136,9 @@ function Quiz(){
 		} 
 		
 		mQ.inQuiz = false;
-		$('#content').empty();
+		$('#mq').empty();
 		
-		$('#content').append("<h2 name='lang' id='page_title_results'>Your results for:<br/> '"+ this.quiz.quiztitle +"':</h2>");
+		$('#mq').append("<h2 name='lang' id='page_title_results'>Your results for:<br/> '"+ this.quiz.quiztitle +"':</h2>");
 		// calculate score
 		var total = 0;
 		for(var r in this.responses){
@@ -1150,14 +1150,14 @@ function Quiz(){
 		} else {
 			var percent = 0;
 		}
-		$('#content').append("<div id='quizresults'>"+ percent.toFixed(0) +"%</div>");
+		$('#mq').append("<div id='quizresults'>"+ percent.toFixed(0) +"%</div>");
 		
 		var rank = $('<div>').attr({'id':'rank','class': 'rank'});
-		$('#content').append(rank);
+		$('#mq').append(rank);
 		rank.hide();
 		
 		var next = $('<div>').attr({'id':'next','class': 'next centre'});
-		$('#content').append(next);
+		$('#mq').append(next);
 		next.hide();
 		
 		var d = $('<div>').attr({'class': 'resultopt clickable centre'});
@@ -1167,14 +1167,14 @@ function Quiz(){
 		l.click(function(){
 			mQ.loadQuiz(qref,false);
 		});
-		$('#content').append(d);
+		$('#mq').append(d);
 		
 		if(mQ.opts.finallinks){
 			for(var i in mQ.opts.finallinks){
 				var d = $('<div>').attr({'class': 'resultopt clickable centre'});
 				var l = $('<a>').attr({'href': mQ.opts.finallinks[i].link}).text(mQ.opts.finallinks[i].title);
 				d.append(l);
-				$('#content').append(d);
+				$('#mq').append(d);
 			}
 			
 		}

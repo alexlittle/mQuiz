@@ -1,0 +1,48 @@
+@CHARSET "UTF-8";
+
+* {padding:0; margin:0;}
+
+body {
+	margin:0 0 5px 0;
+	background:#fff;
+	color:#444;
+	font-size: 120%; /* Resets 1em to 10px */
+	font-family: Verdana, 'Lucida Grande', Tahoma, Arial, Sans-Serif;
+}
+
+#header {
+  	padding:5px 5px;
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+#header-title {
+	float:left;	
+}
+
+#header-title h1 {
+	font-size:130%;
+	display:inline;
+	vertical-align:middle;
+	color: #77a240;
+}
+
+#header-logo {
+	float:left;
+}
+
+#header-right {
+	float:right;	
+	text-align:right;
+}
+
+
+#footer {
+	text-align:center;
+	margin-top:10px;
+	font-size:80%;
+}
+
+.clickable {
+	cursor:pointer;
+}

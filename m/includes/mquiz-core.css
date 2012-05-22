@@ -1,29 +1,13 @@
 @CHARSET "UTF-8";
 
-* {padding:0; margin:0;}
 
-body {
-	margin:0 0 5px 0;
-	background:#fff;
-	color:#444;
-	font-size: 120%; /* Resets 1em to 10px */
-	font-family: Verdana, 'Lucida Grande', Tahoma, Arial, Sans-Serif;
-}
-
-#page {
-}
-
-a:hover, a:visited, a {
+#mq a:hover, a:visited, a {
     color: #77a240;
     text-decoration:underline;
     cursor:pointer;
 }
 
-.clickable {
-	cursor:pointer;
-}
-
-#loading {
+#mq #loading {
 	width:100%;
 	text-align:center;
 	padding:5px;
@@ -31,300 +15,263 @@ a:hover, a:visited, a {
 	margin-top:20px;
 }
 
-.checkbox {
+#mq .checkbox {
 	margin-right:10px;
 }
 
-li {
+#mq li {
 	margin-left:15px;	
 }
 
-#header {
-  	padding:5px 5px;
-	text-align: center;
-	margin-bottom: 5px;
-}
-
-#header-title {
-	float:left;	
-}
-
-#header-title h1 {
-	font-size:130%;
-	display:inline;
-	vertical-align:middle;
-	color: #77a240;
-}
-
-#header-logo {
-	float:left;
-}
-
-#header-right {
-	float:right;	
-	text-align:right;
-}
-
-#content {
-	font-size:110%;
-}
-
-#content h2 {
+#mq h2 {
 	font-size:110%;
 	text-align: center;
 	padding:5px;
 }
 
-#menu {
+#mq #menu {
 	width:100%;
 	text-align:center;
 	padding:5px 0;
 	background:	#9aca3c;
 }
 
-#menu a{
+#mq #menu a{
 	color: #444;	
 }
 
-.error {
+#mq .error {
 	color: red;
 }
 
-.formlabel, .formfield{
+#mq .formlabel, .formfield{
 	font-size:110%;
 	margin:auto;
 	width:90%;
 }
 
-.formfield input{
+#mq .formfield input{
 	font-size:130%;
 	width:100%;
 }
 
-div.ctrl {
+#mq div.ctrl {
 	text-align: center;
 	margin:10px;
 }
-.button {
+#mq .button {
 	padding: 10px;
 	width: 98%;
 	font-size:110%;
 }
 
-.navbutton {
+#mq .navbutton {
 	padding: 10px;
 	width: 100%;
 	font-size:110%;
 }
 
-.quizlist {
+#mq .quizlist {
 	padding: 5px;
 }
-.quizlist:hover {
+#mq .quizlist:hover {
 	background: yellow;
 }
-.quiztitle {
+#mq .quiztitle {
 	color:#77a240;
 }
 
-.quizdesc {
+#mq .quizdesc {
 	font-style:italic;
 	font-size:80%;
 }
 
-#quizheader {
+#mq #quizheader {
 	background: #9aca3c;
 	padding: 5px;
 	font-weight: bold;
 	text-align: center;
 }
 
-#question {
+#mq #question {
 	font-weight: bold;
 	padding: 10px;
 }
 
-#response{
+#mq #response{
 	padding: 10px 0;
 }
-.response {
+#mq .response {
 	padding: 5px 10px;
 }
-.mcresponse {
+#mq .mcresponse {
 	padding: 5px 10px;
 }
-.mcresponse:hover {
+#mq .mcresponse:hover {
 	background: yellow;
 }
 
-.od {
+#mq .od {
 	padding: 5px 10px;
 }
-.mss {
+#mq .mss {
 	float:left;
 	width: 15px;
 }
-.mst {
+#mq .mst {
 	margin-left:20px;
 }
-.od:hover {
+#mq .od:hover {
 	background: yellow;
 }
 
-div.quiznavprev {
+#mq div.quiznavprev {
 	float:left;
 	width:50%;
 }
 
-div.quiznavnext {
+#mq div.quiznavnext {
 	float:right;
 	width:50%;
 	text-align:right;
 }
 
 
-#quizresults {
+#mq #quizresults {
 	font-size: 300%;
 	text-align: center;
 	margin: 20px;
 	font-weight:bold;
 }
 
-.resultopt {
+#mq .resultopt {
 	margin: 10px;
 	color:#77a240;
 }
 
-
-#footer {
-	text-align:center;
-	margin-top:10px;
-	font-size:80%;
-}
-
-.matchingstate {
+#mq .matchingstate {
 	width: auto;
 	text-align:left;
 	float:left;
 }
 
-.matchingopt {
+#mq .matchingopt {
 	float:right;
 	font-size:120%;
 }
 
-.responsefield {
+#mq .responsefield {
 	font-size:130%;
 	width:98%;
 }
 
-.selected{
+#mq .selected{
 	font-weight:bold;
 }
 
-label.error{
+#mq label.error{
 	color:red;
 	font-size:60%;
 }
 
-#searchresults, #suggestresults, #localq {
+#mq #searchresults, #suggestresults, #localq {
 	width:90%;
 	margin:10px auto;
 }
 
-#results {
+#mq #results {
 	width:100%;
 	margin:10px auto;
 }
 
-.centre {
+#mq .centre {
 	text-align: center;
 }
 
-.th {
+#mq .th {
 	font-weight: bold;
 	text-align: center;
 }
 
-#rank {
+#mq #rank {
 	text-align: center;
 }
 
-.result {
+#mq .result {
 	padding: 5px;
 }
-.rest {
+#mq .rest {
 	float:left;
 	width:50%;
 	color:#77a240;
 }
 
 
-.ress {
+#mq .ress {
 	float:left;
 	width:30%;
 	text-align: center;
 }
 
-.resr {
+#mq .resr {
 	float:left;
 	width:20%;
 	text-align: center;
 }
 
-.result:hover{
+#mq .result:hover{
 	background: yellow;
 }
 
-.thrt {
+#mq .thrt {
 	float:left;
 	width:50%;
 	text-align: left;
 }
 
-.thrs {
+#mq .thrs {
 	float:left;
 	width:30%;
 }
 
-.thrr {
+#mq .thrr {
 	float:left;
 	width:20%;
 }
 
-#feedback {
+#mq #feedback {
 	text-align:center;
 	min-height:100px;
 }
-#fbtext {
+#mq #fbtext {
 	text-align:center;
 	width:90%;
 	margin: 10px auto;
 }
 
-#qs {
+#mq #qs {
 	min-height:200px;
 }
-#searchform {
+#mq #searchform {
 	font-size:110%;
 	width:90%;
 	margin:5px auto;
 }
-#searchterms {
+#mq #searchterms {
 	width:200px;
 	font-size:130%;
 }
-#searchbtn {
+#mq #searchbtn {
 	width:60px;
 	font-size:130%;
 }
 
-#msg {
+#mq #msg {
 	width:90%;
 	margin:0 auto;
 	text-align:center;
 	font-size:80%;
 }
-.warn {
+#mq .warn {
 	color: red;
 }
