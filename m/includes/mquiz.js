@@ -11,6 +11,7 @@ function init(){
 	mQ.onLogin = function(){
 		mQ.dataUpdate();
 	}
+	
 	if($(location).attr('hash')){
 		mQ.showPage($(location).attr('hash'));
 	} else {

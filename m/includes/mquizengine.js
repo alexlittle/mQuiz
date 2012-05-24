@@ -381,6 +381,7 @@ function mQuiz(){
 		var results = $('<div>').attr({'id':'results'}); 
 		$('#mq').append(results);
 		var qs = mQ.store.get('results');
+
 		if(qs && qs.length>0){
 			var result = $('<div>').attr({'class':'th'});
 			result.append($('<div>').attr({'class':'thrt'}).text("Quiz"));
@@ -390,7 +391,9 @@ function mQuiz(){
 			results.append(result);
 		} else {
 			results.append("You haven't taken any quizzes yet");
+			return;
 		}
+		qs.sort(sortresults);
 		for (var q in qs){
 			var result = $('<div>').attr({'class':'result'});
 			var d = new Date(qs[q].quizdate);
@@ -453,27 +456,38 @@ function mQuiz(){
 		} 
 
 		// send any unsubmitted responses
-		var unsent = mQ.store.get('unsentresults');
+		var results = mQ.store.get('results');
 		
-		if(unsent){
-			for(var u in unsent){
-				$.ajax({
-					   data:{'method':'submit','username':mQ.store.get('username'),'password':mQ.store.get('password'),'content':unsent[u]}, 
-					   success:function(data){
-						   
-						 //check for any error messages
-						   if(data && !data.error){
-							   unsent[u].rank = data.rank;
-							   mQ.store.addArrayItem('results',unsent[u]);
-							   mQ.store.set('lastupdate',Date());
-							   mQ.store.clearKey('unsentresults');
+		if(results){
+			for(var r in results){
+				console.log(results[r]);
+				if(results[r].sent == false){
+					$.ajax({
+						   data:{'method':'submit','username':mQ.store.get('username'),'password':mQ.store.get('password'),'content':JSON.stringify(results[r])}, 
+						   success:function(data){
+							   
+							 //check for any error messages
+							   if(data && !data.error){
+								   cache = mQ.store.get('results');
+								   mQ.store.clearKey('results');
+								   results[r].sent = true;
+								   results[r].rank = data.rank;
+								   for (var c in cache){
+									   if(cache[c].quizdate == results[r].quizdate){
+										   mQ.store.addArrayItem('results', results[r]);
+									   }else {
+										   mQ.store.addArrayItem('results', cache[c]);
+									   }
+								   } 
+								   mQ.store.set('lastupdate',Date());
+							   }
+							   
+						   }, 
+						   error:function(data){
+							   // do nothing - will send on next update
 						   }
-						   
-					   }, 
-					   error:function(data){
-						   // do nothing - will send on next update
-					   }
-					});
+						});
+				}
 			}
 		}
 		
@@ -1188,16 +1202,16 @@ function Quiz(){
 		content.quizdate = Date.now();
 		content.responses = this.responses;
 		content.quiztitle = this.quiz.quiztitle;
+		content.sent = false;
 	
+		mQ.store.addArrayItem('results', content);
+		
 		$.ajax({
 		   data:{'method':'submit','username':mQ.store.get('username'),'password':mQ.store.get('password'),'content':JSON.stringify(content)}, 
 		   success:function(data){
 			   //check for any error messages
-			   if(!data || data.error){
-				   mQ.store.addArrayItem('unsentresults',content);
-			   } else {
+			   if(data && !data.error){
 				   content.rank = data.rank;
-				   mQ.store.addArrayItem('results', content);
 				   // show ranking 
 				   if($('#rank') && data.rank){
 					   $('#rank').empty();
@@ -1211,10 +1225,20 @@ function Quiz(){
 						   $('#next').show('blind');
 					   }
 				   }
+				   // loop through results and update rank & sent status
+				   cache = mQ.store.get('results');
+				   mQ.store.clearKey('results');
+				   content.sent = true;
+				   for (var c in cache){
+					   if(cache[c].quizdate == content.quizdate){
+						   mQ.store.addArrayItem('results', content);
+					   }else {
+						   mQ.store.addArrayItem('results', cache[c]);
+					   }
+				   } 
 			   }
 		   }, 
-		   error:function(data){
-			   mQ.store.addArrayItem('unsentresults',content);
+		   error:function(data){ 
 		   }
 		});	
 	}
@@ -1269,4 +1293,12 @@ function getUrlVars() {
         vars[hash[0]] = hash[1];
     }
     return vars;
+}
+
+function sortresults(a, b){
+	if(a.quizdate >= b.quizdate){
+		return -1;
+	} else {
+		return 1;
+	}
 }

@@ -3,7 +3,7 @@ header('Content-Type:text/html; charset=UTF-8');
 
 //first detect if using mobile device and redirect accordingly
 $uagent_obj = new uagent_info();
-if($uagent_obj->DetectIphone() || $uagent_obj->DetectAndroidPhone()){
+if($uagent_obj->DetectTierTablet() || $uagent_obj->DetectTierIphone()){
 	header('Location: '.$CONFIG->homeAddress.'m/');
 	die;
 }

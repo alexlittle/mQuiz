@@ -4,8 +4,8 @@ unset($CONFIG);
 $CONFIG = new stdClass;
 
 // include trailing slashes
-$CONFIG->homeAddress = "https://localhost/assessment-sc/";
-$CONFIG->homePath = "/home/alex/data/websites/assessment-sc/";
+$CONFIG->homeAddress = "http://".$_SERVER["SERVER_NAME"]."/mquiz/";
+$CONFIG->homePath = "/var/www/mquiz/";
 
 // this must be a writable directory
 $CONFIG->imagecache = "/tmp/";

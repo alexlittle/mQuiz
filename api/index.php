@@ -62,6 +62,8 @@ if($method == 'login'){
 		$response->login = $login;
 		$response->hash = md5($password);
 		$response->name = $USER->firstname." " .$USER->lastname;
+		// get 10 most recent quiz results for user
+		
 	} else {
 		$response->error = "Login failed";
 	}
@@ -99,6 +101,7 @@ if($method == 'getquiz' || $method == 'submit'){
 	
 	if($method == 'submit'){
 		$content = optional_param("content","",PARAM_TEXT);
+		//$response->error = "no content";
 		if($content == ""){
 			$response->error = "no content";
 		} else {

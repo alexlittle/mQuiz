@@ -554,6 +554,9 @@ class API {
 		$r = array("myrank"=>$myrank,"total"=>$count);
 		return $r;
 	}
+	function getUserRecentAttempts($userid){
+		
+	}
 	
 	function getRankingForAttempt($attemptid){
 		$sql = sprintf("SELECT aqa.id, aqa.qascore FROM quizattempt qa
