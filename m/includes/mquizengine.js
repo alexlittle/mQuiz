@@ -305,6 +305,10 @@ function mQuiz(){
 					   mQ.store.set('displayname',data.name);
 					   mQ.store.set('password',data.hash);
 					   mQ.store.set('lastlogin',Date());
+					   for (var r in data.results){
+						   mQ.store.addArrayItem('results',data.results[r]);
+					   }
+					   console.log( mQ.store.get('results'));
 					   mQ.showUsername();
 					   mQ.showPage(hash);
 					   mQ.onLogin();
@@ -396,7 +400,7 @@ function mQuiz(){
 		qs.sort(sortresults);
 		for (var q in qs){
 			var result = $('<div>').attr({'class':'result'});
-			var d = new Date(qs[q].quizdate);
+			var d = new Date(parseInt(qs[q].quizdate,10));
 			var str = qs[q].quiztitle + "<br/><small>"+ dateFormat(d,'HH:MM d-mmm-yy')+"</small>";
 			result.append($('<div>').attr({'class':'rest clickable','onclick':'document.location="#'+qs[q].qref +'"','title':'try this quiz again'}).html(str));
 			result.append($('<div>').attr({'class':'ress'}).text((qs[q].userscore*100/qs[q].maxscore).toFixed(0)+"%"));
@@ -460,7 +464,6 @@ function mQuiz(){
 		
 		if(results){
 			for(var r in results){
-				console.log(results[r]);
 				if(results[r].sent == false){
 					$.ajax({
 						   data:{'method':'submit','username':mQ.store.get('username'),'password':mQ.store.get('password'),'content':JSON.stringify(results[r])}, 
@@ -481,7 +484,6 @@ function mQuiz(){
 								   } 
 								   mQ.store.set('lastupdate',Date());
 							   }
-							   
 						   }, 
 						   error:function(data){
 							   // do nothing - will send on next update
@@ -1206,12 +1208,15 @@ function Quiz(){
 	
 		mQ.store.addArrayItem('results', content);
 		
+		console.log(content);
 		$.ajax({
 		   data:{'method':'submit','username':mQ.store.get('username'),'password':mQ.store.get('password'),'content':JSON.stringify(content)}, 
 		   success:function(data){
 			   //check for any error messages
 			   if(data && !data.error){
+				   console.log(data);
 				   content.rank = data.rank;
+				   console.log(content.rank);
 				   // show ranking 
 				   if($('#rank') && data.rank){
 					   $('#rank').empty();
@@ -1236,9 +1241,12 @@ function Quiz(){
 						   mQ.store.addArrayItem('results', cache[c]);
 					   }
 				   } 
+				   console.log("saved as sent");
 			   }
 		   }, 
 		   error:function(data){ 
+			   console.log("Error occurred in sending");
+			   console.log(data);
 		   }
 		});	
 	}

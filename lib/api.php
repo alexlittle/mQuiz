@@ -554,8 +554,31 @@ class API {
 		$r = array("myrank"=>$myrank,"total"=>$count);
 		return $r;
 	}
-	function getUserRecentAttempts($userid){
-		
+	
+	function getUserRecentAttempts($userid,$limit=10){
+		$sql = sprintf("SELECT 
+							qa.id,
+							q.qref, 
+							u.username,
+							qa.maxscore, 
+							qa.qascore as userscore, 
+							qa.qadate AS quizdate,
+							q.quiztitle
+						FROM quiz q
+						INNER JOIN quizattempt qa ON q.quizid = qa.quizid
+						INNER JOIN user u ON qa.userid = u.userid
+						WHERE u.userid = %d
+						ORDER BY qa.qadate DESC
+						LIMIT 0,%d",$userid,$limit);
+		$result = _mysql_query($sql,$this->DB);
+		$qas = array();
+		while($o = mysql_fetch_object($result)){
+			$o->rank = $this->getRankingForAttempt($o->id);
+			$o->sent = true;
+			unset($o->id);
+			array_push($qas,$o);
+		}
+		return $qas;
 	}
 	
 	function getRankingForAttempt($attemptid){

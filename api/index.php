@@ -63,6 +63,7 @@ if($method == 'login'){
 		$response->hash = md5($password);
 		$response->name = $USER->firstname." " .$USER->lastname;
 		// get 10 most recent quiz results for user
+		$response->results = $API->getUserRecentAttempts($USER->userid);
 		
 	} else {
 		$response->error = "Login failed";
