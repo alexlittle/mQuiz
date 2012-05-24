@@ -263,6 +263,10 @@ function mQuiz(){
 		var question = $('<div>').attr({'id':'question'});
 		$('#qs').append(question);
 		
+		var notify = $('<div>').attr({'id':'notify','class':'warn'});
+		$('#qs').append(notify);
+		notify.hide();
+		
 		var response = $('<div>').attr({'id':'response'});
 		$('#qs').append(response);
 		
@@ -691,6 +695,8 @@ function Quiz(){
 			if(this.feedback != ""){
 				$('#question').hide();
 				$('#response').hide();
+				$('#notify').hide();
+				$('#notify').empty();
 				$('#feedback').empty();
 				$('#feedback').append("<h2>Feedback</h2><div id='fbtext'>"+this.feedback+"</div>");
 				$('#feedback').show('blind',{},500);
@@ -715,7 +721,8 @@ function Quiz(){
 			}
 
 		} else {
-			alert("Please answer this question before continuing.");
+			$('#notify').text("Please answer this question before continuing.");
+			$('#notify').show();
 		}
 	}
 	
@@ -729,10 +736,12 @@ function Quiz(){
 		this.setHeader();
 		this.setNav();
 		this.feedback = "";
-
+			
 		$('#question').html(this.quiz.q[this.currentQuestion].text);
 		this.loadResponses(this.quiz.q[this.currentQuestion]);
 		$('#feedback').hide();
+		$('#notify').empty();
+		$('#notify').hide();
 		$('#question').show('blind',{},500);
 		$('#response').show('blind',{},500);
 	}
