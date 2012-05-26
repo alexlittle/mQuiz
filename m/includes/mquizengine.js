@@ -687,7 +687,26 @@ function Quiz(){
 	}
 	
 	this.setHeader = function(){
-		$('#quizheader').html(this.quiz.quiztitle + " Q" +(this.currentQuestion+1) + " of "+ this.quiz.q.length);
+		
+		// find how many non-info questions there are
+		var noquestions = this.quiz.q.length;
+		for(var q in this.quiz.q){
+			if(this.quiz.q[q].type == 'info'){
+				noquestions--;
+			}
+		}
+		//check if current question is info one or not
+		if(this.quiz.q[this.currentQuestion].type == 'info'){
+			$('#quizheader').html(this.quiz.quiztitle);
+		} else {
+			var currentq = 1;
+			for(var q in this.quiz.q){
+				if(this.quiz.q[q].type != 'info' && this.currentQuestion > q){
+					currentq++;
+				}
+			}
+			$('#quizheader').html(this.quiz.quiztitle + " Q" +currentq + " of "+ noquestions);
+		}
 	}
 	
 	this.loadNextQuestion = function(){
