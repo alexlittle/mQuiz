@@ -246,12 +246,38 @@ class API {
 	}
 	
 	function insertQuizAttemptResponse($qar){
-		$sql = sprintf("INSERT INTO quizattemptresponse (qaid,questionrefid,qarscore,responsetext) 
+		$text = explode('|',$qar->text);
+		
+		if(count($text)>1){
+			$sql = sprintf("INSERT INTO quizattemptresponse (qaid,questionrefid,qarscore,responsetext) 
+						VALUES (%d, '%s', %f,'')",
+						$qar->qaid,
+						$qar->questionRef,
+						$qar->userScore);
+			$result = _mysql_query($sql,$this->DB);
+			$qarid = mysql_insert_id();
+			foreach($text as $t){
+				if(trim($t) != ""){
+					$this->insertQuizAttemptResponseMulti($qarid, $t);
+				}
+			}
+		} else {
+			$sql = sprintf("INSERT INTO quizattemptresponse (qaid,questionrefid,qarscore,responsetext)
 					VALUES (%d, '%s', %f,'%s')",
 					$qar->qaid,
 					$qar->questionRef,
 					$qar->userScore,
 					$qar->text);
+			$result = _mysql_query($sql,$this->DB);
+		}
+		
+	}
+	
+	function insertQuizAttemptResponseMulti($qarid,$responsetext){
+		$sql = sprintf("INSERT INTO qarmulti (qarid,multiresponsetext)
+				VALUES (%d,'%s')",
+				$qarid,
+				$responsetext);
 		$result = _mysql_query($sql,$this->DB);
 	}
 	
