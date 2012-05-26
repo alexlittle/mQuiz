@@ -1156,7 +1156,8 @@ function Quiz(){
 	
 	this.showResults = function(){
 		if(!this.saveResponse('next')){
-			alert("Please answer this question before getting your results.");
+			$('#notify').text("Please answer this question before getting your results.");
+			$('#notify').show();
 			return;
 		} 
 		
@@ -1175,7 +1176,27 @@ function Quiz(){
 		} else {
 			var percent = 0;
 		}
-		$('#mq').append("<div id='quizresults'>"+ percent.toFixed(0) +"%</div>");
+		
+		// find if any essay questions (so can't be marked)
+		var hasessay = false;
+		for(var q in this.quiz.q){
+			if(this.quiz.q[q].type == 'essay'){
+				hasessay = true;
+			}
+		}
+
+		if(hasessay){
+			var scorestring = percent.toFixed(0) + "% *";
+		} else {
+			var scorestring = percent.toFixed(0) + "%";
+		}
+		
+		$('#mq').append("<div id='quizresults'>"+ scorestring +"</div>");
+		
+		if(hasessay){
+			var essay = $('<div>').attr({'class': 'centre'}).text("* this quiz contained essay questions which will need to be manually marked. Your score will be updated when these questions have been marked");
+			$('#mq').append(essay);
+		}
 		
 		var rank = $('<div>').attr({'id':'rank','class': 'rank'});
 		$('#mq').append(rank);
@@ -1217,15 +1238,12 @@ function Quiz(){
 	
 		mQ.store.addArrayItem('results', content);
 		
-		console.log(content);
 		$.ajax({
 		   data:{'method':'submit','username':mQ.store.get('username'),'password':mQ.store.get('password'),'content':JSON.stringify(content)}, 
 		   success:function(data){
 			   //check for any error messages
 			   if(data && !data.error){
-				   console.log(data);
 				   content.rank = data.rank;
-				   console.log(content.rank);
 				   // show ranking 
 				   if($('#rank') && data.rank){
 					   $('#rank').empty();
@@ -1250,12 +1268,9 @@ function Quiz(){
 						   mQ.store.addArrayItem('results', cache[c]);
 					   }
 				   } 
-				   console.log("saved as sent");
 			   }
 		   }, 
 		   error:function(data){ 
-			   console.log("Error occurred in sending");
-			   console.log(data);
 		   }
 		});	
 	}
