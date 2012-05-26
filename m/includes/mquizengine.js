@@ -312,7 +312,6 @@ function mQuiz(){
 					   for (var r in data.results){
 						   mQ.store.addArrayItem('results',data.results[r]);
 					   }
-					   console.log( mQ.store.get('results'));
 					   mQ.showUsername();
 					   mQ.showPage(hash);
 					   mQ.onLogin();
@@ -1255,6 +1254,7 @@ function Quiz(){
 		content.quiztitle = this.quiz.quiztitle;
 		content.sent = false;
 	
+		console.log(content);
 		mQ.store.addArrayItem('results', content);
 		
 		$.ajax({

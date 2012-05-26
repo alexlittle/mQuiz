@@ -9,7 +9,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/lib/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>includes/script.php"></script>
-	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/mquizengine.js"></script>
+	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/mquizengine-min.js"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/mquiz.js"></script>
 	<script type="text/javascript">
     	function init(){

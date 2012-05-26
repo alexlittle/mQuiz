@@ -231,7 +231,7 @@ class API {
 		$quiz = $this->getQuiz($qa->quizref);
 		
 		$sql = sprintf("INSERT INTO quizattempt (qadate, qascore, maxscore, quizid, userid) 
-					VALUES (%d, %d, %d, %d, %d)",
+					VALUES ('%s', %d, %d, %d, %d)",
 					$qa->quizdate,
 					$qa->userscore,
 					$qa->maxscore,

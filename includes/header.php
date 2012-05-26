@@ -33,7 +33,7 @@ if ($lang != ""){
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/lib/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/lib/jquery-ui-1.8.19.custom.min.js"></script>
 	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>includes/script.php"></script>
-	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/mquizengine.js"></script>
+	<script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/mquizengine-min.js"></script>
 	<link rel="StyleSheet" href="<?php echo $CONFIG->homeAddress; ?>includes/style.css" type="text/css" media="screen">
 	<link rel="shortcut icon" href="<?php echo $CONFIG->homeAddress; ?>images/favicon.ico" />
 	<?php 

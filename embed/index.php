@@ -12,7 +12,7 @@
     <script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/lib/jquery-ui-1.8.19.custom.min.js"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>embed/embed.js"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/dateformat.js"></script>
-    <script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/mquizengine.js"></script>
+    <script type="text/javascript" src="<?php echo $CONFIG->homeAddress; ?>m/includes/mquizengine-min.js"></script>
 </head>
 <body onload="init()" onhashchange="init()">
 <div id="page">
