@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v13
+# v14
 
 CACHE:
 index.html
@@ -7,7 +7,6 @@ includes/mquiz-core.css
 includes/mquiz-local.css
 includes/mquiz.js
 includes/mquizengine.js
-includes/mquizengine-min.js
 includes/dateformat.js
 
 includes/lib/flotr2.min.js
