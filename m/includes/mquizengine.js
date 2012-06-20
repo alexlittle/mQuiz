@@ -67,7 +67,7 @@ function mQuiz(){
 	};
 	
 	this.loadQuiz = function(qref,force){
-		document.location = "#"+qref;
+		//document.location = "#"+qref;
 		$('#mq').empty();
 		mQ.showLoading('quiz');
 		// find if this quiz is already in the cache
@@ -102,7 +102,12 @@ function mQuiz(){
 	
 	this.showRegister = function(){
 		$('#mq').empty();
-		$('#mq').append("<h2>Register</h2>");
+		var str = "<h2>Register";
+		if(this.opts.allowregister){
+			str += " (or <a href='' onclick='mQ.showLogin();'>Login</a>)";
+		}
+		str += "</h2>";
+		$('#mq').append(str);
 		var l = $('<div>').attr({'id':'loading'}).html("Registering...");
 		$('#mq').append(l);
 		l.hide();
@@ -218,7 +223,7 @@ function mQuiz(){
 		$('#mq').empty();
 		var str = "<h2>Login";
 		if(this.opts.allowregister){
-			str += " (or <a href='#register'>Register</a>)";
+			str += " (or <a href='' onclick='mQ.showRegister();'>Register</a>)";
 		}
 		str += "</h2>";
 		$('#mq').append(str);
@@ -585,8 +590,8 @@ function mQuiz(){
 	this.showUsername = function(){
 		$('#logininfo').empty();
 		if(mQ.store.get('displayname') != null){
-			$('#logininfo').text(mQ.store.get('displayname') + " ");
-			$('#logininfo').append("<a onclick='mQ.logout()' name='lang' id='logout'>Logout</a>");
+			$('#logininfo').text(mQ.store.get('displayname') + ": ");
+			$('#logininfo').append("<a onclick='mQ.logout()' name='lang' id='logout' href=''>Logout</a>");
 		} 
 	};
 	

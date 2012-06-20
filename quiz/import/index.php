@@ -5,8 +5,6 @@ $PAGE = "import";
 global $IMPORT_INFO;
 $IMPORT_INFO = array();
 
-
-
 $submit = optional_param("submit","",PARAM_TEXT);
 $title = optional_param("title","",PARAM_TEXT);
 $quizdraft = optional_param('quizdraft',0,PARAM_INT);
@@ -15,7 +13,7 @@ $tags = optional_param("tags","",PARAM_TEXT);
 $content = optional_param("content","",PARAM_TEXT);
 $format = optional_param("format","gift",PARAM_TEXT);
 
-$supported_qtypes = array('truefalse','multichoice','essay','shortanswer','numerical');
+
 if ($submit != ""){
 	
 	if($title == ""){
@@ -24,56 +22,20 @@ if ($submit != ""){
 	if($content == ""){
 		array_push($MSG,getstring('import.quiz.error.nocontent'));
 	}
-	$questions_to_import = array();
 	
 	if($format == 'gift'){
-		include_once('./gift/import.php');
-		$import = new qformat_gift();
+		$q = $API->createQuizfromGIFT($content,$title,$quizdraft,$description,$tags);
+		
+		if($q){
+			// send mail to owner
+			$m = new Mailer();
+			$m->sendQuizCreated($USER->email,$USER->firstname, $title, $q->ref);
 			
-		$lines = explode("\n",$content);
-		$questions = $import->readquestions($lines);
-		foreach($questions as $q){
-			if (in_array($q->qtype, $supported_qtypes)){
-				array_push($questions_to_import,$q);
-			} else {
-				if($q->qtype != 'category'){
-					array_push($IMPORT_INFO, $q->qtype." question type not yet supported ('".$q->questiontext."')");
-				}
-			}	
+			header(sprintf("Location:  %squiz/options.php?qref=%s&new=true",$CONFIG->homeAddress, $q->ref));
+			die;
 		}
 	}
-	
-	if(count($questions_to_import) == 0){
-		array_push($MSG,getstring('import.quiz.error.nosuppportedquestions'));
-	}
-	
-	if(count($MSG) == 0){
-		// now do the actual import
-		if($format == 'gift'){
-			// setup quiz with default props
-			$quizid = $API->addQuiz($title,$quizdraft,$description);
-			$API->setProp('quiz',$quizid,'generatedby','import');
-			$API->setProp('quiz',$quizid,'content',$content);
-			$API->updateQuizTags($quizid, $tags);
-			$importer = new GIFTImporter();
-			$importer->quizid = $quizid;
-			$importer->import($questions_to_import);
-			
-			$API->setProp('quiz', $quizid, 'maxscore', $importer->quizmaxscore);
-		}
-	
-		$q = $API->getQuizById($quizid);
-		// store JSON object for quiz (for caching)
-		$json = json_encode($API->getQuizObject($q->ref));
-		$API->setProp('quiz', $quizid, 'json', $json);
-		
-		// send mail to owner
-		$m = new Mailer();
-		$m->sendQuizCreated($USER->email,$USER->firstname, $title, $q->ref);
-		
-		header(sprintf("Location:  %squiz/options.php?qref=%s&new=true",$CONFIG->homeAddress, $q->ref));
-		die;
-	}
+
 }
 
 include_once("../../includes/header.php");

@@ -9,11 +9,9 @@ if($format == 'json'){
 	header("Content-type:text/plain;charset:utf-8");
 }
 
-
 $method = optional_param("method","",PARAM_TEXT);
 $username = optional_param("username","",PARAM_TEXT);
 $password = optional_param("password","",PARAM_TEXT);
-
 
 $response = new stdClass();
 
@@ -126,7 +124,7 @@ if($method == 'getquiz' || $method == 'submit'){
 /*
 * Methods with login required
 */
-if ($method == "list" || $method == "suggest" || $method == "invite"){
+if ($method == "list" || $method == "suggest" || $method == "invite" || $method == "create"){
 	if (!userLogin($username,$password,false)){
 		$response->login = false;
 	} else {
@@ -161,6 +159,23 @@ if ($method == "list" || $method == "suggest" || $method == "invite"){
 			$emails = optional_param("emails","",PARAM_TEXT);
 			$message = optional_param("message","",PARAM_TEXT);
 			$response->result = $API->invite($qref,$emails,$message);
+		}
+		
+		if($method == 'create'){
+			$IMPORT_INFO = array();
+			$content = optional_param("content","",PARAM_TEXT);
+			$title = optional_param("title","",PARAM_TEXT);
+			$quizdraft = optional_param("quizdraft","false",PARAM_TEXT);
+			$description = optional_param("description","",PARAM_TEXT);
+			$tags = optional_param("tags","",PARAM_TEXT);
+			
+			if($title == ""){
+				$response->error = "No title provided";
+			} else if($content == ""){
+				$response->error = "No content provided";
+			} else {
+				$response = $API->createQuizfromGIFT($content,$title,$quizdraft,$description,$tags);
+			}
 		}
 	}
 }

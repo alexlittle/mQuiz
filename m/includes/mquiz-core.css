@@ -1,7 +1,17 @@
 @CHARSET "UTF-8";
 
 
-#mq a:hover, a:visited, a {
+#mq a:hover {
+    color: #77a240;
+    text-decoration:underline;
+    cursor:pointer;
+}
+#mq a:visited {
+    color: #77a240;
+    text-decoration:underline;
+    cursor:pointer;
+}
+#mq a {
     color: #77a240;
     text-decoration:underline;
     cursor:pointer;

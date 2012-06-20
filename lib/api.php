@@ -1320,6 +1320,53 @@ class API {
 		return $q;	
 	}
 	
+	function createQuizfromGIFT($content,$title,$quizdraft,$description,$tags){
+		global $IMPORT_INFO,$MSG,$CONFIG;
+		$supported_qtypes = array('truefalse','multichoice','essay','shortanswer','numerical');
+		$questions_to_import = array();
+		include_once($CONFIG->homePath.'quiz/import/gift/import.php');
+		$import = new qformat_gift();
+			
+		$lines = explode("\n",$content);
+		$questions = $import->readquestions($lines);
+		foreach($questions as $q){
+			if (in_array($q->qtype, $supported_qtypes)){
+				array_push($questions_to_import,$q);
+			} else {
+				if($q->qtype != 'category'){
+					array_push($IMPORT_INFO, $q->qtype." question type not yet supported ('".$q->questiontext."')");
+				}
+			}
+		}
+		if(count($questions_to_import) == 0){
+			array_push($MSG,getstring('import.quiz.error.nosuppportedquestions'));
+			return;
+		}
+		
+		if(count($MSG) == 0){
+			// now do the actual import
+	
+			// setup quiz with default props
+			$quizid = $this->addQuiz($title,$quizdraft,$description);
+			$this->setProp('quiz',$quizid,'generatedby','import');
+			$this->setProp('quiz',$quizid,'content',$content);
+			$this->updateQuizTags($quizid, $tags);
+			$importer = new GIFTImporter();
+			$importer->quizid = $quizid;
+			$importer->import($questions_to_import);
+				
+			$this->setProp('quiz', $quizid, 'maxscore', $importer->quizmaxscore);
+		
+			$q = $this->getQuizById($quizid);
+			// store JSON object for quiz (for caching)
+			$obj = $this->getQuizObject($q->ref);
+			$json = json_encode($obj);
+			$this->setProp('quiz', $quizid, 'json', $json);
+			return $obj;
+		}
+		return;
+	}
+	
 	private function createUUID($prefix){
 		global $USER;
 		return $prefix.strtolower($USER->userid).uniqid();
