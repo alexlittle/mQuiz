@@ -1321,7 +1321,21 @@ class API {
 	}
 	
 	function createQuizfromGIFT($content,$title,$quizdraft,$description,$tags){
-		global $IMPORT_INFO,$MSG,$CONFIG;
+		global $IMPORT_INFO,$MSG,$CONFIG,$USER;
+		
+		//first check if this quiz already exists
+		$sql = sprintf("SELECT q.qref FROM quizprop qp
+						INNER JOIN quiz q ON q.quizid = qp.quizid
+						WHERE qp.quizpropname='content' 
+						AND qp.quizpropvalue='%s'
+						AND q.createdby=%d",$content,$USER->userid);
+		$result = _mysql_query($sql,$this->DB);
+		while($o = mysql_fetch_object($result)){
+			// store JSON object for quiz (for caching)
+			$obj = $this->getQuizObject($o->qref);
+			return $obj;
+		}
+		
 		$supported_qtypes = array('truefalse','multichoice','essay','shortanswer','numerical');
 		$questions_to_import = array();
 		include_once($CONFIG->homePath.'quiz/import/gift/import.php');
