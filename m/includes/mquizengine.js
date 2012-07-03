@@ -464,6 +464,10 @@ function mQuiz(){
 		return true;
 	};
 	
+	this.track = function(obj){
+		mQ.store.addArrayItem('tracker', obj);
+	}
+	
 	this.dataUpdate = function(){
 		if(!mQ.loggedIn(false)){
 			return;
@@ -532,6 +536,28 @@ function mQuiz(){
 				   // do nothing - run on next update
 			   }
 			});
+		
+		//send any tracker objects
+		var tracks = mQ.store.get('tracker');
+		
+		if(tracks){
+			$.ajax({
+				   data:{'method':'tracker','username':mQ.store.get('username'),'password':mQ.store.get('password'),'content':JSON.stringify(tracks)}, 
+				   success:function(data){
+					   
+					 //check for any error messages
+					   if(data && !data.error){
+						   if(data.result){
+							   mQ.store.clearKey('tracker');
+						   }
+					   }
+				   }, 
+				   error:function(data){
+					   // do nothing - will send on next update
+				   }
+				});
+		}
+		
 	};
 	
 	this.register = function(){
@@ -643,6 +669,8 @@ function Store(){
 			localStorage.setItem('password', null);
 			localStorage.setItem('quizzes', null);
 			localStorage.setItem('results', null);
+			localStorage.setItem('userlang', 'en');
+			localStorage.setItem('tracker', null);
 		}
 	}
 	

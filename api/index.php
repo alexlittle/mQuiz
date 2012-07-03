@@ -124,7 +124,7 @@ if($method == 'getquiz' || $method == 'submit'){
 /*
 * Methods with login required
 */
-if ($method == "list" || $method == "suggest" || $method == "invite" || $method == "create"){
+if ($method == "list" || $method == "suggest" || $method == "invite" || $method == "create" || $method == "tracker"){
 	if (!userLogin($username,$password,false)){
 		$response->login = false;
 	} else {
@@ -176,6 +176,16 @@ if ($method == "list" || $method == "suggest" || $method == "invite" || $method 
 			} else {
 				$response = $API->createQuizfromGIFT($content,$title,$quizdraft,$description,$tags);
 			}
+		}
+		
+		if($method == 'tracker'){
+			$content = optional_param("content","",PARAM_TEXT);
+			$tracks = json_decode(stripslashes($content));
+			$count = count($tracks);
+			foreach($tracks as $t){
+				writeToLog("info","tracker",json_encode($t));
+			}
+			$response->result = true;
 		}
 	}
 }
