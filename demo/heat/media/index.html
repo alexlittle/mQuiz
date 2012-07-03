@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="../includes/mquiz-core.css" type="text/css" />
+<link rel="stylesheet" href="../includes/jquery.mobile-1.1.0.min.css" type="text/css" />
+<link rel="stylesheet" href="../includes/style.css" type="text/css" />
+
+<script type="text/javascript" src="../includes/jquery-1.7.min.js"></script> 
+<script type="text/javascript" src="../includes/jquery.mobile-1.1.0.min.js"></script>
+<script type="text/javascript" src="../includes/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../includes/jquery-ui-1.8.19.custom.min.js"></script>
+<script type="text/javascript" src="../includes/mquizengine.js"></script>
+<script type="text/javascript" src="../includes/dateformat.js"></script>
+<script type="text/javascript" src="../includes/quizcache.js"></script>
+<script type="text/javascript" src="../cordova-1.8.0.js"></script>
+<script type="text/javascript" src="../includes/video.js"></script>
+<script type="text/javascript" src="../includes/script.js"></script>
+
+</head>
+<body onload="init()">
+<div data-role="page" data-ajax="false">
+
+	<div data-role="header" data-theme="h">
+		<h1 data-theme="h">Videos</h1>
+		<a href="../index.html" data-icon="home" data-iconpos="notext" data-ajax="false">Home</a>
+	</div><!-- /header -->
+
+	<div data-role="content">
+		<p class="video">
+			Basic Skills<br/>
+			<img src='images/basic-skills-video-thumb.png'
+				onclick="playVid('basic-skills.mp4')" alt="Watch a video about Basic Skills"
+				title="Watch a video about Basic Skills" 
+				class="video" style="text-align:left"/>
+			
+		</p>
+		<p class="video">
+			Breathing Problems<br/>
+			<img src='images/breathing-problems-thumb.png'
+				onclick="playVid('breathing-problems.mp4')" alt="Watch a video about breathing problems"
+				title="Watch a video about breathing problems" 
+				class="video"/>
+		</p>
+		<p class="video">
+			Physical Examination<br/>
+			<img src='images/physical-exam-thumb.png'
+				onclick="playVid('physical-exam.mp4')" alt="Watch a video about giving a physical exam"
+				title="Watch a video about giving a physical exam" 
+				class="video"/>
+		</p>
+		<p class="video">
+			PPH<br/>
+			<img src='images/pph-thumb.png'
+				onclick="playVid('PPH.mp4')" alt="Watch a video about PPH"
+				title="Watch a video about PPH" 
+				class="video"/>
+			
+		</p>
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-theme="h">
+		<div id="aboutinfo">
+			<a href="about.html" data-ajax="false">About</a>
+		</div>
+		<div id="logininfo"></div>
+	</div><!-- /footer -->
+</div><!-- /page -->
+</body>
+
+</html>
