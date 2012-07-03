@@ -6,7 +6,7 @@ global $IMPORT_INFO;
 $IMPORT_INFO = array();
 
 $submit = optional_param("submit","",PARAM_TEXT);
-$title = optional_param("title","",PARAM_TEXT);
+$title = optional_param("title","",PARAM_HTML);
 $quizdraft = optional_param('quizdraft',0,PARAM_INT);
 $description = optional_param("description","",PARAM_TEXT);
 $tags = optional_param("tags","",PARAM_TEXT);
@@ -53,7 +53,7 @@ if(!empty($MSG)){
 <form method="post" action="">
 	<div class="formblock">
 		<div class="formlabel"><?php echo getstring('import.quiz.title'); ?></div>
-		<div class="formfield"><input type="text" name="title" size="60" value="<?php echo $title; ?>"></input></div>
+		<div class="formfield"><input type="text" name="title" size="60" value="<?php echo htmlentities($title); ?>"></input></div>
 	</div>
 	<div id="options" class="formblock">
 		<div class='formlabel'>&nbsp;</div>

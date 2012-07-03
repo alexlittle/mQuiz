@@ -21,7 +21,7 @@ if($q == null){
 } 
 $submit = optional_param("submit","",PARAM_TEXT);
 if ($submit != ""){
-	$title = optional_param("title","",PARAM_TEXT);
+	$title = optional_param("title","",PARAM_HTML);
 	$description = optional_param("description","",PARAM_TEXT);
 	$quizdraft = optional_param("quizdraft",0,PARAM_INT);
 	$tags = optional_param("tags","",PARAM_TEXT);
@@ -53,7 +53,7 @@ if ($submit != ""){
 				for ($j=1;$j<5;$j++){
 					$rref = "q".($i)."r".($j);
 					$mref = "q".($i)."m".($j);
-					$responsetitle = optional_param($rref,"",PARAM_TEXT);
+					$responsetitle = optional_param($rref,"",PARAM_HTML);
 					$score= optional_param($mref,0,PARAM_INT);
 					if($responsetitle != ""){
 						$responseid = $API->addResponse($responsetitle,$score);
@@ -110,7 +110,7 @@ if ($API->quizHasAttempts($ref)){
 	<div class="formblock">
 		<div class="formlabel"><?php echo getstring('quiz.edit.quiztitle'); ?></div>
 		<div class="formfield">
-			<input type="text" name="title" value="<?php echo $q->title; ?>" size="60"/><br/>
+			<input type="text" name="title" value="<?php echo htmlentities($q->title); ?>" size="60"/><br/>
 		</div>
 	</div>
 	<div class="formblock">
@@ -157,7 +157,7 @@ if ($API->quizHasAttempts($ref)){
 						for($j=1; $j<5;$j++){ 
 							if (isset($qqr[$j-1])){
 					?>
-						<div class="responsetext"><input type="text" name="<?php printf('q%dr%d',$i,$j); ?>" value="<?php echo $qqr[$j-1]->text; ?>" size="40"></input></div>
+						<div class="responsetext"><input type="text" name="<?php printf('q%dr%d',$i,$j); ?>" value="<?php echo htmlentities($qqr[$j-1]->text); ?>" size="40"></input></div>
 						<div class="responsescore"><input type="text" name="<?php printf('q%dm%d',$i,$j); ?>" value="<?php echo $qqr[$j-1]->score; ?>" size="5"></input></div>
 					<?php 
 							} else {

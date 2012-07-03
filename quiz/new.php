@@ -4,7 +4,7 @@ $PAGE = "newquiz";
 
 $submit = optional_param("submit","",PARAM_TEXT);
 
-$title = optional_param("title","",PARAM_TEXT);
+$title = optional_param("title","",PARAM_HTML);
 $quizdraft = optional_param('quizdraft',0,PARAM_INT);
 $description = optional_param("description","",PARAM_TEXT);
 $tags = optional_param("tags","",PARAM_TEXT);
@@ -31,7 +31,7 @@ if ($submit != ""){
 		$noresponses = 0;
 		for ($r=1;$r<5;$r++){
 			$rref = "q".($q)."r".($r);
-			$responsetitle = optional_param($rref,"",PARAM_TEXT);
+			$responsetitle = optional_param($rref,"",PARAM_HTML);
 			if($responsetitle != ""){
 				$noresponses++;
 			}
@@ -83,7 +83,7 @@ if ($submit != ""){
 				for ($r=1;$r<5;$r++){
 					$rref = "q".($q)."r".($r);
 					$mref = "q".($q)."m".($r);
-					$responsetitle = optional_param($rref,"",PARAM_TEXT);
+					$responsetitle = optional_param($rref,"",PARAM_HTML);
 					$score= optional_param($mref,0,PARAM_INT);
 					if($responsetitle != ""){
 						$responseid = $API->addResponse($responsetitle,$score);
@@ -144,7 +144,7 @@ if(!empty($MSG)){
 		<div class="formblock">
 			<div class="formlabel"><?php echo getstring('quiz.new.quiztitle'); ?></div>
 			<div class="formfield">
-				<input type="text" name="title" value="<?php echo $title; ?>" size="60"/><br/>
+				<input type="text" name="title" value="<?php echo htmlentities($title); ?>" size="60"/><br/>
 			</div>
 		</div>
 		<div id="options" class="formblock">
@@ -196,7 +196,7 @@ if(!empty($MSG)){
 									$responsetitle = optional_param($rref,"",PARAM_TEXT);
 									$score= optional_param($mref,0,PARAM_INT);
 							?>
-								<div class="responsetext"><input type="text" name="<?php printf('q%dr%d',$q,$r); ?>" value="<?php echo $responsetitle; ?>" size="40"></input></div>
+								<div class="responsetext"><input type="text" name="<?php printf('q%dr%d',$q,$r); ?>" value="<?php echo htmlentities($responsetitle); ?>" size="40"></input></div>
 								<div class="responsescore"><input type="text" name="<?php printf('q%dm%d',$q,$r); ?>" value="<?php echo $score; ?>" size="5"></input></div>
 							<?php 
 								}
