@@ -18,33 +18,37 @@
 <body onload="init();" >
 	<div data-role="page">
 		<div data-role="header" data-theme="h" id="header">
-			<h1><a href="index.html">PNC</a>: Postnatal Care at the Health Post and in the Community</h1>
+			<h1><a href="index.html" data-ajax="false">PNC</a>: <span class="multilang" lang="en">Postnatal Care at the Health Post and in the Community</span><span class="multilang" lang="sw">Huduma Baada ya Kujifungua katia Kituo cha Afya na katika Jamii</span></h1>
 			<a href="../index.html" data-icon="home" data-iconpos="notext" data-ajax="false">Home</a>
 		</div><!-- /header -->
-		
-		
 		
 		<div data-role="content">
 			<div class="content-primary">
 				<ul data-role="controlgroup" data-type="horizontal" class="localnav">
-					<li><a href="01_5150.html" data-role="button" data-transition="slide">Intro</a></li><li><a href="01_5151.html" data-role="button" data-transition="slide" class="ui-btn-active">Outcomes</a></li><li><a href="01_5152.html" data-role="button" data-transition="slide">Summary</a></li><li><a href="01_5503.html" data-role="button" data-transition="slide" data-ajax="false">SAQs</a></li>
+					<li><a href="01_5150.html" data-role="button" data-transition="slide" data-ajax="false"><span class="multilang" lang="en">Intro</span><span class="multilang" lang="sw">Utangulizi</span></a></li><li><a href="01_5151.html" data-role="button" data-transition="slide" class="ui-btn-active" data-ajax="false"><span class="multilang" lang="en">Outcomes</span><span class="multilang" lang="sw">Matokeo</span></a></li><li><a href="01_5152.html" data-role="button" data-transition="slide" data-ajax="false">Summary</a></li><li><a href="01_5503.html" data-role="button" data-transition="slide" data-ajax="false">SAQs</a></li>
 				</ul>
 			</div>
 			<div style="clear:both"></div>
-			<p>When you have studied this session, you should be able to:</p>
-<p>1.1  Define and use correctly all of the key words printed in <b>bold</b>. (SAQ 1.1)</p>
-<p>1.2  Explain the importance of postnatal care in terms of when most mothers and newborns die, and the main causes of these deaths. (SAQ 1.2)</p>
-<p>1.3  Briefly describe the main physiological changes in the mother and newborn in the postnatal period. (SAQ 1.3)</p>
-<p>1.4  Describe the main danger signs in the postnatal mother and newborn. (SAQ 1.3)</p>
-<p>1.5  Explain the importance of community involvement in postnatal care and describe how you would establish partnerships with gatekeepers in the community. (SAQ 1.2)</p>
-		</div>
-		<!-- /content -->
+			<p class="multilang" lang="en">When you have studied this session, you should be able to:</p>
+<p class="multilang" lang="en">1.1 Define and use correctly all of the key words printed in <b>bold</b>. (SAQ 1.1)</p>
+<p class="multilang" lang="en">1.2 Explain the importance of postnatal care in terms of when most mothers and newborns die, and the main causes of these deaths. (SAQ 1.2)</p>
+<p class="multilang" lang="en">1.3 Briefly describe the main physiological changes in the mother and newborn in the postnatal period. (SAQ 1.3)</p>
+<p class="multilang" lang="en">1.4 Describe the main danger signs in the postnatal mother and newborn. (SAQ 1.3)</p>
+<p class="multilang" lang="en">1.5 Explain the importance of community involvement in postnatal care and describe how you would establish partnerships with gatekeepers in the community. (SAQ 1.2)</p>
+<p class="multilang" lang="sw">Kufikia mwisho wa masomo ya kipindi cha kwanza, ni sharti uweze;</p>
+<p class="multilang" lang="sw">1.1 Kuleza na kutumia vyema majina yote ambayo yameandikwa katika rangi nyingi.</p>
+<p class="multilang" lang="sw">1.2 Kufafanua umuhimu wa huduma baada ya kujifungua wakati mwingi kina mama na watoto waliozaliwa hufa na sababu kuu za kusababisha vifo hivi.</p>
+<p class="multilang" lang="sw">1.3 Kwa kifupi kujadili mabadiliko ya kiakili kwa mama na mtoto katika huduma baada ya kujifungua.</p>
+<p class="multilang" lang="sw">1.4 Kuelezea hatari kuu katika kujifungua mtoto.</p>
+<p class="multilang" lang="sw">1.5 Kuelezea umuhimu wa jamii kujiunga na huduma baada ya kujifungua na kujadili vipi mtu anaweza kuanzisha ushirikiano na wasaidizi katika jamii.</p>
+		</div><!-- /content -->
 
 		<div data-role="footer" data-theme="h">
 			<div id="aboutinfo">
 				<a href="../about.html" data-ajax="false">About</a>
 			</div>
 			<div id="logininfo"></div>
+			<div id="lang"><select name="lang" id="langchange" onchange="updateLang()"><option value='sw'>Swahili</option><option value='en'>English</option></select></div>
 		</div><!-- /footer -->
 	</div>
 </body>
