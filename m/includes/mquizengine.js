@@ -288,13 +288,16 @@ function mQuiz(){
 		fb.hide();
 		
 		var quiznav = $('<div>').attr({'id':'quiznav'});
-		var quiznavprev = $('<div>').attr({'class':'quiznavprev'}).append($('<input>').attr({'id':'quiznavprevbtn','type':'button','class':'button','value':'<< Prev'}));
+		
+		var quiznavprev = $('<div>').attr({'id':'quiznavprev','tabindex':'0'}).html("&lt;&lt; Prev");
 		quiznav.append(quiznavprev);
 		
-		var quiznavnext = $('<div>').attr({'class':'quiznavnext'}).append($('<input>').attr({'id':'quiznavnextbtn','type':'button','class':'button','value':'Next >>'}));
+		var quiznavnext = $('<div>').attr({'id':'quiznavnext','tabindex':'0'}).html('Next &gt;&gt;');
 		quiznav.append(quiznavnext);
 		
 		var clear = $('<div>').attr({'style':'clear:both'});
+		quiznav.append(clear);
+		
 		$('#mq').append(quiznav);
 		Q.loadQuestion();
 	};
@@ -758,13 +761,13 @@ function Quiz(){
 				$('#feedback').empty();
 				$('#feedback').append("<h2>Feedback</h2><div id='fbtext'>"+this.feedback+"</div>");
 				$('#feedback').show('blind',{},500);
-				$('#quiznavnextbtn').unbind('click');
+				$('#quiznavnext').unbind('click');
 				if(this.currentQuestion+1 == this.quiz.q.length){
-					$('#quiznavnextbtn').bind('click',function(){
+					$('#quiznavnext').bind('click',function(){
 						Q.showResults();
 					});
 				} else {
-					$('#quiznavnextbtn').bind('click',function(){
+					$('#quiznavnext').bind('click',function(){
 						Q.currentQuestion++;
 						Q.loadQuestion();
 					});
@@ -1335,24 +1338,24 @@ function Quiz(){
 	}
 	
 	this.setNav = function(){
-		$('#quiznavprevbtn').unbind('click');
-		$('#quiznavprevbtn').bind('click',function(event){
+		$('#quiznavprev').unbind('click');
+		$('#quiznavprev').bind('click',function(event){
 			Q.loadPrevQuestion();
 		});
 		if(this.currentQuestion == 0){
-			$('#quiznavprevbtn').attr('disabled', 'disabled');
+			$('#quiznavprev').hide();
 		} else {
-			$('#quiznavprevbtn').removeAttr('disabled');
+			$('#quiznavprev').show();
 		}
 		
-		$('#quiznavnextbtn').unbind('click');
+		$('#quiznavnext').unbind('click');
 		if(this.currentQuestion+1 == this.quiz.q.length){
-			$('#quiznavnextbtn').attr({'value':'Get results'});
+			$('#quiznavnext').html('Get results');
 		} else {
-			$('#quiznavnextbtn').attr({'value':'Next >>'});
+			$('#quiznavnext').html('Next &gt;&gt;');
 			
 		}
-		$('#quiznavnextbtn').bind('click',function(){
+		$('#quiznavnext').bind('click',function(){
 			Q.loadNextQuestion();
 		});
 	}
