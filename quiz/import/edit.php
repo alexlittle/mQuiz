@@ -10,7 +10,7 @@ $q = $API->getQuizForUser($ref,$USER->userid);
 if($q == null){
 	include_once("../../includes/header.php");
 	echo "Quiz not found";
-	include_once("../includes/footer.php");
+	include_once("../../includes/footer.php");
 	die;
 }
 

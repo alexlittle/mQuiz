@@ -14,9 +14,9 @@ $modules[0]->url = $dir. "/anc-20120809213956.zip";
 
 $modules[1] = new stdClass();
 $modules[1]->title = "Postnatal Care";
-$modules[1]->version = "20120809222630";
+$modules[1]->version = "20120812154113";
 $modules[1]->shortname = "pnc";
-$modules[1]->url = $dir. "/pnc-20120809222630.zip";
+$modules[1]->url = $dir. "/pnc-20120812154113.zip";
 
 $modules[2] = new stdClass();
 $modules[2]->title = "Nutrition";
