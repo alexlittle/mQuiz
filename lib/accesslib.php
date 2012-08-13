@@ -18,7 +18,7 @@ function userLogin($username,$password,$log = true){
     if ($USER instanceof User)  {
             if($USER->validPassword($password)){
             	$_SESSION["session_username"] = $USER->getUsername();
-    			setcookie("user",$USER->getUsername(),time() + 60*60*24*30, "/mQuiz");
+    			setcookie("user",$USER->getUsername(),time() + 60*60*24*30, "/");
                 
     			setLang($USER->getProp('lang'));
                 if($log){
@@ -51,7 +51,7 @@ function startSession($ses = 'mQuiz') {
     
     // Reset the expiration time upon page load
     if (isset($_COOKIE[$ses])){
-    	setcookie($ses, $_COOKIE[$ses], time() + 60*60*24*30, "/mQuiz");
+    	setcookie($ses, $_COOKIE[$ses], time() + 60*60*24*30, "/");
     }
 }
 /**

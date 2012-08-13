@@ -180,12 +180,25 @@ if ($method == "list" || $method == "suggest" || $method == "invite" || $method 
 		
 		if($method == 'tracker'){
 			$content = optional_param("content","",PARAM_TEXT);
-			$tracks = json_decode(stripslashes($content));
-			$count = count($tracks);
-			foreach($tracks as $t){
-				writeToLog("info","tracker",json_encode($t));
+			try {
+				$tracks = json_decode(stripslashes($content));
+				if(is_array($tracks)){
+					$count = count($tracks);
+					if($count > 0){
+						foreach($tracks as $t){
+							writeToLog("info","tracker",json_encode($t));
+						}
+						$response->result = true;
+					} else {
+						$response->result = false;
+					}
+				} else {
+					writeToLog("info","tracker",json_encode($tracks));
+					$response->result = true;
+				}
+			} catch (Exception $e){
+				$response->result = false;
 			}
-			$response->result = true;
 		}
 	}
 }
