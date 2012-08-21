@@ -3,7 +3,6 @@
 
 function userLogin($username,$password,$log = true){
 	global $USER,$MSG;
-
 	if($username == ""){
 		array_push($MSG,getstring('warning.login.noemail'));
 		return false;
@@ -12,7 +11,6 @@ function userLogin($username,$password,$log = true){
     	array_push($MSG,getstring('warning.login.nopassword'));
         return false;
     }   
-    
     $USER = new User($username);
     $USER->setUsername($username);
     if ($USER instanceof User)  {
@@ -80,6 +78,15 @@ function checkLogin(){
 function isLoggedIn(){
 	global $USER;
 	if(isset($_SESSION["session_username"]) && $_SESSION["session_username"] != ""){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function isAdmin(){
+	global $USER;
+	if(isset($USER->props["admin"]) && $USER->props["admin"] == "true"){
 		return true;
 	} else {
 		return false;

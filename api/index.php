@@ -45,7 +45,7 @@ if($method == 'register'){
 			$m = new Mailer();
 			$m->sendSignUpNotification($firstname." ".$lastname);
 	
-			$login = userLogin($username,$password);
+			$login = userLogin($email,$password);
 			$response->login = $login;
 			$response->hash = md5($password);
 			$response->name = $firstname." ".$lastname;
@@ -108,15 +108,20 @@ if($method == 'getquiz' || $method == 'submit'){
 			// only save results if not owner
 			if(!$API->isOwner($json->qref)){
 				$attemptid = saveResult($json,$username);
-				$best = $API->getBestRankForQuiz($json->qref, $USER->userid);
-				$response->rank = $API->getRankingForAttempt($attemptid);
-				$response->bestrank = $best;
-					
-				$qa = $API->getQuizAttempt($attemptid);
-				$response->next = $API->suggestNext($json->qref,$qa->score);
+				if($attemptid == null){
+					$response->error = "quiz not found";
+				} else {
+					$best = $API->getBestRankForQuiz($json->qref, $USER->userid);
+					$response->rank = $API->getRankingForAttempt($attemptid);
+					$response->bestrank = $best;
+						
+					$qa = $API->getQuizAttempt($attemptid);
+					$response->next = $API->suggestNext($json->qref,$qa->score);
+					$response->result = true;
+				}
+			} else {
+				$response->result = true;
 			}
-	
-			$response->result = true;
 		}
 	}
 }	
@@ -186,14 +191,36 @@ if ($method == "list" || $method == "suggest" || $method == "invite" || $method 
 					$count = count($tracks);
 					if($count > 0){
 						foreach($tracks as $t){
-							writeToLog("info","tracker",json_encode($t));
+							if(isset($tracks->digest)){
+								$digest = $tracks->digest;
+							} else {
+								$digest = "";
+							}
+							if(isset($tracks->datetime)){
+								$date = $tracks->datetime;
+							} else {
+								$date = date('Y-m-d H:i:s');
+							}
+							writeToLog("info","tracker",json_encode($t),0,0,0,0,$digest,$date);
 						}
 						$response->result = true;
 					} else {
 						$response->result = false;
 					}
 				} else {
-					writeToLog("info","tracker",json_encode($tracks));
+					
+					if(isset($tracks->digest)){
+						$digest = $tracks->digest;
+					} else {
+						$digest = "";
+					}
+					if(isset($tracks->datetime)){
+						$date = $tracks->datetime;
+					} else {
+						$date = date('Y-m-d H:i:s');
+					}
+					
+					writeToLog("info","tracker",json_encode($tracks),0,0,0,0,$digest,$date);
 					$response->result = true;
 				}
 			} catch (Exception $e){

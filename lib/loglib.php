@@ -1,6 +1,6 @@
 <?php
 
-function writeToLog($loglevel,$logtype,$logmsg,$logpagephptime=0,$logpagemysqltime=0,$logpagequeries=0,$userid=0){
+function writeToLog($loglevel,$logtype,$logmsg,$logpagephptime=0,$logpagemysqltime=0,$logpagequeries=0,$userid=0,$digest='',$date=''){
 	global $USER,$API;
 	if ( isset($_SERVER["REMOTE_ADDR"]) )    {
 		$ip=$_SERVER["REMOTE_ADDR"];
@@ -11,7 +11,7 @@ function writeToLog($loglevel,$logtype,$logmsg,$logpagephptime=0,$logpagemysqlti
 	} 
 	
 	$uagent = new uagent_info();
-	$API->writeLog($loglevel,$USER->userid,$logtype,$logmsg,$ip,$logpagephptime,$logpagemysqltime,$logpagequeries,$uagent->useragent);
+	$API->writeLog($loglevel,$USER->userid,$logtype,$logmsg,$ip,$logpagephptime,$logpagemysqltime,$logpagequeries,$uagent->useragent,$digest,$date);
 }
 
 function _mysql_query($query,$db) {

@@ -219,10 +219,10 @@ class API {
 	/*
 	 *
 	*/
-	function writeLog($loglevel,$userid,$logtype,$logmsg,$ip,$logpagephptime,$logpagemysqltime,$logpagequeries,$logagent){
-		$sql = sprintf("INSERT INTO log (loglevel,userid,logtype,logmsg,logip,logpagephptime,logpagemysqltime,logpagequeries,logagent) 
-						VALUES ('%s',%d,'%s','%s','%s',%f,%f,%d,'%s')", 
-						$loglevel,$userid,$logtype,mysql_real_escape_string($logmsg),$ip,$logpagephptime,$logpagemysqltime,$logpagequeries,$logagent);
+	function writeLog($loglevel,$userid,$logtype,$logmsg,$ip,$logpagephptime,$logpagemysqltime,$logpagequeries,$logagent,$digest,$date){
+		$sql = sprintf("INSERT INTO log (loglevel,userid,logtype,logmsg,logip,logpagephptime,logpagemysqltime,logpagequeries,logagent,trackerdigest,trackertime) 
+						VALUES ('%s',%d,'%s','%s','%s',%f,%f,%d,'%s','%s','%s')", 
+						$loglevel,$userid,$logtype,mysql_real_escape_string($logmsg),$ip,$logpagephptime,$logpagemysqltime,$logpagequeries,$logagent,$digest,$date);
 		mysql_query($sql,$this->DB);
 	}
 	
@@ -230,6 +230,9 @@ class API {
 		$user = $this->getUserFromUsername($qa->username);
 		$quiz = $this->getQuiz($qa->quizref);
 		
+		if($quiz == null){
+			return;
+		}
 		$sql = sprintf("INSERT INTO quizattempt (qadate, qascore, maxscore, quizid, userid) 
 					VALUES ('%s', %d, %d, %d, %d)",
 					$qa->quizdate,
