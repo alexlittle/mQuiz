@@ -226,6 +226,42 @@ class API {
 		mysql_query($sql,$this->DB);
 	}
 	
+	
+	function addModule($versionid, $title, $shortname, $file){
+		$shortname = strtolower($shortname);
+		//find if module already exists
+		$sql = sprintf("SELECT * FROM module WHERE modshortname='%s'",$shortname);
+		$result = _mysql_query($sql,$this->DB);	
+		if(mysql_num_rows($result) == 0){
+			//insert
+			$sql = sprintf("INSERT INTO module (versionid,modtitle,modshortname,modfilename) 
+							VALUES (%d,'%s','%s','%s')",$versionid,$title,$shortname,$file);
+			_mysql_query($sql,$this->DB);
+			return mysql_insert_id(); 
+		} else {
+			while($r = mysql_fetch_object($result)){
+				$updateid = $r->modid;
+				$oldfile = $r->modfilename;
+			}
+			//delete the old file
+			if($oldfile != $file){
+				$del = __DIR__."/../modules/uploads/". $oldfile;
+				echo $del;
+				unlink($del);
+				echo "file deleted: ".$del."\n";
+			}
+			
+			//update
+			$sql = sprintf("UPDATE module SET
+							versionid = %d,
+							modtitle = '%s',
+							modfilename = '%s'
+							WHERE modid = %d", $versionid,$title,$file,$updateid);
+			_mysql_query($sql,$this->DB);
+			return $updateid;
+		}
+	}
+	
 	function insertQuizAttempt($qa){
 		$user = $this->getUserFromUsername($qa->username);
 		$quiz = $this->getQuiz($qa->quizref);
@@ -1280,7 +1316,7 @@ class API {
 										'refid'=> $o->refid,
 										'orderno'=> $o->orderno,
 										'text'=>$o->text,
-										'score'=>$o->score,
+										'score'=>strval($o->score),
 										'props'=>$props
 				);
 				array_push($responses,$r);

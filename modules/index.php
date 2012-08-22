@@ -13,14 +13,16 @@ $submit=optional_param("submit","",PARAM_TEXT);
 echo "hello admin!";
 echo "<pre>";
 if($submit != ""){
-	$target_path = __DIR__."/uploads/".basename( $_FILES['modulefile']['name']);
+	$filename = basename( $_FILES['modulefile']['name']);
+	
+	$target_path = __DIR__."/uploads/".$filename;
 	if(!move_uploaded_file($_FILES['modulefile']['tmp_name'], $target_path)) {
 		echo "There was an error uploading the file, please try again!\n";
 		die;
 	}
-
+	
 	$zip = new ZipArchive;
-	$res = $zip->open("uploads/".basename( $_FILES['modulefile']['name']));
+	$res = $zip->open("uploads/".$filename);
 	if ($res !== TRUE) {
 		echo 'failed: not a valid zip file\n';
 		die;
@@ -43,8 +45,7 @@ if($submit != ""){
 		echo "invalid module.xml file";
 		die;
 	}
-	$versionid = $xml->meta->versionid;
-	echo "versionid: ".$versionid."\n";
+	
 	$course_title = $xml->meta->title;
 	$title = array();
 	foreach($course_title as $ct){
@@ -53,7 +54,11 @@ if($submit != ""){
 		}
 	}
 	$title = json_encode($title);
-	echo $title;
+	$versionid = intval($xml->meta->versionid,10);
+	$shortname = strval($xml->meta->shortname);
+	$modid = $API->addModule($versionid, $title, $shortname, $filename);
+	
+	
 }
 
 echo "</pre>";
@@ -70,7 +75,6 @@ include_once("../includes/footer.php");
 function deleteDir($dirPath) {
 	if (! is_dir($dirPath)) {
 		return;
-		//throw new InvalidArgumentException('$dirPath must be a directory');
 	}
 	if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
 		$dirPath .= '/';
