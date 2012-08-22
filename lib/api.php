@@ -258,8 +258,63 @@ class API {
 							modfilename = '%s'
 							WHERE modid = %d", $versionid,$title,$file,$updateid);
 			_mysql_query($sql,$this->DB);
+			
+			//delete all old sections and activities
+			$sql = sprintf("DELETE FROM activity WHERE sectid in (SELECT sectid FROM section WHERE modid = %d)",$updateid);
+			_mysql_query($sql,$this->DB);
+			
+			$sql = sprintf("DELETE FROM section WHERE modid = %d",$updateid);
+			_mysql_query($sql,$this->DB);
+			
 			return $updateid;
 		}
+	}
+	
+	function addSection($modid, $xmlid, $title){
+		$sql = sprintf("INSERT INTO section (modid,xmlid,secttitle)
+						VALUES (%d,%d,'%s')",$modid,$xmlid,$title);
+		_mysql_query($sql,$this->DB);
+		return mysql_insert_id();
+	}
+	
+	function addActivity($sectid, $xmlid, $title,$digest,$type){
+		$sql = sprintf("INSERT INTO activity (sectid,xmlid,activitytitle,activitydigest,activitytype)
+				VALUES (%d,%d,'%s','%s','%s')",$sectid,$xmlid,$title,$digest,$type);
+		_mysql_query($sql,$this->DB);
+		return mysql_insert_id();
+	}
+	
+	function getModules($lang,$dir){
+		$sql = sprintf("SELECT * FROM module");
+		$result = _mysql_query($sql,$this->DB);
+		$mods = array();
+		
+		while($o = mysql_fetch_object($result)){
+			$m = new stdClass;
+			$titleJSON = json_decode($o->modtitle);
+			
+			$vars = get_object_vars($titleJSON);
+			$i = 0;
+			$deftitle = "no title set";
+			foreach($vars as $k=>$v){
+				if($k == $lang){
+					$m->title = $titleJSON->{$lang};
+				}
+				if($i == 0){
+					$deftitle = $v;
+				}
+				$i++;
+			}
+			if(!isset($m->title)){
+				$m->title = $deftitle;
+			}
+		
+			$m->versionid = $o->versionid;
+			$m->shortname = $o->modshortname;
+			$m->url = $dir."/".$o->modfilename;
+			array_push($mods, $m);
+		}
+		return $mods;
 	}
 	
 	function insertQuizAttempt($qa){

@@ -50,14 +50,62 @@ if($submit != ""){
 	$title = array();
 	foreach($course_title as $ct){
 		foreach($ct->attributes() as $a => $b) {
-			$title[strval($b)] = strval($ct);
+			$title[strval($b)] =  strval($ct);
 		}
 	}
 	$title = json_encode($title);
+	print_r($title);
+	echo "\n";
 	$versionid = intval($xml->meta->versionid,10);
 	$shortname = strval($xml->meta->shortname);
 	$modid = $API->addModule($versionid, $title, $shortname, $filename);
 	
+	//Now add the sections
+	$sections = $xml->structure->section;
+	foreach($sections as $section){
+		foreach($section->attributes() as $a => $b) {
+			if($a == "id"){
+				$xmlid = strval($b);
+			}
+		}
+		$title = array();
+		foreach($section->title as $st){
+			foreach($st->attributes() as $k => $v) {
+				$title[strval($v)] =  strval($st);
+			}
+		}
+		$title = json_encode($title);
+		print_r($title);
+		echo "\n";
+		// add section to db
+		$sectid = $API->addSection($modid, $xmlid, $title);
+		
+		//now add the activities
+		foreach($section->activities->activity as $activity){
+			foreach($activity->attributes() as $k => $v) {
+				if($k == "id"){
+					$xmlid = strval($v);
+				}
+				if($k == "type"){
+					$type = strval($v);
+				}
+				if($k == "digest"){
+					$digest = strval($v);
+				}
+			}
+			$title = array();
+			foreach($activity->title as $at){
+				foreach($at->attributes() as $k => $v) {
+					$title[strval($v)] = strval($at);
+				}
+			}
+			$title = json_encode($title);
+			print_r($title);
+			echo "\n";
+			$API->addActivity($sectid, $xmlid, $title, $digest, $type);
+		}
+	}
+	echo "Module added \n";
 	
 }
 
