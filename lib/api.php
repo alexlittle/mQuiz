@@ -308,13 +308,31 @@ class API {
 			if(!isset($m->title)){
 				$m->title = $deftitle;
 			}
-		
-			$m->versionid = $o->versionid;
+			$m->id = $o->modid;
+			$m->version = $o->versionid;
 			$m->shortname = $o->modshortname;
 			$m->url = $dir."/".$o->modfilename;
 			array_push($mods, $m);
 		}
 		return $mods;
+	}
+	
+	function getRecentModuleActivity($modid, $days=31){
+		$sql = sprintf("SELECT trackertime FROM log l
+						INNER JOIN activity a ON a.activitydigest = l.trackerdigest
+						INNER JOIN section s ON a.sectid = s.sectid
+						WHERE l.logtype = 'tracker'
+						AND s.modid = %d
+						AND trackertime > DATE_ADD( NOW() , INTERVAL -%d DAY )", $modid, $days);
+
+		$result = _mysql_query($sql, $this->DB);
+		$hits = array();
+		while($o = mysql_fetch_object($result)){
+			array_push($hits,$o);
+		}
+		
+		return $hits;
+		
 	}
 	
 	function insertQuizAttempt($qa){
