@@ -25,13 +25,12 @@ if ($submit != ""){
 	
 	if($format == 'gift'){
 		$q = $API->createQuizfromGIFT($content,$title,$quizdraft,$description,$tags);
-		
+		//die;
 		if($q){
 			// send mail to owner
 			$m = new Mailer();
-			$m->sendQuizCreated($USER->email,$USER->firstname, $title, $q->ref);
-			
-			header(sprintf("Location:  %squiz/options.php?qref=%s&new=true",$CONFIG->homeAddress, $q->ref));
+			$m->sendQuizCreated($USER->email,$USER->firstname, $title, $q->qref);
+			header(sprintf("Location:  %squiz/options.php?qref=%s&new=true",$CONFIG->homeAddress, $q->qref));
 			die;
 		}
 	}

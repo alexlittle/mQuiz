@@ -317,6 +317,65 @@ class API {
 		return $mods;
 	}
 	
+	function getModule($modid, $lang){
+		$sql = sprintf("SELECT * FROM module WHERE modid=%d",$modid);
+		$result = _mysql_query($sql,$this->DB);
+	
+		while($o = mysql_fetch_object($result)){
+			$m = new stdClass;
+			$titleJSON = json_decode($o->modtitle);
+				
+			$vars = get_object_vars($titleJSON);
+			$i = 0;
+			$deftitle = "no title set";
+			foreach($vars as $k=>$v){
+				if($k == $lang){
+					$m->title = $titleJSON->{$lang};
+				}
+				if($i == 0){
+					$deftitle = $v;
+				}
+				$i++;
+			}
+			if(!isset($m->title)){
+				$m->title = $deftitle;
+			}
+			$m->id = $o->modid;
+			$m->version = $o->versionid;
+			$m->shortname = $o->modshortname;
+		}
+		return $m;
+	}
+	
+	
+	function getModuleParticipants($modid){
+		
+		$sql = sprintf("SELECT u.userid, 
+								u.firstname, 
+								u.lastname, 
+								COUNT( DISTINCT trackerdigest ) AS ActivitiesComplete, 
+								MAX( trackertime ) as MostRecentActivity, 
+								(SELECT COUNT( DISTINCT activitydigest ) AS TotalActivities
+									FROM activity a
+									INNER JOIN section s ON s.sectid = a.sectid
+									WHERE s.modid =%d
+									) AS TotalActivites
+						FROM user u
+						INNER JOIN log l ON l.userid = u.userid
+						INNER JOIN activity a ON a.activitydigest = l.trackerdigest
+						INNER JOIN section s ON s.sectid = a.sectid
+						WHERE l.logtype = 'tracker'
+						AND s.modid =%d
+						GROUP BY u.userid",$modid,$modid);
+		$result = _mysql_query($sql,$this->DB);
+		$users = array();
+		
+		while($o = mysql_fetch_object($result)){
+			array_push($users, $o);
+		}
+		return $users;
+	}
+	
 	function getRecentModuleActivity($modid, $days=31){
 		$sql = sprintf("SELECT trackertime FROM log l
 						INNER JOIN activity a ON a.activitydigest = l.trackerdigest
@@ -334,6 +393,49 @@ class API {
 		return $hits;
 		
 	}
+	
+	/*function getModulePercentComplete($modid,$userid){
+		$sql = sprintf("SELECT COUNT(DISTINCT trackerdigest) AS ActivitiesComplete FROM user u
+			INNER JOIN log l ON l.userid = u.userid
+			INNER JOIN activity a ON a.activitydigest = l.trackerdigest
+			INNER JOIN section s ON s.sectid = a.sectid
+			WHERE l.logtype='tracker'
+			AND s.modid = %d
+			AND u.userid = %d",$modid,$userid);
+		$result = _mysql_query($sql, $this->DB);
+		$nocomplete = 0;
+		while($o = mysql_fetch_object($result)){
+			$nocomplete = $o->ActivitiesComplete;
+		}
+		
+		$sql = sprintf("SELECT COUNT( DISTINCT activitydigest ) AS TotalActivities
+						FROM activity a
+						INNER JOIN section s ON s.sectid = a.sectid
+						WHERE s.modid =%d",$modid);
+		$result = _mysql_query($sql, $this->DB);
+		$totalacts = 0;
+		while($o = mysql_fetch_object($result)){
+			$totalacts = $o->TotalActivities;
+		}
+		return $nocomplete*100/$totalacts;
+	}
+	
+	function getMostRecentModuleActivity($modid, $userid){
+		$sql = sprintf("SELECT MAX( trackertime ) AS mostrecent
+						FROM log l
+						INNER JOIN activity a ON l.trackerdigest = a.activitydigest
+						INNER JOIN section s ON s.sectid = a.sectid
+						WHERE s.modid = %d
+						AND l.userid = %d",$modid,$userid);
+		$result = _mysql_query($sql, $this->DB);
+		$mostrecent = null;
+		while($o = mysql_fetch_object($result)){
+			$mostrecent = $o->mostrecent;
+		}
+		return $mostrecent;
+	}*/
+	
+	
 	
 	function insertQuizAttempt($qa){
 		$user = $this->getUserFromUsername($qa->username);
@@ -1423,12 +1525,15 @@ class API {
 			$maxscore = 0;
 		}
 		
-		$q = array (	'qref'=>$quiz->qref,
-						'quiztitle'=>$quiz->quiztitle,
-						'quizdescription'=>$quiz->quizdescription,
-						'maxscore'=>$maxscore,
-						'lastupdate'=>$quiz->lastupdate,
-						'q'=>$questions);
+		$q = new stdClass;
+		$q->qref = $quiz->qref;
+		$q->quiztitle = $quiz->quiztitle;
+		$q->quizdescription = $quiz->quizdescription;
+		$q->maxscore = $maxscore;
+		$q->lastupdate = $quiz->lastupdate;
+		$q->q = $questions;
+		
+		
 		return $q;	
 	}
 	

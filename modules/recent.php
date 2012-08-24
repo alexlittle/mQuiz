@@ -8,12 +8,12 @@ if(!isAdmin()){
 	die;
 }
 $modules = $API->getModules('en','');
-$days = 31;
+$days = optional_param("days",7,PARAM_INT);
 $options['width'] = 600;
 $options['height'] = 300;
 
 foreach($modules as $m){
-	echo "<h2>".$m->title."</h2>";
+	echo "<h2><a href='detail.php?modid=".$m->id."'>".$m->title."</a></h2>";
 	$hits = $API->getRecentModuleActivity($m->id,$days);
 	$summary = array();
 	foreach($hits as $s){
@@ -62,7 +62,7 @@ foreach($modules as $m){
         chart.draw(data, {	width: <?php echo $options['width'] ?>, 
                 			height: <?php echo $options['height'] ?>,
                 			hAxis: {title: 'Date'},
-                			vAxis: {title: 'Page hits'},
+                			vAxis: {title: 'Activity'},
                 			legend: 'none',
                 			chartArea:{left:50,top:20,width:"90%",height:"75%"},
                 			pointSize:3,
