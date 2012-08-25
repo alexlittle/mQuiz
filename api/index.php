@@ -81,7 +81,8 @@ if($method == 'search'){
 /*
  * Methods which allow logged in or anon users
  */
-if($method == 'getquiz' || $method == 'submit'){
+if($method == 'getquiz' 
+		|| $method == 'submit'){
 	if (!userLogin($username,$password,false)){
 		$USER = new User($CONFIG->anonuser);
 		$USER->setUsername($CONFIG->anonuser);
@@ -129,7 +130,11 @@ if($method == 'getquiz' || $method == 'submit'){
 /*
 * Methods with login required
 */
-if ($method == "list" || $method == "suggest" || $method == "invite" || $method == "create" || $method == "tracker"){
+if ($method == "list" 
+		|| $method == "suggest" 
+		|| $method == "invite" 
+		|| $method == "create" 
+		|| $method == "tracker"){
 	if (!userLogin($username,$password,false)){
 		$response->login = false;
 	} else {

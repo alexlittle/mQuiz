@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /mquiz/api/
+RewriteRule ^([a-z]*?/?)module/([0-9]*)$ module.php?modid=$2&lang=$1 [L]
+RewriteRule ^module/([0-9]*)/class class.php?modid=$1 [L]
+
+</IfModule>

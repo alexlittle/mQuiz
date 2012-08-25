@@ -18,6 +18,7 @@ require_once $CONFIG->homePath."lib/mailer.php";
 require_once $CONFIG->homePath."lib/user.class.php";
 require_once $CONFIG->homePath."lib/mdetect.php";
 require_once $CONFIG->homePath."lib/general.php";
+require_once $CONFIG->homePath."lib/module.class.php";
 
 unset($API);
 global $API;
