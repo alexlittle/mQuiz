@@ -15,7 +15,7 @@ echo "<pre>";
 if($submit != ""){
 	$filename = basename( $_FILES['modulefile']['name']);
 	
-	$target_path = __DIR__."/uploads/".$filename;
+	$target_path = $CONFIG->modulePath.$filename;
 	if(!move_uploaded_file($_FILES['modulefile']['tmp_name'], $target_path)) {
 		echo "There was an error uploading the file, please try again!\n";
 		die;

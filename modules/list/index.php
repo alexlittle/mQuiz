@@ -1,10 +1,10 @@
 <?php 
+
+//TODO - this can be removed - use the /api/modules/ instead
 include_once("../../config.php");
 
-$dir = dirname("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-$dir .= "/uploads";
-$lang=optional_param("lang","en",PARAM_TEXT);
-$mods = $API->getModules($lang,$dir);
+$lang=optional_param("lang",$CONFIG->defaultlang,PARAM_TEXT);
+$mods = $API->getModules($lang);
 
 
 header('Content-type: application/json; charset=UTF-8');

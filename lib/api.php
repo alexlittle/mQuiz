@@ -284,7 +284,8 @@ class API {
 		return mysql_insert_id();
 	}
 	
-	function getModules($lang,$dir){
+	function getModules($lang){
+		global $CONFIG;
 		$sql = sprintf("SELECT * FROM module");
 		$result = _mysql_query($sql,$this->DB);
 		$mods = array();
@@ -311,13 +312,14 @@ class API {
 			$m->id = $o->modid;
 			$m->version = $o->versionid;
 			$m->shortname = $o->modshortname;
-			$m->url = $dir."/".$o->modfilename;
+			$m->url = $CONFIG->moduleAddress.$o->modfilename;
 			array_push($mods, $m);
 		}
 		return $mods;
 	}
 	
 	function getModule($modid, $lang){
+		global $CONFIG;
 		$sql = sprintf("SELECT * FROM module WHERE modid=%d",$modid);
 		$result = _mysql_query($sql,$this->DB);
 	
@@ -343,6 +345,7 @@ class API {
 			$m->id = $o->modid;
 			$m->version = $o->versionid;
 			$m->shortname = $o->modshortname;
+			$m->url = $CONFIG->moduleAddress.$o->modfilename;
 			return $m;
 		}
 		return false;
