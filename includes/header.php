@@ -10,7 +10,7 @@ if($uagent_obj->DetectTierTablet() || $uagent_obj->DetectTierIphone()){
 
 global $PAGE,$CONFIG,$MSG,$API,$HEADER;
 
-$nologinpages = array ("login","index","register","faqs","terms","about","phoneapps","reset","search","browse");
+$nologinpages = array ("login","index","register","faqs","terms","about","phoneapps","reset","search","browse","contact");
 
 if (!in_array($PAGE,$nologinpages)){
 	checkLogin();
@@ -43,61 +43,41 @@ if ($lang != ""){
 
 <body onload="initPage()">
 
-<div id="page">
-	<div id="header">
-		<form action="<?php echo $CONFIG->homeAddress; ?>search.php" method="get">
-			<div id="logo">
-				<a href="<?php echo $CONFIG->homeAddress; ?>index.php" class="logo">mQuiz</a>
-			</div>
-			<div id="search">
-				Search:
-					<input type="text" name="s" value=""/> 	
-			</div>
-		</form>
-		<div style="clear:both"></div>
-		<div id="menu">
-			<ul>
-				<li><a href="<?php echo $CONFIG->homeAddress; ?>my/results.php">My Results</a></li>
-				<li><a href="<?php echo $CONFIG->homeAddress; ?>my/quizzes.php">My Quizzes</a></li>
-				<li><a href="<?php echo $CONFIG->homeAddress; ?>browse.php">Browse Quizzes</a></li>
-				<li><a href="<?php echo $CONFIG->homeAddress; ?>quiz/new.php">Create New Quiz</a></li>
+	<div id="header"> 
+	    <div class="content">  
+	        <div id="logo"><h1><a href="<?php echo $CONFIG->homeAddress; ?>">mQuiz</a></h1></div>
+	
+	
+	        <div id="menu">
+	            <ul>
+	            <li <?php if($PAGE == 'index') echo "class='selected'"; ?>><a href="<?php echo $CONFIG->homeAddress; ?>">Home</a></li>
+	            <li <?php if($PAGE == 'myresults') echo "class='selected'"; ?>><a href="<?php echo $CONFIG->homeAddress; ?>my/results.php">My Results</a></li>
+				<li <?php if($PAGE == 'myquizzes') echo "class='selected'"; ?>><a href="<?php echo $CONFIG->homeAddress; ?>my/quizzes.php">My Quizzes</a></li>
+				<li <?php if($PAGE == 'browse') echo "class='selected'"; ?>><a href="<?php echo $CONFIG->homeAddress; ?>browse.php">Browse Quizzes</a></li>
+				<li <?php if($PAGE == 'newquiz' || $PAGE == 'import') echo "class='selected'"; ?>><a href="<?php echo $CONFIG->homeAddress; ?>quiz/new.php">Create New Quiz</a></li>
 				<li><a href="<?php echo $CONFIG->homeAddress; ?>m/">Mobile</a></li>
-			</ul>
-		</div>
-		<div id="userlogin">
-			<ul>
-				<?php 
+	            </ul>
+	        </div>
+	        <div id="login">
+	        	<?php 
 					if (isLoggedIn()){
 				?>
-						<li><?php echo $USER->firstname." ".$USER->lastname; ?></li>
-						<li><a href="<?php echo $CONFIG->homeAddress; ?>profile.php">Profile</a></li>
-						<li><a href="<?php echo $CONFIG->homeAddress; ?>logout.php">Logout</a></li>
+	        		Welcome, <?php echo $USER->firstname." ".$USER->lastname; ?>
+					<a href="<?php echo $CONFIG->homeAddress; ?>profile.php">Profile</a>
+					<a href="<?php echo $CONFIG->homeAddress; ?>logout.php">Logout</a>
 				<?php 
 					} else {
 						$url = "http" . ((!empty($_SERVER["HTTPS"])) ? "s" : "") . "://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
 				?>
-						<li><a href="<?php echo $CONFIG->homeAddress; ?>login.php">Login</a></li>
-						<li><a href="<?php echo $CONFIG->homeAddress; ?>register.php?ref=<?php echo $url; ?>">Register</a></li>
+						Welcome, please <a href="<?php echo $CONFIG->homeAddress; ?>login.php">log in</a> or
+						<a href="<?php echo $CONFIG->homeAddress; ?>register.php?ref=<?php echo $url; ?>">register</a>
 				<?php 
 					}
-				?>
-				
-				<!-- li><form action="" method="post" name="langform" id="langform">
-				<select name="lang" onchange="document.langform.submit();">
-					<?php 
-						foreach ($CONFIG->langs as $key => $value){
-							if (isset($_SESSION["session_lang"]) &&  $_SESSION["session_lang"] == $key){
-								echo "<option value='".$key."' selected='selected'>".$value."</option>";
-							} else {
-								echo "<option value='".$key."'>".$value."</option>";
-							}
-						}
-					?>
-				</select>
-				</form></li -->
-			</ul>
-		</div>
-		<div style="clear:both"></div>
+				?>	
+	        </div>
+	    </div>
+	    <div style="clear:both;"></div>
 	</div>
 
-<div id="content">
+<div id="main">
+<div class="content">
