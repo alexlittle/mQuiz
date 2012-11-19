@@ -46,6 +46,22 @@ class API {
 		}
 	}
 	
+	function getUserFromEmail(&$user){
+		$sql = "SELECT * FROM user WHERE email ='".$user->email."' LIMIT 0,1";
+		$result = _mysql_query($sql,$this->DB);
+		if (!$result){
+			return;
+		}
+		while($row = mysql_fetch_array($result)){
+			$user->userid = $row['userid'];
+			$user->username = $row['username'];
+			$user->firstname = $row['firstname'];
+			$user->lastname =  $row['lastname'];
+			$user->email =  $row['email'];
+			$user->password =  $row['password'];
+		}
+	}
+	
 	function getUserFromUsername($username){
 		$sql = sprintf("SELECT * FROM user WHERE username ='%s' LIMIT 0,1",$username);
 		$result = _mysql_query($sql,$this->DB);
@@ -58,7 +74,7 @@ class API {
 		return false;
 	}
 	
-	function checkUserNameNotInUse($username){
+	function checkUserNameInUse($username){
 		global $USER;
 		$sql = sprintf("SELECT * FROM user WHERE username='%s' AND userid != %d",$username,$USER->userid);
 		$result = _mysql_query($sql,$this->DB);
@@ -71,10 +87,23 @@ class API {
 		return false;
 	}
 	
-	function updateUser($username,$firstname,$lastname){
+	function checkEmailInUse($email){
+		global $USER;
+		$sql = sprintf("SELECT * FROM user WHERE email='%s' AND userid != %d",$email,$USER->userid);
+		$result = _mysql_query($sql,$this->DB);
+		if (!$result){
+			return;
+		}
+		while($row = mysql_fetch_array($result)){
+			return true;
+		}
+		return false;
+	}
+	
+	function updateUser($username,$email,$firstname,$lastname){
 		global $USER;
 		$username = strtolower($username);
-		$sql = sprintf("UPDATE user SET username = '%s', email = '%s', firstname = '%s', lastname = '%s' WHERE userid = %d",$username,$username,$firstname,$lastname,$USER->userid);
+		$sql = sprintf("UPDATE user SET username = '%s', email = '%s', firstname = '%s', lastname = '%s' WHERE userid = %d",$username,$email,$firstname,$lastname,$USER->userid);
 		$result = _mysql_query($sql,$this->DB);
 		if (!$result){
 			return false;
@@ -202,16 +231,30 @@ class API {
 		return false;
 	}
 	
-	function resetPassword($username){
-		if(!$this->checkUserExists($username)){
+	function checkUserEmailExists($email){
+		$sql = sprintf("SELECT * FROM user WHERE email='%s' and pending=0",$email);
+		$result = _mysql_query($sql,$this->DB);
+		if (!$result){
+			return false;
+		}
+		while($row = mysql_fetch_array($result)){
+			return true;
+		}
+		return false;
+	}
+	
+	function resetPassword($email){
+		if(!$this->checkUserEmailExists($email)){
 			return false;
 		}
 		$newpass = substr($this->createUUID(""), 7,60);
-		$sql = sprintf("UPDATE user set password=md5('%s') WHERE username='%s'",$newpass,$username);
+		$sql = sprintf("UPDATE user set password=md5('%s') WHERE email='%s'",$newpass,$email);
 		$result = _mysql_query($sql,$this->DB);
 		
-		$tempU = new User($username);
-		$this->getUser($tempU);
+		$tempU = new User();
+		$tempU->email = $email;
+		$this->getUserFromEmail($tempU);
+		
 		$m = new Mailer();
 		$m->resetPassword($tempU, $newpass);
 		return true;

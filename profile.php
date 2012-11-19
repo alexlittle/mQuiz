@@ -2,16 +2,21 @@
 include_once("config.php");
 $PAGE = "profile";
 
+$username = optional_param("username",$USER->username,PARAM_TEXT);
 $password = optional_param("password","",PARAM_TEXT);
 $repeatpassword = optional_param("repeatpassword","",PARAM_TEXT);
 $firstname = optional_param("firstname",$USER->firstname,PARAM_TEXT);
 $surname = optional_param("surname",$USER->lastname,PARAM_TEXT);
-$email = optional_param("email",$USER->username,PARAM_TEXT);
+$email = optional_param("email",$USER->email,PARAM_TEXT);
 $submit = optional_param("submit","",PARAM_TEXT);
 
 $ref = optional_param("ref",$CONFIG->homeAddress."index.php",PARAM_TEXT);
 
 if ($submit != ""){
+	if ($username == ""){
+		array_push($MSG,"Enter a username");
+	}
+	
 	if ($email == ""){
 		array_push($MSG,"Enter your email");
 	} else	if(!preg_match("/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/i", $email) ) {
@@ -27,16 +32,21 @@ if ($submit != ""){
 	}
 	
 	// check email/username not in use by anyone else
-	if ($API->checkUserNameNotInUse($email) == true){
-		array_push($MSG,"Email already in use");
+	if($API->checkUserNameInUse($username)){
+		array_push($MSG,"Username already in use, please select another");
+	}
+	
+	if($API->checkEmailInUse($email)){
+		array_push($MSG,"Email already in use, please select another");
 	}
 	
 	// update user details
 	if(count($MSG) == 0){
-		if ($API->updateUser($email, $firstname, $surname)){
+		if ($API->updateUser($username,$email, $firstname, $surname)){
 			array_push($MSG,"You details have been updated" );
 			// reload user
-			$USER = new User($email);
+			$USER->username = $username;
+			$USER->load();
 		} else {
 			array_push($MSG,"An error occured whilst updating your details" );
 		}
@@ -70,12 +80,17 @@ if(!empty($MSG)){
 	}
 	echo "</ul>";
 }
+
 ?>
 
 
 <form method="post" action="">
-<div class="formblock">
-	<div class="formlabel"><?php echo getstring('register.email'); ?></div>
+	<div class="formblock">
+		<div class="formlabel"><?php echo getstring('register.username'); ?></div>
+		<div class="formfield"><input type="text" name="username" value="<?php echo $username; ?>"></input></div>
+	</div>
+	<div class="formblock">
+		<div class="formlabel"><?php echo getstring('register.email'); ?></div>
 		<div class="formfield"><input type="text" name="email" value="<?php echo $email; ?>"></input></div>
 	</div>
 	<div class="formblock">

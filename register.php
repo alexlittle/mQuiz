@@ -3,7 +3,7 @@ include_once("config.php");
 global $PAGE,$MSG,$API;
 $PAGE = "register";
 
-
+$username = optional_param("username","",PARAM_TEXT);
 $password = optional_param("password","",PARAM_TEXT);
 $repeatpassword = optional_param("repeatpassword","",PARAM_TEXT);
 $firstname = optional_param("firstname","",PARAM_TEXT);
@@ -14,6 +14,10 @@ $submit = optional_param("submit","",PARAM_TEXT);
 $ref = optional_param("ref",$CONFIG->homeAddress."index.php",PARAM_TEXT);
 
 if ($submit != ""){
+	if ($username == ""){
+		array_push($MSG,"Enter a username");
+	}
+	
 	if ($email == ""){
 		array_push($MSG,"Enter your email");
 	} else	if(!preg_match("/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/i", $email) ) {
@@ -37,14 +41,18 @@ if ($submit != ""){
 	}
 	
 	// check username doesn't already exist
-	if($API->checkUserExists($email)){
+	if($API->checkUserNameInUse($username)){
+		array_push($MSG,"Username already in use, please select another");
+	}
+	
+	if($API->checkEmailInUse($email)){
 		array_push($MSG,"Email already in use, please select another");
 	}
 	
 	// create user
 	if(count($MSG) == 0){
-		if($API->addUser($email, $password, $firstname, $surname, $email)){
-			userLogin($email,$password);
+		if($API->addUser($username, $password, $firstname, $surname, $email)){
+			userLogin($username,$password);
 			include_once("./includes/header.php");
 			echo "<div class='info'>";
 			echo "You are now registered, please <a href='".$ref."'>continue</a>";
@@ -74,8 +82,12 @@ if(!empty($MSG)){
 
 
 <form method="post" action="">
-<div class="formblock">
-	<div class="formlabel"><?php echo getstring('register.email'); ?></div>
+	<div class="formblock">
+		<div class="formlabel"><?php echo getstring('register.username'); ?></div>
+		<div class="formfield"><input type="text" name="username" value="<?php echo $username; ?>"></input></div>
+	</div>
+	<div class="formblock">
+		<div class="formlabel"><?php echo getstring('register.email'); ?></div>
 		<div class="formfield"><input type="text" name="email" value="<?php echo $email; ?>"></input></div>
 	</div>
 	<div class="formblock">

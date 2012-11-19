@@ -18,7 +18,7 @@ $LANG["import.title"] = "Import Quiz";
 
 $LANG['login.password'] = 'Password';
 $LANG['login.submit.button'] = 'Login';
-$LANG['login.username'] = 'Email';
+$LANG['login.username'] = 'Username';
 
 $LANG['myquizzes.none'] = "You haven't created any quizzes yet. Why not <a href='%s'>create one</a>?";
 $LANG['myquizzes.title'] = "My Quizzes";
@@ -74,7 +74,7 @@ $LANG['reset.submit.button'] = 'Reset password';
 
 $LANG['user.anon'] = 'Anonymous';
 
-$LANG['warning.login.invalid'] = "Email or password not recognised";
+$LANG['warning.login.invalid'] = "Username or password not recognised";
 $LANG['warning.login.noemail'] = "Please enter your email address";
 $LANG['warning.login.nopassword'] = "Please enter your password";
 $LANG['warning.login.required'] = "Please login or <a href='%s'>register</a>";

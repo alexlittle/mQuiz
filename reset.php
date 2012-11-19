@@ -12,7 +12,7 @@ if ($submit != ""){
 	// check email entered
 	if($email == ""){
 		array_push($MSG, "Please enter your email address");
-	} else if(!$API->checkUserExists($email)){
+	} else if(!$API->checkUserEmailExists($email)){
 		array_push($MSG, "Email address not found.");
 	}
 	

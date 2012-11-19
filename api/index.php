@@ -20,12 +20,14 @@ $response = new stdClass();
  */
 
 if($method == 'register'){
-	$email = optional_param("email",$username,PARAM_TEXT);
+	$email = optional_param("email","",PARAM_TEXT);
 	$passwordAgain = optional_param("passwordagain","",PARAM_TEXT);
 	$firstname = optional_param("firstname","",PARAM_TEXT);
 	$lastname = optional_param("lastname","",PARAM_TEXT);
 	
-	if ($email == ""){
+	if ($username == ""){
+		$response->error = "Enter your username";
+	} else if ($email == ""){
 		$response->error = "Enter your email";
 	} else	if(!preg_match("/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/i", $email) ) {
 		$response->error = "Invalid email address format";
@@ -38,14 +40,16 @@ if($method == 'register'){
 	} else if ($lastname == ""){
 		$response->error = "Enter your lastname";
 	} else {
-		if($API->checkUserExists($email)){
+		if($API->checkUserNameInUse($username)){
+			$response->error = "Username already registered";
+		} else if($API->checkEmailInUse($email)){
 			$response->error = "Email already registered";
 		} else {
-			$API->addUser($email, $password, $firstname, $lastname, $email);
+			$API->addUser($username, $password, $firstname, $lastname, $email);
 			$m = new Mailer();
 			$m->sendSignUpNotification($firstname." ".$lastname);
 	
-			$login = userLogin($email,$password);
+			$login = userLogin($username,$password);
 			$response->login = $login;
 			$response->hash = md5($password);
 			$response->name = $firstname." ".$lastname;

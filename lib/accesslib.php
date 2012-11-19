@@ -13,6 +13,7 @@ function userLogin($username,$password,$log = true){
     }   
     $USER = new User($username);
     $USER->setUsername($username);
+    $USER->password = $password;
     if ($USER instanceof User)  {
             if($USER->validPassword($password)){
             	$_SESSION["session_username"] = $USER->getUsername();

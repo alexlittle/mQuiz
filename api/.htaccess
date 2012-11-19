@@ -4,6 +4,7 @@ RewriteEngine On
 # for modules
 RewriteRule ^(([a-zA-Z_-]*)/)?module/([0-9]*)$ module.php?modid=$3&lang=$2 [L]
 RewriteRule ^(([a-zA-Z_-]*)/)?module/([0-9]*)/class class.php?modid=$3&lang=$2 [L]
+RewriteRule ^(([a-zA-Z_-]*)/)?module/upload moduleupload.php [L]
 
 #searching
 RewriteRule ^(([a-zA-Z_-]*)/)?search/(.*)$ index.php?method=search&t=$3 [L]
@@ -20,6 +21,4 @@ RewriteRule ^(([a-zA-Z_-]*)/)?register/?$ index.php?method=register [L]
 #submit
 RewriteRule ^(([a-zA-Z_-]*)/)?submit/?$ index.php?method=submit [L]
 
-#submit
-RewriteRule ^(([a-zA-Z_-]*)/)?temp/(.*)$ temp.php?1=$1&2=$2&3=$3&4=$4 [L]
 </IfModule>

@@ -7,8 +7,6 @@ include_once("../includes/header.php");
 
 <p>mQuiz is a work in progress and is provided as-is. Not everything may work 100%, so if you find anything wrong, then <a href="mailto:alex@mquiz.org">please let us know</a>.</p>
 
-
-
 <h2>License</h2>
 <p>mQuiz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
