@@ -6,14 +6,21 @@ body {
 	margin:0 0 5px 0;
 	background:#fff;
 	color:#444;
-	font-size: 120%; /* Resets 1em to 10px */
-	font-family: Verdana, 'Lucida Grande', Tahoma, Arial, Sans-Serif;
+	font-size: 120%; 
+	font-family: Helvetica,Arial,sans-serif;
+    background:#ddd;
 }
 
 #header {
+	background: none repeat scroll 0 0 #77A240;
+	color: #fff;
   	padding:5px 5px;
 	text-align: center;
-	margin-bottom: 5px;
+}
+
+#header a {
+    color: #fff;
+    text-decoration:underline;
 }
 
 #header-title {
@@ -24,7 +31,6 @@ body {
 	font-size:130%;
 	display:inline;
 	vertical-align:middle;
-	color: #77a240;
 }
 
 #header-logo {

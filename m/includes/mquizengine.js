@@ -104,7 +104,7 @@ function mQuiz(){
 		$('#mq').empty();
 		var str = "<h2>Register";
 		if(this.opts.allowregister){
-			str += " (or <a href='' onclick='mQ.showLogin();'>Login</a>)";
+			str += " (or <a href='#' onclick='mQ.showLogin();'>Login</a>)";
 		}
 		str += "</h2>";
 		$('#mq').append(str);
@@ -112,6 +112,10 @@ function mQuiz(){
 		$('#mq').append(l);
 		l.hide();
 		var form =  $('<form>').attr({'id':'register'});
+		form.append("<div class='formblock'>" +
+				"<div class='formlabel'>Username:</div>" +
+				"<div class='formfield'><input type='text' name='username' id='username'></input></div>" +
+				"</div>");
 		form.append("<div class='formblock'>" +
 			"<div class='formlabel'>Email address:</div>" +
 			"<div class='formfield'><input type='text' name='email' id='email'></input></div>" +
@@ -137,6 +141,9 @@ function mQuiz(){
 		//data validation
 		$('#register').validate({
 			rules: {
+				username: {
+					required: true
+				},
 				email: {
 					required: true,
 					email:true
@@ -223,7 +230,7 @@ function mQuiz(){
 		$('#mq').empty();
 		var str = "<h2>Login";
 		if(this.opts.allowregister){
-			str += " (or <a href='' onclick='mQ.showRegister();'>Register</a>)";
+			str += " (or <a href='#' onclick='mQ.showRegister();'>Register</a>)";
 		}
 		str += "</h2>";
 		$('#mq').append(str);
@@ -232,7 +239,7 @@ function mQuiz(){
 		msg.hide();
 		var form =  $('<div>');
 		form.append("<div class='formblock'>" +
-			"<div class='formlabel' name='lang' id='login_username'>Username/Email:</div>" +
+			"<div class='formlabel' name='lang' id='login_username'>Username:</div>" +
 			"<div class='formfield'><input type='text' name='username' id='username'></input></div>" +
 			"</div>");
 		
@@ -565,7 +572,8 @@ function mQuiz(){
 	
 	this.register = function(){
 		
-		var username = $('#email').val();
+		var username = $('#username').val();
+		var email = $('#email').val();
 		var password = $('#password').val();
 		var passwordAgain = $('#password_confirm').val();
 		var firstname = $('#firstname').val();
@@ -585,7 +593,7 @@ function mQuiz(){
 		$('#register').hide();
 		
 		$.ajax({
-			   data:{'method':'register','username':username,'password':password,'passwordagain':passwordAgain,'firstname':firstname,'lastname':lastname}, 
+			   data:{'method':'register','username':username,'email':email,'password':password,'passwordagain':passwordAgain,'firstname':firstname,'lastname':lastname}, 
 			   success:function(data){
 				   //check for any error messages
 				   if(data.login){
